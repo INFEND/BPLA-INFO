@@ -125,17 +125,27 @@ public final class OtaUpdater {
     }
     private void verifySigner(File apk,String manifestCert) throws Exception{
         PackageManager pm=activity.getPackageManager();
-        PackageInfo current=pm.getPackageInfo(activity.getPackageName(),PackageManager.GET_SIGNING_CERTIFICATES);
-        PackageInfo archive=pm.getPackageArchiveInfo(apk.getAbsolutePath(),PackageManager.GET_SIGNING_CERTIFICATES);
-        if(archive==null||!activity.getPackageName().equals(archive.packageName)||archive.signingInfo==null||current.signingInfo==null)
-            throw new SecurityException("Невозможно проверить подпись APK");
+        int flags=Build.VERSION.SDK_INT>=28?PackageManager.GET_SIGNING_CERTIFICATES:PackageManager.GET_SIGNATURES;
+        PackageInfo current=pm.getPackageInfo(activity.getPackageName(),flags);
+        PackageInfo archive=pm.getPackageArchiveInfo(apk.getAbsolutePath(),flags);
+        if(archive==null||!activity.getPackageName().equals(archive.packageName))
+            throw new SecurityException("Невозможно проверить пакет APK");
         long targetVersion=Build.VERSION.SDK_INT>=28?archive.getLongVersionCode():archive.versionCode;
         long installedVersion=Build.VERSION.SDK_INT>=28?current.getLongVersionCode():current.versionCode;
         if(targetVersion<=installedVersion||targetVersion!=version.getInt("versionCode"))
             throw new SecurityException("Некорректная версия обновления");
-        Signature[] existing=current.signingInfo.getApkContentsSigners();
-        Signature[] incoming=archive.signingInfo.getApkContentsSigners();
-        if(existing.length!=1||incoming.length!=1||!existing[0].equals(incoming[0]))
+        Signature[] existing;
+        Signature[] incoming;
+        if(Build.VERSION.SDK_INT>=28){
+            if(current.signingInfo==null||archive.signingInfo==null)
+                throw new SecurityException("Сертификат APK недоступен");
+            existing=current.signingInfo.getApkContentsSigners();
+            incoming=archive.signingInfo.getApkContentsSigners();
+        } else {
+            existing=current.signatures;
+            incoming=archive.signatures;
+        }
+        if(existing==null||incoming==null||existing.length!=1||incoming.length!=1||!existing[0].equals(incoming[0]))
             throw new SecurityException("Подпись APK отличается от установленной");
         String cert=hex(MessageDigest.getInstance("SHA-256").digest(incoming[0].toByteArray()));
         if(!manifestCert.isEmpty()&&!cert.equalsIgnoreCase(manifestCert))throw new SecurityException("Сертификат APK не совпадает с манифестом");
