@@ -299,6 +299,46 @@
           "source": "Wikimedia Commons"
         }
       ]
+    },
+    "lostarmour-pdf-2024-054": {
+      "name": "UJ-22 AIRBORNE",
+      "review": "One model-specific licensed photograph; additional views and background removal pending",
+      "files": [
+        {
+          "file": "UKRJET UJ-22 Airborne, Kyiv 2021, 07.jpg",
+          "source": "Wikimedia Commons",
+          "author": "VoidWanderer",
+          "license": "CC BY-SA 4.0",
+          "processed": false
+        }
+      ]
+    },
+    "lostarmour-pdf-2024-072": {
+      "name": "EOS C",
+      "review": "Three model-specific licensed source photographs; isolation/background removal pending",
+      "files": [
+        {
+          "file": "Threod Systems EOS C VTOL.jpg",
+          "source": "Wikimedia Commons",
+          "author": "Defensie Nederlands",
+          "license": "CC BY-SA 4.0",
+          "processed": false
+        },
+        {
+          "file": "Threod Systems EOS C VTOL - 2.jpg",
+          "source": "Wikimedia Commons",
+          "author": "Defensie Nederlands",
+          "license": "CC BY-SA 4.0",
+          "processed": false
+        },
+        {
+          "file": "Threod Systems EOS C VTOL - 3.jpg",
+          "source": "Wikimedia Commons",
+          "author": "Defensie Nederlands",
+          "license": "CC BY-SA 4.0",
+          "processed": false
+        }
+      ]
     }
   }
 }
