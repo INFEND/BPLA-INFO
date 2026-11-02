@@ -58,7 +58,7 @@ public final class UiDialogs {
         int width=(int)(a.getResources().getDisplayMetrics().widthPixels*0.90f);
         int maxHeight=(int)(a.getResources().getDisplayMetrics().heightPixels*0.83f);
         dialog.getWindow().setLayout(width,-2);
-        root.setMaximumHeight(maxHeight);
+        if(root.getMeasuredHeight()>maxHeight)dialog.getWindow().setLayout(width,maxHeight);
         if(t.animations){
             root.setAlpha(0f);root.setScaleX(.96f);root.setScaleY(.96f);
             root.animate().alpha(1).scaleX(1).scaleY(1).setDuration(180).start();
