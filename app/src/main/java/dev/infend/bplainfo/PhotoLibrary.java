@@ -112,6 +112,15 @@ public final class PhotoLibrary {
             return "https://upload.wikimedia.org/wikipedia/commons/"+md5.substring(0,1)+"/"+md5.substring(0,2)+"/"+encoded;
         }catch(Exception e){return "";}
     }
+    // Validate cached/downloaded bytes before accepting them. A failed or partial
+    // decode must not poison subsequent offline gallery views.
+    private static boolean validImage(File file){
+        if(!file.isFile()||file.length()<512)return false;
+        BitmapFactory.Options bounds=new BitmapFactory.Options();
+        bounds.inJustDecodeBounds=true;
+        BitmapFactory.decodeFile(file.getAbsolutePath(),bounds);
+        return bounds.outWidth>=500&&bounds.outHeight>=300;
+    }
     public static void load(Context c,Photo photo,int maxPixels,Callback callback){
         if(photo==null){callback.ready(null);return;}
         Context app=c.getApplicationContext();
@@ -122,7 +131,8 @@ public final class PhotoLibrary {
                 if(!folder.isDirectory()&&!folder.mkdirs())throw new java.io.IOException("No cache directory");
                 String md5=hex(MessageDigest.getInstance("MD5").digest(photo.file.getBytes("UTF-8")));
                 File output=new File(folder,md5+".img");
-                if(!output.isFile()||output.length()<512){
+                if(output.isFile()&&!validImage(output))output.delete();
+                if(!output.isFile()){
                     boolean complete=false;
                     // Try Commons' supported width-limited redirect first.
                     // If it fails, fall back to the traditional original URL.
@@ -156,7 +166,7 @@ public final class PhotoLibrary {
                                         out.write(buffer,0,n);
                                     }
                                 }
-                                if(size<512||!temp.renameTo(output))
+                                if(size<512||!validImage(temp)||!temp.renameTo(output))
                                     throw new java.io.IOException("Invalid image response");
                                 complete=true;
                             }catch(java.io.IOException e){
@@ -182,6 +192,10 @@ public final class PhotoLibrary {
                 BitmapFactory.Options opts=new BitmapFactory.Options();
                 opts.inSampleSize=sample;opts.inPreferredConfig=Bitmap.Config.ARGB_8888;
                 result=BitmapFactory.decodeFile(output.getAbsolutePath(),opts);
+                if(result==null){
+                    output.delete();
+                    throw new java.io.IOException("Cached photo could not be decoded");
+                }
                 output.setLastModified(System.currentTimeMillis());
             }catch(Exception e){
                 android.util.Log.d("BPLA-INFO","Photo not available: "+photo.file+" "+e.getMessage());
