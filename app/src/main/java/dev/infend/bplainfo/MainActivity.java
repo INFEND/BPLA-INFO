@@ -163,7 +163,8 @@ public final class MainActivity extends Activity {
             int result;
             if(sortBy>=2){
                 int field=sortBy==2?5:sortBy==3?6:sortBy==4?10:3;
-                double vx=Drone.numeric(x.get(field)),vy=Drone.numeric(y.get(field));
+                double vx=Drone.numeric(sortBy==2?x.previewSpeed():sortBy==3?x.previewRange():x.get(field));
+                double vy=Drone.numeric(sortBy==2?y.previewSpeed():sortBy==3?y.previewRange():y.get(field));
                 if(vx<0&&vy>=0)return 1;
                 if(vy<0&&vx>=0)return -1;
                 result=Double.compare(vx,vy);
@@ -529,8 +530,8 @@ public final class MainActivity extends Activity {
         content.setPadding(dp(13),dp(13),dp(13),dp(22));
         content.setBackgroundColor(t.bg);
         LinearLayout bar=horizontal();content.addView(bar,margins(-1,47,0,0));
-        TextView title=text("ПОДЛИННАЯ ФОТОГРАФИЯ",12,t.accent,true);
-        bar.addView(title,new LinearLayout.LayoutParams(0,-1,1));
+        View blank=new View(this);
+        bar.addView(blank,new LinearLayout.LayoutParams(0,-1,1));
         bar.addView(button("✕",false,overlay::dismiss),margins(45,40,0,0));
         ImageView photo=new ImageView(this);photo.setScaleType(ImageView.ScaleType.FIT_CENTER);
         content.addView(photo,new LinearLayout.LayoutParams(-1,0,1));
