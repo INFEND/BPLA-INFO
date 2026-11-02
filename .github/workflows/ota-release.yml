@@ -42,6 +42,7 @@ jobs:
       - name: Test manifest logic
         run: python3 -m unittest discover -s tests -v
       - name: Compile Android debug and release
+        id: compilation
         run: gradle --no-daemon :app:assembleDebug :app:assembleRelease
       - name: Upload test APK before signing
         if: github.event_name == 'pull_request'
@@ -52,6 +53,7 @@ jobs:
           if-no-files-found: error
           retention-days: 14
       - name: Sign release with permanent key
+        id: signing
         if: github.event_name != 'pull_request'
         env:
           BPLA_INFO_SIGNING_BUNDLE: ${{ secrets.BPLA_INFO_SIGNING_BUNDLE || secrets.INFEND_SIGNING_BUNDLE || secrets.ANDROID_SIGNING_BUNDLE || secrets.QR_LINK_SIGNING_BUNDLE }}
@@ -73,6 +75,7 @@ jobs:
           if-no-files-found: error
           retention-days: 14
       - name: Publish GitHub Release
+        id: publishing
         if: github.event_name != 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
@@ -96,3 +99,34 @@ jobs:
             echo "- [Скачать APK](https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG/BPLA-INFO.apk)"
             echo "- [OTA-манифест](https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG/update.json)"
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Save last build status in the repository
+        if: always() && github.event_name != 'pull_request'
+        env:
+          BPLA_${{ job.status }}: JOB_STATUS
+          BPLA_${{ steps.compilation.outcome }}: COMPILE_STATUS
+          BPLA_${{ steps.signing.outcome }}: SIGN_STATUS
+          BPLA_${{ steps.publishing.outcome }}: PUBLISH_STATUS
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p status
+          cat > status/latest.json <<EOF
+          {
+            "workflow": "BPLA INFO Android OTA",
+            "run_id": "$GITHUB_RUN_ID",
+            "commit": "$GITHUB_SHA",
+            "result": "$BPLA_JOB_STATUS",
+            "compile": "$BPLA_COMPILE_STATUS",
+            "signing": "$BPLA_SIGN_STATUS",
+            "publish": "$BPLA_PUBLISH_STATUS",
+            "release": "https://github.com/$GITHUB_REPOSITORY/releases/latest",
+            "apk": "https://github.com/$GITHUB_REPOSITORY/releases/latest/download/BPLA-INFO.apk",
+            "checked_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          EOF
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add status/latest.json
+          git commit -m "chore: record OTA build outcome [skip ci]"
+          git push origin HEAD:main
