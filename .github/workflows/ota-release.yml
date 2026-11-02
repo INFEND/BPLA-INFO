@@ -90,3 +90,9 @@ jobs:
           for name in BPLA-INFO.apk update.json; do
             gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name' | grep -Fxq "$name"
           done
+          {
+            echo "### БПЛА ИНФО · опубликован релиз $TAG"
+            echo ""
+            echo "- [Скачать APK](https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG/BPLA-INFO.apk)"
+            echo "- [OTA-манифест](https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG/update.json)"
+          } >> "$GITHUB_STEP_SUMMARY"
