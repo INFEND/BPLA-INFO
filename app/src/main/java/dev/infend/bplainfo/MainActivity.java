@@ -299,10 +299,14 @@ public final class MainActivity extends Activity {
             if(which==0){openPhotoPicker(d);return;}
             if(which==1){
                 StringBuilder content=new StringBuilder(d.name()+"\n");
-                if(!d.specRows.isEmpty())for(String[] item:d.specRows){
-                    if(item.length>=2)content.append(item[0]).append(": ").append(item[1]).append('\n');
-                }else for(int i=1;i<14;i++)if(!d.get(i).isEmpty()){
-                    content.append(Drone.TITLES[i]).append(": ").append(d.get(i)).append('\n');
+                if(!d.specRows.isEmpty()){
+                    for(String[] item:d.specRows){
+                        if(item.length>=2)content.append(item[0]).append(": ").append(item[1]).append('\n');
+                    }
+                }else{
+                    for(int i=1;i<14;i++){
+                        if(!d.get(i).isEmpty())content.append(Drone.TITLES[i]).append(": ").append(d.get(i)).append('\n');
+                    }
                 }
                 Intent intent=new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");intent.putExtra(Intent.EXTRA_TEXT,content.toString());
