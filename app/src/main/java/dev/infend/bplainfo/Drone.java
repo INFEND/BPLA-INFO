@@ -13,6 +13,7 @@ public final class Drone {
  public void set(int i,String s){values[i]=s==null?"":s.trim();}
  public String name(){return get(0);}
  public String type(){return get(1);}
+ public String manufacturer(){return get(2);}
  public JSONObject json() throws JSONException {JSONObject j=new JSONObject();j.put("id",id);for(int i=0;i<FIELDS.length;i++)j.put(FIELDS[i],get(i));j.put("imageUri",imageUri);j.put("favorite",favorite);return j;}
  public static Drone fromJson(JSONObject j){Drone d=new Drone();String id=j.optString("id","");if(!id.isEmpty()&&id.length()<120)d.id=id;for(int i=0;i<FIELDS.length;i++){String v=j.optString(FIELDS[i],"");d.set(i,v.length()>3000?v.substring(0,3000):v);}d.imageUri=j.optString("imageUri","");d.favorite=j.optBoolean("favorite");return d;}
  public static Drone mara(){Drone d=new Drone();d.id="seed-mara-2m";String[] v={"МАРА-2М","Самолётный","КАРБОЛАЙН","1,95 м","1,14 м","100 км/ч","25 км","50–750 м","2000 м","0,4 кг","2,5 кг","1,5 часа","С руки","Электрический","Изображение пользователя, независимо не проверено","Сведения переписаны с изображения. Рисунки в приложении схематические."};for(int i=0;i<v.length;i++)d.set(i,v[i]);return d;}
