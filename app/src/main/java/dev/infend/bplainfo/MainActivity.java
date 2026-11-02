@@ -281,6 +281,8 @@ public final class MainActivity extends Activity {
             }
             strip.setOnScrollChangeListener((v,x,y,oldX,oldY)->
                 loadVisibleDocumentaryPhotos(strip,lazyFrames,lazyLoads));
+            gallery.addOnLayoutChangeListener((v,l,top,r,b,oldL,oldT,oldR,oldB)->
+                loadVisibleDocumentaryPhotos(strip,lazyFrames,lazyLoads));
             strip.post(()->loadVisibleDocumentaryPhotos(strip,lazyFrames,lazyLoads));
         }
         LinearLayout actions=horizontal();content.addView(actions,margins(-1,49,0,6));
@@ -317,7 +319,8 @@ public final class MainActivity extends Activity {
         int right=strip.getScrollX()+strip.getWidth()+dp(60);
         for(int i=0;i<frames.size();i++){
             View frame=frames.get(i);
-            if(frame.getRight()>=left&&frame.getLeft()<=right)loaders.get(i).run();
+            if(frame.getWidth()>0&&frame.getRight()>=left&&frame.getLeft()<=right)
+                loaders.get(i).run();
         }
     }
     private void more(Drone d){
