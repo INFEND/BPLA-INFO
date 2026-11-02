@@ -38,6 +38,8 @@ class PhotoDeliveryRegressionTests(unittest.TestCase):
         verifier = (ROOT / "scripts/verify_photo_sources.py").read_text("utf-8")
         self.assertIn('if blocked:', verifier)
         self.assertIn('INCONCLUSIVE:', verifier)
+        self.assertIn("if wait>30:", verifier)
+        self.assertIn("remaining not tested", verifier)
 
     def test_photo_loading_exposes_visible_failure_state(self):
         activity = (ROOT / "app/src/main/java/dev/infend/bplainfo/MainActivity.java").read_text("utf-8")
