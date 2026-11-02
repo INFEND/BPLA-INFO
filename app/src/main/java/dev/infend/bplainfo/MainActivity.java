@@ -1,7 +1,6 @@
 package dev.infend.bplainfo;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.Context;
 import android.graphics.Color;
@@ -129,7 +128,7 @@ public final class MainActivity extends Activity {
         });
         HorizontalScrollView strip=new HorizontalScrollView(this);strip.setHorizontalScrollBarEnabled(false);
         LinearLayout chips=horizontal();strip.addView(chips);inner.addView(strip,margins(-1,47,0,6));
-        for(String group:new String[]{"Все","Самолётный","Мультикоптер","Другие","Схема крыло","Одномоторный · винт спереди","Одномоторный · винт сзади","Двойная хвостовая балка","Многомоторный","Барражирующие боеприпасы"}){
+        for(String group:new String[]{"Все","Самолётный","Мультикоптер","Многомоторный","Барражирующие боеприпасы"}){
             TextView chip=button(group,category.equals(group),()->{category=group;home();});
             chips.addView(chip,margins(-2,39,0,0));
         }
@@ -145,11 +144,11 @@ public final class MainActivity extends Activity {
         String q=searchTerm.toLowerCase(Locale.ROOT).trim();
         for(Drone d:records){
             if(onlyFavorites&&!d.favorite)continue;
-            String kind=d.type().toLowerCase(Locale.ROOT);
-            if(category.equals("Самолётный")&&!kind.contains("самол"))continue;
-            if(category.equals("Мультикоптер")&&!(kind.contains("коптер")||kind.contains("мульт")||kind.contains("квадр")))continue;
-            if(category.equals("Другие")&&(kind.contains("самол")||kind.contains("коптер")||kind.contains("мульт")||kind.contains("квадр")))continue;
-            if(!category.equals("Все")&&!category.equals("Самолётный")&&!category.equals("Мультикоптер")&&!category.equals("Другие")&&!category.equals(d.sourceGroup))continue;
+            String kind=d.displayType().toLowerCase(Locale.ROOT);
+            if(category.equals("Самолётный")&&!kind.equals("самолётный"))continue;
+            if(category.equals("Мультикоптер")&&!kind.equals("мультикоптер"))continue;
+            if(category.equals("Многомоторный")&&!kind.equals("многомоторный"))continue;
+            if(category.equals("Барражирующие боеприпасы")&&!kind.contains("барраж"))continue;
             if(!q.isEmpty()){
                 boolean match=false;
                 for(String field:d.values){if(field!=null&&field.toLowerCase(Locale.ROOT).contains(q)){match=true;break;}}
@@ -199,35 +198,12 @@ public final class MainActivity extends Activity {
             head.addView(typeIcon,margins(37,37,0,0));
             LinearLayout labels=vertical();head.addView(labels,new LinearLayout.LayoutParams(0,-2,1));
             labels.addView(text(d.name(),20,t.fg,true));
-            labels.addView(text(d.type()+"  •  "+d.manufacturer(),12,t.muted,false));
-            if(!d.sourceGroup.isEmpty())labels.addView(text(d.sourceGroup+" · 2024",10,t.muted,false));
+            String engine=d.engineType().trim();
+            labels.addView(text("Тип: "+d.displayType()+"  |  Тип двигателя: "+(engine.isEmpty()?"—":engine),12,t.muted,false));
             TextView star=button(d.favorite?"★":"☆",false,()->{d.favorite=!d.favorite;save();cards();});
             star.setTextColor(t.accent);head.addView(star,margins(42,42,3,0));
-            java.util.List<PhotoLibrary.Photo> curated=PhotoLibrary.forDrone(this,d);
-            if(!curated.isEmpty()){
-                LinearLayout preview=vertical();preview.setBackground(panel(t.soft,13));
-                preview.setPadding(dp(6),dp(5),dp(6),dp(5));preview.setGravity(Gravity.CENTER);
-                card.addView(preview,margins(-1,117,0,7));
-                ImageView image=new ImageView(this);image.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                image.setImageResource(R.drawable.ic_airplane);
-                image.setColorFilter(t.muted);
-                preview.addView(image,new LinearLayout.LayoutParams(-1,dp(103)));
-                image.clearColorFilter();
-                PhotoLibrary.into(this,curated.get(0),image,1000);
-            }else{
-                LinearLayout preview=vertical();preview.setGravity(Gravity.CENTER);
-                preview.setPadding(dp(10),dp(17),dp(10),dp(17));
-                preview.setBackground(panel(t.soft,13));
-                card.addView(preview,margins(-1,91,0,7));
-                TextView modelGlyph=text(d.type().toLowerCase(Locale.ROOT).contains("коптер")?"◈":"✈",29,t.accent,true);
-                modelGlyph.setGravity(Gravity.CENTER);
-                preview.addView(modelGlyph);
-                TextView imageLabel=text(d.galleryUris.isEmpty()?"НЕТ ПРОВЕРЕННЫХ ФОТО":"ЕСТЬ СВОИ ФОТО",10,t.muted,false);
-                imageLabel.setGravity(Gravity.CENTER);
-                preview.addView(imageLabel);
-            }
             LinearLayout stats=horizontal();card.addView(stats);
-            stat(stats,"РАЗМАХ",d.previewSpan());
+            stat(stats,"АВТОНОМНОСТЬ",d.previewEndurance());
             stat(stats,"СКОРОСТЬ",d.previewSpeed());
             stat(stats,"ДАЛЬНОСТЬ",d.previewRange());
             card.setOnClickListener(v->detail(d));
@@ -239,9 +215,8 @@ public final class MainActivity extends Activity {
         LinearLayout group=vertical();group.setPadding(dp(4),dp(3),dp(3),dp(2));
         row.addView(group,new LinearLayout.LayoutParams(0,-2,1));
         group.addView(text(label,9,t.muted,true));
-        group.addView(text(value.isEmpty()?"Н/Д":value,13,t.accent,true));
+        group.addView(text(value==null||value.trim().isEmpty()?"—":value,13,t.accent,true));
     }
-    private AlertDialog.Builder dialog(){return new AlertDialog.Builder(this,t.mode==2?android.R.style.Theme_Material_Light_Dialog_Alert:android.R.style.Theme_Material_Dialog_Alert);}
     private void save(){DroneStore.save(this,records);}
     private void detail(Drone d){
         hideKeyboard();showingDetail=true;setup();
@@ -258,8 +233,7 @@ public final class MainActivity extends Activity {
         java.util.LinkedHashSet<String> images=new java.util.LinkedHashSet<>(d.galleryUris);
         if(images.isEmpty()&&!d.imageUri.isEmpty())images.add(d.imageUri);
         int available=documentary.size()+images.size();
-        photos.addView(text("РЕАЛЬНЫЕ ФОТО  "+documentary.size()+" / 5  ·  СВОИ  "+images.size(),
-            11,t.muted,true),margins(-1,-2,0,8));
+
         if(available==0){
             photos.addView(text("Для этой модификации пока нет пяти достоверных снимков. Можно добавить свои фотографии.",12,t.muted,false),margins(-1,-2,0,8));
         }else{
@@ -279,8 +253,7 @@ public final class MainActivity extends Activity {
                 frame.addView(photo,new LinearLayout.LayoutParams(-1,0,1));
                 photo.clearColorFilter();
                 PhotoLibrary.into(this,p,photo,1350);
-                TextView info=text("ФОТО "+number+" · WIKIMEDIA COMMONS",10,t.muted,true);
-                info.setGravity(Gravity.CENTER);frame.addView(info,margins(-1,23,0,0));
+
                 frame.setOnClickListener(v->showDocumentaryPhoto(p));
             }
             for(String path:images){
@@ -291,8 +264,7 @@ public final class MainActivity extends Activity {
                 ImageView photo=new ImageView(this);photo.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 frame.addView(photo,new LinearLayout.LayoutParams(-1,0,1));
                 try{photo.setImageURI(Uri.parse(path));}catch(Exception ignored){}
-                TextView label=text("СВОЯ ФОТОГРАФИЯ",10,t.muted,true);label.setGravity(Gravity.CENTER);
-                frame.addView(label,margins(-1,23,0,0));
+
                 frame.setOnClickListener(v->showFullPhoto(path));
             }
         }
@@ -323,11 +295,25 @@ public final class MainActivity extends Activity {
         }
     }
     private void more(Drone d){
-        dialog().setTitle(d.name()).setItems(new String[]{"Добавить / сменить фото","Поделиться карточкой","Удалить карточку"},(dialog,which)->{
-            if(which==0){openPhotoPicker(d);}
-            if(which==1){StringBuilder b=new StringBuilder(d.name()+"\n");for(int i=1;i<14;i++)if(!d.get(i).isEmpty())b.append(Drone.TITLES[i]).append(": ").append(d.get(i)).append('\n');Intent intent=new Intent(Intent.ACTION_SEND);intent.setType("text/plain");intent.putExtra(Intent.EXTRA_TEXT,b.toString());startActivity(Intent.createChooser(intent,"Поделиться карточкой"));}
-            if(which==2)dialog().setTitle("Удалить «"+d.name()+"»?").setMessage("Карточка будет удалена из локального каталога.").setNegativeButton("ОТМЕНА",null).setPositiveButton("УДАЛИТЬ",(dd,w)->{records.remove(d);save();home();}).show();
-        }).show();
+        UiDialogs.options(this,t,d.name(),new String[]{"Добавить фотографии","Поделиться карточкой","Удалить карточку"},-1,which->{
+            if(which==0){openPhotoPicker(d);return;}
+            if(which==1){
+                StringBuilder content=new StringBuilder(d.name()+"\n");
+                if(!d.specRows.isEmpty())for(String[] item:d.specRows){
+                    if(item.length>=2)content.append(item[0]).append(": ").append(item[1]).append('\n');
+                }else for(int i=1;i<14;i++)if(!d.get(i).isEmpty()){
+                    content.append(Drone.TITLES[i]).append(": ").append(d.get(i)).append('\n');
+                }
+                Intent intent=new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");intent.putExtra(Intent.EXTRA_TEXT,content.toString());
+                startActivity(Intent.createChooser(intent,"Поделиться карточкой"));
+                return;
+            }
+            if(which==2)UiDialogs.confirmation(this,t,"Удаление карточки",
+                "Удалить «"+d.name()+"» из локального каталога?","УДАЛИТЬ",()->{
+                    records.remove(d);save();home();
+                });
+        });
     }
     private void edit(Drone existing){
         Drone d=existing==null?new Drone():existing;
@@ -340,22 +326,33 @@ public final class MainActivity extends Activity {
             if(i==15)e.setMinLines(2);
             e.setHint(Drone.TITLES[i]);e.setSelectAllOnFocus(false);inputs[i]=e;fields.addView(e,margins(-1,43,0,4));
         }
-        AlertDialog dialog=dialog().setTitle(existing==null?"Новая карточка":"Редактирование").setView(sc)
-            .setNegativeButton("ОТМЕНА",null).setPositiveButton("СОХРАНИТЬ",null).create();
-        dialog.setOnShowListener(v->dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(b->{
-            if(inputs[0].getText().toString().trim().isEmpty()){inputs[0].setError("Название обязательно");return;}
+        for(EditText input:inputs){
+            if(input==null)continue;
+            input.setTextColor(t.fg);
+            input.setHintTextColor(t.muted);
+            input.setBackground(outlined(t.soft,t.stroke,10));
+            input.setPadding(dp(12),dp(5),dp(12),dp(5));
+        }
+        UiDialogs.editor(this,t,existing==null?"Новая карточка":"Редактирование",sc,()->{
+            if(inputs[0].getText().toString().trim().isEmpty()){
+                inputs[0].setError("Название обязательно");return false;
+            }
             for(int i=0;i<inputs.length;i++)if(inputs[i]!=null)d.set(i,inputs[i].getText().toString());
             if(existing==null)records.add(d);
-            save();dialog.dismiss();detail(d);
-        }));
-        dialog.show();
+            save();
+            detail(d);
+            return true;
+        });
     }
     private void sortDialog(){
-        String[] names=new String[sortNames.length+1];System.arraycopy(sortNames,0,names,0,sortNames.length);names[sortNames.length]=descending?"Направление: ↓ убывание":"Направление: ↑ возрастание";
-        dialog().setTitle("Сортировка").setItems(names,(dialog,choice)->{
-            if(choice==sortNames.length)descending=!descending;else sortBy=choice;
+        String[] names=new String[sortNames.length+1];
+        System.arraycopy(sortNames,0,names,0,sortNames.length);
+        names[sortNames.length]=descending?"Направление: ↓ убывание":"Направление: ↑ возрастание";
+        UiDialogs.options(this,t,"Сортировка",names,sortBy,choice->{
+            if(choice==sortNames.length)descending=!descending;
+            else sortBy=choice;
             home();
-        }).show();
+        });
     }
     private String activeSettingsSection="appearance";
     private boolean showingSettings=false;
@@ -373,9 +370,9 @@ public final class MainActivity extends Activity {
         intro.setBackground(panel(t.panel,20));content.addView(intro,margins(-1,-2,0,8));
         intro.addView(text("ПЕРСОНАЛИЗАЦИЯ",11,t.accent,true));
         intro.addView(text("Интерфейс под твой стиль",20,t.fg,true),margins(-1,-2,0,4));
-        intro.addView(text("Настройки в стиле QR LINK. Разделы раскрываются по нажатию.",12,t.muted,false));
+        intro.addView(text("Удобное оформление и персональные настройки.",12,t.muted,false));
 
-        addSettingsSection(content,"appearance","Оформление","Тема и палитра из QR LINK","◈",body->{
+        addSettingsSection(content,"appearance","Оформление","Тема и цветовые акценты","◈",body->{
             body.addView(text("ТЕМА ИНТЕРФЕЙСА",11,t.muted,true),margins(-1,-2,1,10));
             LinearLayout themes=horizontal();body.addView(themes,margins(-1,88,0,7));
             String[] names={"AMOLED","Тёмная","Светлая"},glyphs={"◉","☾","☀"};
@@ -533,11 +530,6 @@ public final class MainActivity extends Activity {
         bar.addView(button("✕",false,overlay::dismiss),margins(45,40,0,0));
         ImageView photo=new ImageView(this);photo.setScaleType(ImageView.ScaleType.FIT_CENTER);
         content.addView(photo,new LinearLayout.LayoutParams(-1,0,1));
-        content.addView(text("Wikimedia Commons · автор и условия использования на странице файла",11,t.muted,false),margins(-1,-2,0,8));
-        content.addView(button("ОТКРЫТЬ ОРИГИНАЛ И ЛИЦЕНЗИЮ",false,()->{
-            try{startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(item.attributionUrl)));}
-            catch(Exception e){toast("Не удалось открыть источник");}
-        }),margins(-1,44,0,5));
         overlay.setContentView(content);
         overlay.show();
         if(overlay.getWindow()!=null){
@@ -584,7 +576,7 @@ public final class MainActivity extends Activity {
                 try(InputStream in=getContentResolver().openInputStream(uri)){if(in==null)throw new IOException("Нет доступа");ByteArrayOutputStream out=new ByteArrayOutputStream();byte[] buf=new byte[8192];int n;while((n=in.read(buf))>=0){out.write(buf,0,n);if(out.size()>2_000_000)throw new IOException("Файл слишком большой");}content=out.toByteArray();}
                 int n=DroneStore.importJson(this,records,new String(content,StandardCharsets.UTF_8));toast("Импортировано / обновлено: "+n);home();
             }
-        }catch(Exception e){dialog().setTitle("Ошибка файла").setMessage(e.getMessage()).setPositiveButton("ОК",null).show();}
+        }catch(Exception e){UiDialogs.message(this,t,"Ошибка файла",e.getMessage()==null?"Не удалось прочитать файл":e.getMessage());}
     }
     private void toast(String s){Toast.makeText(this,s,Toast.LENGTH_LONG).show();}
     private void hideKeyboard(){try{((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(root.getWindowToken(),0);}catch(Exception ignored){}}

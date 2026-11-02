@@ -46,8 +46,35 @@ public final class Drone {
    }
    return "";
  }
- public String previewSpan(){String a=specification("РАЗМАХ");return a.isEmpty()?get(3):a;}
- public String previewSpeed(){String a=specification("МАКСИМАЛЬНАЯ СКОРОСТЬ");return a.isEmpty()?get(5):a;}
- public String previewRange(){String a=specification("ДАЛЬНОСТЬ ПОЛЕТА");return a.isEmpty()?get(6):a;}
+ public String displayType(){
+   String raw=type();
+   String upper=(raw+" "+sourceGroup).toUpperCase(java.util.Locale.ROOT);
+   if(upper.contains("КОПТЕР")||upper.contains("КВАДР"))return "Мультикоптер";
+   if(upper.contains("БАРРАЖ"))return "Барражирующий";
+   if(upper.contains("МНОГОМОТОР"))return "Многомоторный";
+   if(upper.contains("КРЫЛО")||upper.contains("САМОЛ")||upper.contains("ОДНОМОТОР")||upper.contains("ХВОСТОВ"))return "Самолётный";
+   return raw.isEmpty()?"—":raw;
+ }
+ public String engineType(){
+   String a=specification("ТИП ДВИГАТЕЛЯ");
+   return a.isEmpty()?get(13):a;
+ }
+ private String firstSpecification(String... names){
+   for(String name:names){
+     String upper=name.toUpperCase(java.util.Locale.ROOT);
+     for(String[] row:specRows){
+       if(row.length<2)continue;
+       if(row[0].toUpperCase(java.util.Locale.ROOT).equals(upper)&&!row[1].trim().isEmpty())return row[1].trim();
+     }
+   }
+   return "";
+ }
+ public String previewSpan(){String a=firstSpecification("РАЗМАХ КРЫЛЬЕВ");return a.isEmpty()?get(3):a;}
+ public String previewEndurance(){String a=firstSpecification("АВТОНОМНОСТЬ","ВРЕМЯ ПОЛЕТА","ПРОДОЛЖИТЕЛЬНОСТЬ ПОЛЕТА");return a.isEmpty()?get(11):a;}
+ public String previewSpeed(){
+   String a=firstSpecification("МАКСИМАЛЬНАЯ СКОРОСТЬ","МАКС. ГОРИЗОНТ. СКОРОСТЬ","КРЕЙСЕРСКАЯ СКОРОСТЬ","СКОРОСТЬ АТАКИ");
+   return a.isEmpty()?get(5):a;
+ }
+ public String previewRange(){String a=firstSpecification("ДАЛЬНОСТЬ ПОЛЕТА","РАДИУС ДЕЙСТВИЯ","ДАЛЬНОСТЬ СВЯЗИ");return a.isEmpty()?get(6):a;}
  public static double numeric(String s){if(s==null)return -1;java.util.regex.Matcher m=java.util.regex.Pattern.compile("-?\\d+(?:[.,]\\d+)?").matcher(s);try{return m.find()?Double.parseDouble(m.group().replace(',','.')):-1;}catch(Exception e){return -1;}}
 }
