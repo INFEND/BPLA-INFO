@@ -35,7 +35,8 @@ class EnrichmentTests(unittest.TestCase):
         self.assertIn('if(already)continue;',store)
         self.assertIn('&&original.get(5).isEmpty())',store)
     def test_subtitle_is_only_bold_values(self):
-        self.assertIn('labels.addView(text(d.displayType()+"  ·  "+',main)
+        self.assertIn('labels.addView(text(subtitle,13,t.fg,true));',main)
+        self.assertIn('modelType+" | "+engine',main)
         self.assertNotIn('"Тип: "+d.displayType()',main)
         self.assertNotIn('"Тип двигателя: "+',main)
 
