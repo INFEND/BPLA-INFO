@@ -249,6 +249,56 @@
           "source": "Wikimedia Commons"
         }
       ]
+    },
+    "lostarmour-pdf-2024-043": {
+      "name": "PUNISHER",
+      "files": [
+        {
+          "file": "At the military training.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "Flight Punisher Drone.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "Launch of the Punisher drone.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "PUNISHER DRONE AT LAUNCHER.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "PUNISHER DRONE Maxim Subotin.jpg",
+          "source": "Wikimedia Commons"
+        }
+      ]
+    },
+    "lostarmour-pdf-2024-071": {
+      "name": "RAYBIRD-3",
+      "files": [
+        {
+          "file": "Raybird 3.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "Raybird catapult.png",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "Raybird.png",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "RB production.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "RB3.jpg",
+          "source": "Wikimedia Commons"
+        }
+      ]
     }
   }
 }
