@@ -252,7 +252,7 @@ public final class MainActivity extends Activity {
                 TextView photoStatus=text("ЗАГРУЗКА ФОТО…",10,t.muted,false);
                 frame.addView(photoStatus,margins(-1,-2,0,2));
                 PhotoLibrary.into(this,p,photo,1350,ok->
-                    photoStatus.setText(ok?"СНИМОК "+number:"ФОТО НЕДОСТУПНО • НАЖМИТЕ ДЛЯ ПОВТОРА"));
+                    photoStatus.setText(ok?"СНИМОК "+number:PhotoLibrary.unavailableMessage(this)));
 
                 frame.setOnClickListener(v->showDocumentaryPhoto(p));
             }
@@ -582,7 +582,7 @@ public final class MainActivity extends Activity {
         Runnable retry=()->{
             loadStatus.setText("ЗАГРУЗКА ФОТО…");
             PhotoLibrary.into(this,item,photo,2800,ok->
-                loadStatus.setText(ok?"СНИМОК ЗАГРУЖЕН":"ФОТО НЕДОСТУПНО • НАЖМИТЕ ДЛЯ ПОВТОРА"));
+                loadStatus.setText(ok?"СНИМОК ЗАГРУЖЕН":PhotoLibrary.unavailableMessage(this)));
         };
         photo.setOnClickListener(v->retry.run());
         loadStatus.setOnClickListener(v->retry.run());

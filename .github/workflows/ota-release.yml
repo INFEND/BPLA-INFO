@@ -53,6 +53,12 @@ jobs:
           mkdir -p /tmp/bpla-photo-check
           javac -encoding UTF-8 -d /tmp/bpla-photo-check app/src/main/java/dev/infend/bplainfo/CommonsRetryPolicy.java tests/CommonsRetryPolicySmoke.java
           java -cp /tmp/bpla-photo-check dev.infend.bplainfo.CommonsRetryPolicySmoke
+      - name: Verify landscape and portrait photo dimensions on JVM
+        shell: bash
+        run: |
+          mkdir -p /tmp/bpla-photo-dimensions
+          javac -encoding UTF-8 -d /tmp/bpla-photo-dimensions app/src/main/java/dev/infend/bplainfo/PhotoDimensions.java tests/PhotoDimensionsSmoke.java
+          java -cp /tmp/bpla-photo-dimensions dev.infend.bplainfo.PhotoDimensionsSmoke
       - name: Compile Android debug and release
         id: compilation
         run: gradle --no-daemon :app:assembleDebug :app:assembleRelease

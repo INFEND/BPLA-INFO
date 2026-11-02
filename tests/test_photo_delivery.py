@@ -46,7 +46,7 @@ class PhotoDeliveryRegressionTests(unittest.TestCase):
         self.assertIn("public interface ResultCallback", JAVA)
         self.assertIn("status.complete(bitmap!=null)", JAVA)
         self.assertIn("ЗАГРУЗКА ФОТО", activity)
-        self.assertIn("ФОТО НЕДОСТУПНО", activity)
+        self.assertIn("PhotoLibrary.unavailableMessage(this)", activity)
 
     def test_fullscreen_requests_jump_ahead_of_queued_thumbnails(self):
         self.assertIn("PriorityBlockingQueue<Runnable>", JAVA)
@@ -64,12 +64,20 @@ class PhotoDeliveryRegressionTests(unittest.TestCase):
         self.assertNotIn("seconds>15||attempt>0", JAVA)
         self.assertIn("connection.getContentLengthLong()", JAVA)
 
+    def test_portrait_images_are_accepted_and_cooldown_is_visible(self):
+        helper = (ROOT / "app/src/main/java/dev/infend/bplainfo/PhotoDimensions.java").read_text("utf-8")
+        self.assertIn("Math.min(width,height)>=300", helper)
+        self.assertIn("Math.max(width,height)>=500", helper)
+        self.assertEqual(JAVA.count("PhotoDimensions.acceptable("), 2)
+        self.assertIn('getLong("cooldown_until",0L)', JAVA)
+        self.assertIn("public static String unavailableMessage(Context context)", JAVA)
+
     def test_fullscreen_viewer_has_error_and_retry(self):
         activity = (ROOT / "app/src/main/java/dev/infend/bplainfo/MainActivity.java").read_text("utf-8")
         viewer = activity.split("private void showDocumentaryPhoto(", 1)[1].split("private void showFullPhoto(", 1)[0]
         self.assertIn("loadStatus.setOnClickListener(v->retry.run())", viewer)
         self.assertIn("photo.setOnClickListener(v->retry.run())", viewer)
-        self.assertIn("ФОТО НЕДОСТУПНО", viewer)
+        self.assertIn("PhotoLibrary.unavailableMessage(this)", viewer)
 
     def test_reviewed_flyeye_images_have_attribution_and_unique_file_pages(self):
         flyeye = MANIFEST["items"]["lostarmour-pdf-2024-032"]

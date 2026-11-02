@@ -68,7 +68,7 @@ public final class PhotoLibrary {
     private static long lastNetworkRequest=0;
     // Shared cooldown prevents a blocked Commons host from being hit by every
     // queued thumbnail, even when the user restarts the app.
-    private static long nextAllowedNetworkAtMs=0L;
+    private static volatile long nextAllowedNetworkAtMs=0L;
     private static void throttle() throws InterruptedException {
         long elapsed=System.currentTimeMillis()-lastNetworkRequest;
         if(elapsed<1600)Thread.sleep(1600-elapsed);
@@ -139,7 +139,7 @@ public final class PhotoLibrary {
         BitmapFactory.Options bounds=new BitmapFactory.Options();
         bounds.inJustDecodeBounds=true;
         BitmapFactory.decodeFile(file.getAbsolutePath(),bounds);
-        return bounds.outWidth>=500&&bounds.outHeight>=300;
+        return PhotoDimensions.acceptable(bounds.outWidth,bounds.outHeight);
     }
     public static void load(Context c,Photo photo,int maxPixels,Callback callback){
         if(photo==null){callback.ready(null);return;}
@@ -224,7 +224,7 @@ public final class PhotoLibrary {
                 BitmapFactory.Options probe=new BitmapFactory.Options();
                 probe.inJustDecodeBounds=true;
                 BitmapFactory.decodeFile(output.getAbsolutePath(),probe);
-                if(probe.outWidth<500||probe.outHeight<300){
+                if(!PhotoDimensions.acceptable(probe.outWidth,probe.outHeight)){
                     output.delete();throw new java.io.IOException("Photo resolution too low");
                 }
                 int sample=1;
@@ -257,6 +257,20 @@ public final class PhotoLibrary {
             if(f.delete())total-=size;
         }
     }
+    /**
+     * Explain a server-enforced cooldown without making another network request.
+     * Previously cached images can still be viewed during this interval.
+     */
+    public static String unavailableMessage(Context context){
+        long persisted=context.getApplicationContext()
+                .getSharedPreferences("photo_net",Context.MODE_PRIVATE)
+                .getLong("cooldown_until",0L);
+        long until=Math.max(nextAllowedNetworkAtMs,persisted);
+        long remaining=Math.max(0L,(until-System.currentTimeMillis()+999L)/1000L);
+        if(remaining>0L)
+            return "WIKIMEDIA: ПАУЗА "+((remaining+59L)/60L)+" МИН · КЭШ ДОСТУПЕН";
+        return "ФОТО НЕДОСТУПНО • НАЖМИТЕ ДЛЯ ПОВТОРА";
+    }
     public interface ResultCallback {void complete(boolean success);}
     public static void into(Context c,Photo photo,ImageView image,int px){
         into(c,photo,image,px,null);
@@ -274,7 +288,7 @@ public final class PhotoLibrary {
                     image.setImageBitmap(bitmap);
                     image.setContentDescription("Фотография БПЛА");
                 }else{
-                    image.setContentDescription("Фотография временно недоступна");
+                    image.setContentDescription(unavailableMessage(c));
                 }
                 if(status!=null)status.complete(bitmap!=null);
             }
