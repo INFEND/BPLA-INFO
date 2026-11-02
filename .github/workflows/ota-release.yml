@@ -41,6 +41,12 @@ jobs:
           gradle-version: '9.6.1'
       - name: Test manifest logic
         run: python3 -m unittest discover -s tests -v
+      - name: Verify measurement display on JVM
+        shell: bash
+        run: |
+          mkdir -p /tmp/bpla-format-check
+          javac -encoding UTF-8 -d /tmp/bpla-format-check app/src/main/java/dev/infend/bplainfo/SpecFormatter.java tests/SpecFormatterSmoke.java
+          java -cp /tmp/bpla-format-check dev.infend.bplainfo.SpecFormatterSmoke
       - name: Compile Android debug and release
         id: compilation
         run: gradle --no-daemon :app:assembleDebug :app:assembleRelease
