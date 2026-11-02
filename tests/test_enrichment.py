@@ -33,7 +33,7 @@ class EnrichmentTests(unittest.TestCase):
         self.assertIn('mergeEnrichment(c,out)',store)
         self.assertIn('"enrichment_revision"',store)
         self.assertIn('if(already)continue;',store)
-        self.assertIn('if(original.get(5).isEmpty())',store)
+        self.assertIn('&&original.get(5).isEmpty())',store)
     def test_subtitle_is_only_bold_values(self):
         self.assertIn('labels.addView(text(d.displayType()+"  ·  "+',main)
         self.assertNotIn('"Тип: "+d.displayType()',main)
