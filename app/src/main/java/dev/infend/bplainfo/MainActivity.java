@@ -91,8 +91,10 @@ public final class MainActivity extends Activity {
         LinearLayout hero=vertical();hero.setPadding(dp(18),dp(17),dp(18),dp(14));
         hero.setBackground(panel(t.panel,22));inner.addView(hero,margins(-1,-2,0,4));
         hero.addView(text("АВИАЦИОННЫЙ АРХИВ",11,t.accent,true));
-        hero.addView(text("Исследуй. Сравнивай. Сохраняй.",18,t.fg,true),margins(-1,-2,0,6));
+        hero.addView(text("Изучай. Сортируй. Сохраняй.",18,t.fg,true),margins(-1,-2,0,6));
         hero.addView(text("Личный справочник с редактированием и офлайн-доступом",12,t.muted,false));
+        RadarView radar=new RadarView(this,t);
+        hero.addView(radar,margins(-1,108,0,1));
         LinearLayout controls=horizontal();inner.addView(controls,margins(-1,-2,0,9));
         controls.addView(button("+ ДОБАВИТЬ",true,()->edit(null)),new LinearLayout.LayoutParams(0,dp(43),1));
         controls.addView(button("⇅ СОРТИРОВКА",false,this::sortDialog),margins(-2,43,5,0));
