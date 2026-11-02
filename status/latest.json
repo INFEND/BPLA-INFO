@@ -1,12 +1,12 @@
 {
   "workflow": "BPLA INFO Android OTA",
-  "run_id": "41445435303",
-  "commit": "72d7aa770780f170f18fba3c33ce16f0fe6b650e",
+  "run_id": "41463121617",
+  "commit": "7bbef7d4a09f6c713176f35fad195610556d4e3c",
   "result": "success",
   "compile": "success",
   "signing": "success",
   "publish": "success",
   "release": "https://github.com/INFEND/BPLA-INFO/releases/latest",
   "apk": "https://github.com/INFEND/BPLA-INFO/releases/latest/download/BPLA-INFO.apk",
-  "checked_at": "2026-11-02T12:33:42Z"
+  "checked_at": "2026-11-02T14:35:08Z"
 }
