@@ -74,6 +74,18 @@
       ],
       "source": "https://clarity-project.info/tender/caf005e8eaa8470cbd3604a11ca701e4",
       "note": "Название производителя подтверждено документацией о закупке DH-1 «Домаха»."
+    },
+    {
+      "id": "lostarmour-pdf-2024-025",
+      "name": "AVENGER",
+      "fields": [
+        [
+          "ПРОИЗВОДИТЕЛЬ",
+          "Вітряк С"
+        ]
+      ],
+      "source": "https://youcontrol.com.ua/catalog/company_details/37416579/",
+      "note": "Подтверждено наименование производителя для аппарата Avenger."
     }
   ]
 }
