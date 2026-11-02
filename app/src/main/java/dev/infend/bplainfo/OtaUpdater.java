@@ -1,7 +1,6 @@
 package dev.infend.bplainfo;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -53,9 +52,8 @@ public final class OtaUpdater {
         while((n=in.read(buf))!=-1){out.write(buf,0,n);if(out.size()>max)throw new IOException("Слишком большой ответ сервера");}
         return out.toByteArray();
     }
-    private AlertDialog.Builder dialog(){ThemePrefs theme=new ThemePrefs(activity);return new AlertDialog.Builder(activity,theme.mode==2?android.R.style.Theme_Material_Light_Dialog_Alert:android.R.style.Theme_Material_Dialog_Alert);}
     private void ui(Runnable run){activity.runOnUiThread(()->{if(!activity.isFinishing())run.run();});}
-    private void error(String message){ui(()->dialog().setTitle("OTA · Ошибка").setMessage(message).setPositiveButton("ОК",null).show());}
+    private void error(String message){ui(()->UiDialogs.message(activity,new ThemePrefs(activity),"Ошибка обновления",message));}
     private OtaProgressDialog progress;
     private void ensureProgress(){
         if(progress==null)progress=new OtaProgressDialog(activity);
@@ -161,12 +159,13 @@ public final class OtaUpdater {
     private void install(){
         if(Build.VERSION.SDK_INT>=26&&!activity.getPackageManager().canRequestPackageInstalls()){
             activity.getPreferences(0).edit().putBoolean("ota_pending_install",true).apply();
-            dialog().setTitle("Разрешение установки")
-                .setMessage("Android требует один раз разрешить установку обновлений из БПЛА ИНФО. После возврата установка продолжится автоматически.")
-                .setNegativeButton("ПОЗЖЕ",null).setPositiveButton("ОТКРЫТЬ НАСТРОЙКИ",(d,w)->{
-                    Intent intent=new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,Uri.parse("package:"+activity.getPackageName()));
+            UiDialogs.confirmation(activity,new ThemePrefs(activity),"Разрешение установки",
+                "Разреши установку обновлений для БПЛА ИНФО. После возвращения установка продолжится автоматически.",
+                "НАСТРОЙКИ",()->{
+                    Intent intent=new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
+                        Uri.parse("package:"+activity.getPackageName()));
                     activity.startActivity(intent);
-                }).show();
+                });
             return;
         }
         activity.getPreferences(0).edit().putBoolean("ota_pending_install",false).apply();
