@@ -21,7 +21,8 @@ public final class SettingsIconView extends View {
     private void circle(Canvas c,float x,float y,float r){c.drawCircle(x,y,r,pen);}
     @Override protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
-        float size=Math.min(getWidth(),getHeight());
+        float size=Math.min(getWidth()-getPaddingLeft()-getPaddingRight(),
+            getHeight()-getPaddingTop()-getPaddingBottom());
         if(size<=0)return;
         canvas.save();
         canvas.translate((getWidth()-size)/2f,(getHeight()-size)/2f);
