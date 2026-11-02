@@ -167,6 +167,12 @@ public final class MainActivity extends Activity {
             LinearLayout card=vertical();card.setPadding(dp(13),dp(12),dp(13),dp(12));card.setBackground(panel(t.panel,20));
             listHost.addView(card,margins(-1,-2,0,5));
             LinearLayout head=horizontal();card.addView(head);
+            ImageView typeIcon=new ImageView(this);
+            String type=d.type().toLowerCase(Locale.ROOT);
+            typeIcon.setImageResource(type.contains("коптер")||type.contains("мульт")||type.contains("квадр")?R.drawable.ic_multicopter:R.drawable.ic_airplane);
+            typeIcon.setColorFilter(t.accent);
+            typeIcon.setPadding(dp(3),dp(3),dp(3),dp(3));
+            head.addView(typeIcon,margins(37,37,0,0));
             LinearLayout labels=vertical();head.addView(labels,new LinearLayout.LayoutParams(0,-2,1));
             labels.addView(text(d.name(),20,t.fg,true));
             labels.addView(text(d.type()+"  •  "+d.manufacturer(),12,t.muted,false));
