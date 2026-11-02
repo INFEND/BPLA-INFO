@@ -8,7 +8,9 @@ def main():
     secret=next((os.getenv(k,"").strip() for k in ENV_KEYS if os.getenv(k,"").strip()),"")
     if not secret:raise SystemExit("Missing persistent signing bundle; refusing to publish unsigned APK")
     try:
-        data=base64.b64decode(secret,validate=True)
+        clean="".join(secret.split()).replace("-","+").replace("_","/")
+        clean += "="*((4-len(clean)%4)%4)
+        data=base64.b64decode(clean,validate=True)
         if len(data)>100000:raise ValueError("Signing bundle too large")
         with zipfile.ZipFile(io.BytesIO(data)) as z:
             info=json.loads(z.read("signing.json"))
@@ -17,7 +19,7 @@ def main():
             key_data=z.read(keys[0])
         for k in ("alias","keystore_password","key_password","certificate_sha256"):
             if not isinstance(info.get(k),str) or not info[k]:raise ValueError("Missing signing.json field "+k)
-    except Exception as e:raise SystemExit("Invalid signing ZIP: "+str(e)) from e
+    except Exception as e:raise SystemExit("Invalid signing ZIP: expected Base64-encoded ZIP with signing.json and one .p12; reason: "+str(e)) from e
     sdk=pathlib.Path(os.environ["ANDROID_SDK_ROOT"])/"build-tools"/"35.0.0"
     files=list((ROOT/"app/build/outputs/apk/release").glob("*.apk"))
     if len(files)!=1:raise SystemExit("Exactly one release APK required")
