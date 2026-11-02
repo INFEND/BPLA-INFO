@@ -53,7 +53,7 @@ public final class Drone {
    if(upper.contains("БАРРАЖ"))return "Барражирующий";
    if(upper.contains("МНОГОМОТОР"))return "Многомоторный";
    if(upper.contains("КРЫЛО")||upper.contains("САМОЛ")||upper.contains("ОДНОМОТОР")||upper.contains("ХВОСТОВ"))return "Самолётный";
-   return raw.isEmpty()?"—":raw;
+   return raw.isEmpty()?"БПЛА":raw;
  }
  public String engineType(){
    String a=specification("ТИП ДВИГАТЕЛЯ");
