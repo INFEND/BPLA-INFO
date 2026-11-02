@@ -23,8 +23,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Hand-curated high-resolution documentary photos. Originals are fetched over
@@ -46,7 +48,22 @@ public final class PhotoLibrary {
         }
     }
     public interface Callback {void ready(Bitmap bitmap);}
-    private static final ExecutorService EXECUTOR=Executors.newSingleThreadExecutor();
+    // One download at a time protects the on-disk .part files and limits Commons traffic.
+    // A full-screen request should not wait behind every gallery thumbnail.
+    private static final AtomicLong NEXT_TASK=new AtomicLong();
+    private static final class LoadTask implements Runnable,Comparable<LoadTask> {
+        final int priority;
+        final long order=NEXT_TASK.getAndIncrement();
+        final Runnable work;
+        LoadTask(int maxPixels,Runnable work){this.priority=maxPixels>=2000?0:1;this.work=work;}
+        @Override public int compareTo(LoadTask other){
+            int byPriority=Integer.compare(priority,other.priority);
+            return byPriority!=0?byPriority:Long.compare(order,other.order);
+        }
+        @Override public void run(){work.run();}
+    }
+    private static final ThreadPoolExecutor EXECUTOR=new ThreadPoolExecutor(
+        1,1,0L,TimeUnit.MILLISECONDS,new PriorityBlockingQueue<Runnable>());
     private static final Handler UI=new Handler(Looper.getMainLooper());
     private static long lastNetworkRequest=0;
     private static void throttle() throws InterruptedException {
@@ -124,7 +141,7 @@ public final class PhotoLibrary {
     public static void load(Context c,Photo photo,int maxPixels,Callback callback){
         if(photo==null){callback.ready(null);return;}
         Context app=c.getApplicationContext();
-        EXECUTOR.execute(()->{
+        EXECUTOR.execute(new LoadTask(maxPixels,()->{
             Bitmap result=null;
             try{
                 File folder=new File(app.getCacheDir(),"uav-photos");
@@ -148,15 +165,27 @@ public final class PhotoLibrary {
                                 connection.setReadTimeout(35000);
                                 connection.setInstanceFollowRedirects(true);
                                 connection.setRequestProperty("User-Agent","BPLAINFO/1.1 (https://github.com/INFEND/BPLA-INFO)");
+                                connection.setRequestProperty("Accept","image/jpeg,image/png,image/webp,image/*;q=0.8");
                                 int status=connection.getResponseCode();
                                 if(status==429||status==503){
-                                    Thread.sleep(2500L*(attempt+1));
+                                    // Commons can ask clients to wait for 10 minutes.
+                                    // Do not ignore that instruction and hammer the host.
+                                    String header=connection.getHeaderField("Retry-After");
+                                    long seconds=0;
+                                    try{seconds=Long.parseLong(header);}catch(Exception ignored){}
+                                    if(seconds>15||attempt>0){
+                                        android.util.Log.w("BPLA-INFO","Commons rate limit: HTTP "+status+"; Retry-After "+header);
+                                        break;
+                                    }
+                                    Thread.sleep(Math.max(2500L*(attempt+1),seconds*1000L));
                                     continue;
                                 }
                                 if(status!=200)break;
                                 String type=connection.getContentType();
                                 if(type==null||!type.toLowerCase(java.util.Locale.ROOT).startsWith("image/"))
                                     throw new java.io.IOException("Response is not an image");
+                                long announced=connection.getContentLengthLong();
+                                if(announced>15_000_000L)throw new java.io.IOException("Image too large");
                                 long size=0;
                                 try(InputStream in=connection.getInputStream();FileOutputStream out=new FileOutputStream(temp)){
                                     byte[] buffer=new byte[32768];int n;
@@ -202,7 +231,7 @@ public final class PhotoLibrary {
             }
             Bitmap finalResult=result;
             UI.post(()->callback.ready(finalResult));
-        });
+        }));
     }
     private static void trim(File dir){
         File[] files=dir.listFiles(f->f.getName().endsWith(".img"));
