@@ -72,6 +72,16 @@ class PhotoDeliveryRegressionTests(unittest.TestCase):
         self.assertIn('getLong("cooldown_until",0L)', JAVA)
         self.assertIn("public static String unavailableMessage(Context context)", JAVA)
 
+    def test_offline_photos_use_cache_without_network_timeouts(self):
+        manifest = (ROOT / "app/src/main/AndroidManifest.xml").read_text("utf-8")
+        self.assertIn("android.permission.ACCESS_NETWORK_STATE", manifest)
+        self.assertIn("ConnectivityManager", JAVA)
+        self.assertIn("getActiveNetwork()", JAVA)
+        self.assertIn("NetworkCapabilities.NET_CAPABILITY_INTERNET", JAVA)
+        self.assertIn("if(!hasNetwork(app))throw new java.io.IOException", JAVA)
+        self.assertLess(JAVA.index("if(output.isFile()&&!validImage(output))"), JAVA.index("if(!hasNetwork(app))"))
+        self.assertIn("НЕТ ИНТЕРНЕТА · СОХРАНЁННЫЕ ФОТО ДОСТУПНЫ", JAVA)
+
     def test_fullscreen_viewer_has_error_and_retry(self):
         activity = (ROOT / "app/src/main/java/dev/infend/bplainfo/MainActivity.java").read_text("utf-8")
         viewer = activity.split("private void showDocumentaryPhoto(", 1)[1].split("private void showFullPhoto(", 1)[0]
