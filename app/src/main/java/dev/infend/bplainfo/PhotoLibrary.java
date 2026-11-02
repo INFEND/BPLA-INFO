@@ -217,7 +217,15 @@ public final class PhotoLibrary {
             if(f.delete())total-=size;
         }
     }
+    public interface ResultCallback {void complete(boolean success);}
     public static void into(Context c,Photo photo,ImageView image,int px){
+        into(c,photo,image,px,null);
+    }
+    public static void into(Context c,Photo photo,ImageView image,int px,ResultCallback status){
+        if(photo==null){
+            if(status!=null)status.complete(false);
+            return;
+        }
         image.setTag(photo.file);
         load(c,photo,px,bitmap->{
             if(photo.file.equals(image.getTag())){
@@ -228,6 +236,7 @@ public final class PhotoLibrary {
                 }else{
                     image.setContentDescription("Фотография временно недоступна");
                 }
+                if(status!=null)status.complete(bitmap!=null);
             }
         });
     }
