@@ -43,19 +43,27 @@ jobs:
         run: python3 -m unittest discover -s tests -v
       - name: Compile Android debug and release
         run: gradle --no-daemon :app:assembleDebug :app:assembleRelease
+      - name: Upload test APK before signing
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: BPLA-INFO-debug-test
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
       - name: Sign release with permanent key
-        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        if: github.event_name != 'pull_request'
         env:
           BPLA_INFO_SIGNING_BUNDLE: ${{ secrets.BPLA_INFO_SIGNING_BUNDLE || secrets.INFEND_SIGNING_BUNDLE || secrets.ANDROID_SIGNING_BUNDLE || secrets.QR_LINK_SIGNING_BUNDLE }}
         run: python3 scripts/sign_release.py
       - name: Generate and verify update.json
-        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        if: github.event_name != 'pull_request'
         id: info
         run: |
           python3 scripts/make_manifest.py --apk dist/BPLA-INFO.apk --aapt "$ANDROID_SDK_ROOT/build-tools/35.0.0/aapt" --output dist/update.json --github-output "$GITHUB_OUTPUT"
           python3 -m json.tool dist/update.json >/dev/null
       - name: Save signed APK and manifest
-        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        if: github.event_name != 'pull_request'
         uses: actions/upload-artifact@v4
         with:
           name: BPLA-INFO-OTA
