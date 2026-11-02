@@ -15,17 +15,32 @@ for id,entry in data["items"].items():
     assert all("." in file and "/" not in file for file in files)
     photos+=len(files)
 print("Curated model count:",len(data["items"]),"verified-file references:",photos,"of target",5*len(names))
-for index,(id,entry) in enumerate(data["items"].items()):
-    if index>1:break
-    name=entry["files"][0]["file"].replace(" ","_")
-    md5=hashlib.md5(name.encode("utf-8")).hexdigest()
-    encoded=urllib.parse.quote(name,safe="")
-    url=f"https://upload.wikimedia.org/wikipedia/commons/{md5[0]}/{md5[:2]}/{encoded}"
-    print("Inspect",entry["name"],url)
-    req=urllib.request.Request(url,headers={"User-Agent":"BPLAINFO-verification/1.0 (INFEND/BPLA-INFO)"},method="HEAD")
-    try:
-        with urllib.request.urlopen(req,timeout=20) as r:
-            print("HEAD",r.status,r.headers.get("Content-Type"),r.headers.get("Content-Length"))
-            assert r.status==200 and r.headers.get("Content-Type","").startswith("image/")
-    except Exception as error:
-        print("WARNING: image server not reachable from CI:",repr(error))
+passed=0
+missing=[]
+blocked=0
+for id,entry in data["items"].items():
+    for record in entry["files"]:
+        name=record["file"].replace(" ","_")
+        md5=hashlib.md5(name.encode("utf-8")).hexdigest()
+        encoded=urllib.parse.quote(name,safe="")
+        url=f"https://upload.wikimedia.org/wikipedia/commons/{md5[0]}/{md5[:2]}/{encoded}"
+        req=urllib.request.Request(url,headers={"User-Agent":"BPLAINFO-verification/1.0 (INFEND/BPLA-INFO)"},method="HEAD")
+        try:
+            with urllib.request.urlopen(req,timeout=16) as r:
+                if r.status==200 and r.headers.get("Content-Type","").startswith("image/"):
+                    passed+=1
+                else:missing.append((id,name,r.status))
+        except urllib.error.HTTPError as error:
+            if error.code in (429,403,503):
+                blocked+=1
+            else:missing.append((id,name,error.code))
+        except Exception as error:
+            blocked+=1
+        if (passed+len(missing)+blocked)%10==0:
+            print("CHECK",passed,"confirmed",len(missing),"missing",blocked,"blocked",flush=True)
+print("FINAL:",passed,"of",photos,"accessible;",
+      blocked,"rate-limited/unavailable;",len(missing),"missing")
+for row in missing:
+    print("MISSING:",row)
+if missing:
+    raise SystemExit("Manifest contains incorrect Commons filenames")
