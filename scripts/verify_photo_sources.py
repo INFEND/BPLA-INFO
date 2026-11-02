@@ -40,7 +40,13 @@ for id,entry in data["items"].items():
             except urllib.error.HTTPError as error:
                 if error.code==429 and attempt==0:
                     retry_after=error.headers.get("Retry-After","")
-                    wait=min(20,max(6,int(retry_after))) if retry_after.isdigit() else 8
+                    wait=int(retry_after) if retry_after.isdigit() else 4
+                    if wait>6:
+                        blocked+=1
+                        if len(blocked_samples)<8:blocked_samples.append((id,name,f"HTTP 429; Retry-After {wait}s"))
+                        print("RATE-LIMIT:",name,"deferred; server requests a long wait",flush=True)
+                        break
+                    wait=max(3,wait)
                     print("RATE-LIMIT:",name,"retrying in",wait,"seconds",flush=True)
                     time.sleep(wait)
                     continue
