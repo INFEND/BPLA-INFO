@@ -21,6 +21,24 @@ class PhotoDeliveryRegressionTests(unittest.TestCase):
         self.assertIn('trim(folder)', JAVA)
         self.assertIn('photo.file.equals(image.getTag())', JAVA)
 
+    def test_cache_rejects_corrupt_images_before_and_after_download(self):
+        self.assertIn("private static boolean validImage(File file)", JAVA)
+        self.assertIn("if(output.isFile()&&!validImage(output))output.delete();", JAVA)
+        self.assertIn("!validImage(temp)||!temp.renameTo(output)", JAVA)
+        self.assertIn('throw new java.io.IOException("Cached photo could not be decoded")', JAVA)
+
+    def test_fullscreen_photo_is_not_zero_height_in_wrap_content_dialog(self):
+        activity = (ROOT / "app/src/main/java/dev/infend/bplainfo/MainActivity.java").read_text("utf-8")
+        viewer = activity.split("private void showDocumentaryPhoto(", 1)[1].split("private void showFullPhoto(", 1)[0]
+        self.assertIn("photoHeight", viewer)
+        self.assertIn("new LinearLayout.LayoutParams(-1,photoHeight)", viewer)
+        self.assertNotIn("content.addView(photo,new LinearLayout.LayoutParams(-1,0,1))", viewer)
+
+    def test_network_blocked_links_do_not_pass_verification(self):
+        verifier = (ROOT / "scripts/verify_photo_sources.py").read_text("utf-8")
+        self.assertIn('if blocked:', verifier)
+        self.assertIn('INCONCLUSIVE:', verifier)
+
     def test_photo_records_have_real_catalog_ids_and_no_duplicate_files(self):
         ids = {row["id"] for row in CATALOG["entries"]}
         self.assertEqual(len(ids), len(CATALOG["entries"]))
