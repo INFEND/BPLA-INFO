@@ -52,6 +52,17 @@ jobs:
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
+      - name: Confirm release signing configuration
+        if: github.event_name != 'pull_request'
+        env:
+          BPLA_INFO_SIGNING_BUNDLE: ${{ secrets.BPLA_INFO_SIGNING_BUNDLE || secrets.INFEND_SIGNING_BUNDLE || secrets.ANDROID_SIGNING_BUNDLE || secrets.QR_LINK_SIGNING_BUNDLE }}
+        shell: bash
+        run: |
+          if [[ -z "$BPLA_INFO_SIGNING_BUNDLE" ]]; then
+            echo "::error::No permanent BPLA signing bundle was supplied"
+            exit 1
+          fi
+          echo "Permanent signing bundle is available; its contents are not logged."
       - name: Sign release with permanent key
         id: signing
         if: github.event_name != 'pull_request'
