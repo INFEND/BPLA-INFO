@@ -53,25 +53,56 @@
       "files": [
         {
           "file": "Baykar Bayraktar TB2 TEKNOFEST 2022.jpg",
-          "source": "Wikimedia Commons"
+          "source": "Wikimedia Commons",
+          "author": "𐰇𐱅𐰚𐰤",
+          "license": "CC BY-SA 4.0",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Baykar_Bayraktar_TB2_TEKNOFEST_2022.jpg",
+          "reviewedOn": "2026-11-02",
+          "binaryVerified": false,
+          "processed": false
         },
         {
           "file": "Baykar Bayraktar TB2 TEKNOFEST 2022 (2).jpg",
-          "source": "Wikimedia Commons"
+          "source": "Wikimedia Commons",
+          "author": "𐰇𐱅𐰚𐰤",
+          "license": "CC BY-SA 4.0",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Baykar_Bayraktar_TB2_TEKNOFEST_2022_(2).jpg",
+          "reviewedOn": "2026-11-02",
+          "binaryVerified": false,
+          "processed": false
         },
         {
           "file": "Bayraktar TB2 Ground.jpg",
-          "source": "Wikimedia Commons"
+          "source": "Wikimedia Commons",
+          "author": "Bayhaluk",
+          "license": "CC BY-SA 4.0",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bayraktar_TB2_Ground.jpg",
+          "reviewedOn": "2026-11-02",
+          "binaryVerified": false,
+          "processed": false
         },
         {
           "file": "Bayraktar TB2 Runway.jpg",
-          "source": "Wikimedia Commons"
+          "source": "Wikimedia Commons",
+          "author": "Bayhaluk",
+          "license": "CC BY-SA 4.0",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bayraktar_TB2_Runway.jpg",
+          "reviewedOn": "2026-11-02",
+          "binaryVerified": false,
+          "processed": false
         },
         {
           "file": "Bayraktar TB2 S-IHA TurkishArmy Teknofest2021 (1).jpg",
-          "source": "Wikimedia Commons"
+          "source": "Wikimedia Commons",
+          "author": "CeeGee",
+          "license": "CC BY-SA 4.0",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bayraktar_TB2_S-IHA_TurkishArmy_Teknofest2021_(1).jpg",
+          "reviewedOn": "2026-11-02",
+          "binaryVerified": false,
+          "processed": false
         }
-      ]
+      ],
+      "review": "All five Commons file-description pages were checked for exact TB2 filename, credited author, CC BY-SA 4.0 and subject. Binary GET, image distinctness by pixels, angles and Android rendering remain unverified."
     },
     "lostarmour-pdf-2024-058": {
       "name": "LELEKA-100 (BASIC)",
