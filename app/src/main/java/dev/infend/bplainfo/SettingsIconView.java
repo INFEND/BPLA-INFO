@@ -32,6 +32,7 @@ public final class SettingsIconView extends View {
                 circle(canvas,24,24,12);circle(canvas,24,24,7);
                 pen.setStyle(Paint.Style.FILL);circle(canvas,24,24,2);
                 break;
+            case "dark":
             case "moon":{
                 Path moon=new Path();moon.moveTo(28,9);
                 moon.cubicTo(17,12,13,24,18,32);
@@ -40,6 +41,7 @@ public final class SettingsIconView extends View {
                 moon.cubicTo(12,14,19,9,28,9);
                 canvas.drawPath(moon,pen);break;
             }
+            case "light":
             case "sun":
                 circle(canvas,24,24,7.5f);
                 for(int i=0;i<8;i++){
@@ -48,6 +50,7 @@ public final class SettingsIconView extends View {
                         24+(float)Math.cos(a)*16,24+(float)Math.sin(a)*16);
                 }
                 break;
+            case "appearance":
             case "palette":{
                 Path palette=new Path();palette.moveTo(23,9);
                 palette.cubicTo(9,9,6,20,10,30);
@@ -67,10 +70,12 @@ public final class SettingsIconView extends View {
                 star.lineTo(20,28);star.lineTo(9,24);star.lineTo(20,20);star.close();
                 canvas.drawPath(star,pen);break;
             }
+            case "ota":
             case "refresh":
                 canvas.drawArc(11,11,37,37,-53,292,false,pen);
                 line(canvas,31,11,37,12);line(canvas,37,12,37,18);
                 break;
+            case "about":
             case "info":
                 circle(canvas,24,24,14);
                 line(canvas,24,22,24,32);

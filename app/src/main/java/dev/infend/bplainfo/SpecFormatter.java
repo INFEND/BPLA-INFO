@@ -22,6 +22,8 @@ public final class SpecFormatter {
         if(!numeric)return text;
         boolean approximate=APPROX.matcher(text).find()||text.startsWith("~")||text.startsWith("≈");
         text=APPROX_NOTE.matcher(text).replaceAll("");
+        text=text.replaceAll("(?iu)\\s*\\((?:без дополнительной батареи|32\\s*м\\s*/\\s*с)\\)","");
+        text=text.replace('≈','~');
         text=rep(text,"\\b(?:примерно|приблизительно|около|ориентировочно|оценочно|предположительно)\\b","");
         text=text.replaceAll("(?<=\\d)\\.(?=\\d)",",");
         text=rep(text,"\\b(?:км\\s*/\\s*(?:ч|час|часа|часов)|км\\s*в\\s*час|km/h|kmph)\\b","КМ/Ч");

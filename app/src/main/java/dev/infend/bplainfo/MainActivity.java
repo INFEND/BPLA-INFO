@@ -357,12 +357,17 @@ public final class MainActivity extends Activity {
         });
     }
     private String activeSettingsSection="";
+    private final java.util.Map<String,LinearLayout> settingsBodies=new java.util.LinkedHashMap<>();
+    private final java.util.Map<String,TextView> settingsArrows=new java.util.LinkedHashMap<>();
     private boolean showingSettings=false;
     private String appVersion(){
         try{return getPackageManager().getPackageInfo(getPackageName(),0).versionName;}
         catch(Exception ignored){return "—";}
     }
     private void settings(){
+        activeSettingsSection="";
+        settingsBodies.clear();
+        settingsArrows.clear();
         showingDetail=false;showingSettings=true;
         setup();
         titleBar("НАСТРОЙКИ","ПЕРСОНАЛИЗАЦИЯ  /  БПЛА ИНФО",this::home);
@@ -467,25 +472,35 @@ public final class MainActivity extends Activity {
         header.setOnClickListener(v->{
             if(t.haptics)v.performHapticFeedback(android.view.HapticFeedbackConstants.KEYBOARD_TAP);
             boolean expand=body.getVisibility()!=View.VISIBLE;
+            for(LinearLayout item:settingsBodies.values()){
+                if(item!=body){
+                    item.animate().cancel();
+                    item.setVisibility(View.GONE);
+                    item.setAlpha(1f);
+                    item.setTranslationY(0f);
+                }
+            }
+            for(TextView item:settingsArrows.values())item.setText("⌄");
             body.animate().cancel();
-            activeSettingsSection=expand?id:"";
-            arrow.setText(expand?"⌃":"⌄");
             if(expand){
                 body.setVisibility(View.VISIBLE);
+                arrow.setText("⌃");
+                activeSettingsSection=id;
                 if(t.animations){
                     body.setAlpha(0f);body.setTranslationY(-dp(8));
-                    body.animate().alpha(1f).translationY(0).setDuration(190).start();
-                }else{body.setAlpha(1f);body.setTranslationY(0);}
+                    body.animate().alpha(1f).translationY(0f).setDuration(190).start();
+                }else{
+                    body.setAlpha(1f);body.setTranslationY(0f);
+                }
             }else{
-                if(t.animations){
-                    body.animate().alpha(0f).translationY(-dp(6)).setDuration(110)
-                        .withEndAction(()->{
-                            body.setVisibility(View.GONE);
-                            body.setAlpha(1f);body.setTranslationY(0);
-                        }).start();
-                }else{body.setVisibility(View.GONE);body.setAlpha(1f);}
+                body.setVisibility(View.GONE);
+                body.setAlpha(1f);body.setTranslationY(0f);
+                arrow.setText("⌄");
+                activeSettingsSection="";
             }
         });
+        settingsBodies.put(id,body);
+        settingsArrows.put(id,arrow);
     }
     private interface ToggleHandler {void set(boolean selected);}
     private void settingsToggle(LinearLayout parent,String label,String description,boolean initial,ToggleHandler onChange){

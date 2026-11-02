@@ -9,7 +9,7 @@
       "fields": [
         [
           "МАКСИМАЛЬНАЯ СКОРОСТЬ",
-          "160 км/ч (публикация 2026 г.)"
+          "~160 КМ/Ч"
         ]
       ],
       "source": "https://good-time-invest.com/blog/elf-k-strike-uav/",
@@ -21,7 +21,7 @@
       "fields": [
         [
           "МАКСИМАЛЬНАЯ СКОРОСТЬ",
-          "200 км/ч (по публикациям)"
+          "~200 КМ/Ч"
         ]
       ],
       "source": "https://www.weaponspecs.com/systems/terminal-autonomy/aq-400-scythe/",
@@ -33,7 +33,7 @@
       "fields": [
         [
           "МАКСИМАЛЬНАЯ СКОРОСТЬ",
-          "140 км/ч"
+          "140 КМ/Ч"
         ]
       ],
       "source": "https://www.unmannedsystemstechnology.com/wp-content/uploads/2016/06/PD-1-Fixed-Wing-UAV.pdf",
@@ -45,7 +45,7 @@
       "fields": [
         [
           "МАКСИМАЛЬНАЯ СКОРОСТЬ",
-          "140–160 км/ч (зависит от конфигурации)"
+          "140–160 КМ/Ч"
         ]
       ],
       "source": "https://ukrspecsystems.com/uk/drones/pd-2-uas",
@@ -57,7 +57,7 @@
       "fields": [
         [
           "МАКСИМАЛЬНАЯ СКОРОСТЬ",
-          "до 115 км/ч (32 м/с)"
+          "ДО 115 КМ/Ч"
         ]
       ],
       "source": "https://pdf.directindustry.com/pdf/uavfactory-ltd/penguin-c/181026-666726.html",
@@ -93,7 +93,7 @@
       "fields": [
         [
           "ПОЛЕЗНАЯ НАГРУЗКА",
-          "до 1,2 кг (без дополнительной батареи)"
+          "ДО 1,2 КГ"
         ]
       ],
       "source": "https://docs.deltaquad.com/deltaquad-pro-operations-manual-v2/vehicle-specifications",
@@ -105,7 +105,7 @@
       "fields": [
         [
           "ПОЛЕЗНАЯ НАГРУЗКА",
-          "580 г"
+          "580 Г"
         ]
       ],
       "source": "https://www.baykartech.com/en/uav/bayraktar-mini-iha/",
@@ -117,7 +117,7 @@
       "fields": [
         [
           "ПОЛЕЗНАЯ НАГРУЗКА",
-          "до 30 кг"
+          "ДО 30 КГ"
         ]
       ],
       "source": "https://www.uncrewed-systems.com/how-making-this-uav-comply-with-a-raft-of-nato-standards-is-paying-dividends-in-its-use-for-military-missions/",
