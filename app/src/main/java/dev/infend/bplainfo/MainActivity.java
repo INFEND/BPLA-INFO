@@ -101,7 +101,7 @@ public final class MainActivity extends Activity {
         if(back==null)bar.addView(button("⚙",false,this::settings),margins(46,46,4,0));
     }
     private void home(){
-        showingDetail=false;
+        showingDetail=false;showingSettings=false;
         setup();
         titleBar("БПЛА  ИНФО","КАТАЛОГ  /  СПРАВОЧНИК  /  INFEND",null);
         LinearLayout inner=vertical();inner.setPadding(dp(14),0,dp(14),dp(30));
@@ -283,15 +283,134 @@ public final class MainActivity extends Activity {
             home();
         }).show();
     }
+    private String activeSettingsSection="appearance";
+    private boolean showingSettings=false;
     private void settings(){
-        String[] options={"Тема: "+ThemePrefs.MODES[t.mode],"Акцент: "+ThemePrefs.ACCENTS[t.accentIndex],"Анимации: "+(t.animations?"ВКЛ":"ВЫКЛ"),"Проверить обновления OTA","О приложении"};
-        dialog().setTitle("НАСТРОЙКИ").setItems(options,(dialog,index)->{
-            if(index==0)dialog().setTitle("Оформление").setSingleChoiceItems(ThemePrefs.MODES,t.mode,(dd,i)->{t.mode=i;t.save(this);t=new ThemePrefs(this);dd.dismiss();home();}).show();
-            if(index==1)dialog().setTitle("Цветовой акцент").setSingleChoiceItems(ThemePrefs.ACCENTS,t.accentIndex,(dd,i)->{t.accentIndex=i;t.save(this);t=new ThemePrefs(this);dd.dismiss();home();}).show();
-            if(index==2){t.animations=!t.animations;t.save(this);home();}
-            if(index==3)new OtaUpdater(this).check(false);
-            if(index==4)dialog().setTitle("БПЛА ИНФО 1.0.0").setMessage("Справочник INFEND.\nЛокальные карточки, сортировки и фильтры, импорт/экспорт, темы и встроенное OTA.\n\nНачальные сведения переписаны с изображения и не проверены независимо.").setPositiveButton("ГОТОВО",null).show();
-        }).show();
+        showingDetail=false;showingSettings=true;
+        setup();
+        titleBar("НАСТРОЙКИ","ПЕРСОНАЛИЗАЦИЯ  /  БПЛА ИНФО",this::home);
+        LinearLayout content=vertical();content.setPadding(dp(16),0,dp(16),dp(28));
+        scroll(root).addView(content);
+        LinearLayout intro=vertical();intro.setPadding(dp(17),dp(16),dp(17),dp(17));
+        intro.setBackground(panel(t.panel,20));content.addView(intro,margins(-1,-2,0,8));
+        intro.addView(text("ПЕРСОНАЛИЗАЦИЯ",11,t.accent,true));
+        intro.addView(text("Интерфейс под твой стиль",20,t.fg,true),margins(-1,-2,0,4));
+        intro.addView(text("Настройки в стиле QR LINK. Разделы раскрываются по нажатию.",12,t.muted,false));
+
+        addSettingsSection(content,"appearance","Оформление","Тема и палитра из QR LINK","◈",body->{
+            body.addView(text("ТЕМА ИНТЕРФЕЙСА",11,t.muted,true),margins(-1,-2,1,10));
+            LinearLayout themes=horizontal();body.addView(themes,margins(-1,88,0,7));
+            String[] names={"AMOLED","Тёмная","Светлая"},glyphs={"◉","☾","☀"};
+            for(int i=0;i<3;i++){
+                final int index=i;boolean selected=t.mode==i;
+                LinearLayout tile=vertical();tile.setGravity(Gravity.CENTER);tile.setPadding(dp(3),dp(6),dp(3),dp(6));
+                tile.setBackground(outlined(selected?t.soft:t.buttonBg,selected?t.accent:t.stroke,14));
+                TextView glyph=text(glyphs[i],27,selected?t.accent:t.muted,true);
+                glyph.setGravity(Gravity.CENTER);tile.addView(glyph);
+                TextView title=text(names[i],12,selected?t.accent:t.fg,selected);
+                title.setGravity(Gravity.CENTER);tile.addView(title);
+                LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(0,-1,1);
+                lp.setMargins(dp(3),0,dp(3),0);themes.addView(tile,lp);
+                tile.setContentDescription("Тема "+names[i]);
+                tile.setOnClickListener(v->{
+                    if(t.mode==index)return;
+                    t.mode=index;t.save(this);t=new ThemePrefs(this);settings();
+                });
+            }
+            body.addView(text("АКЦЕНТНЫЙ ЦВЕТ  ·  "+ThemePrefs.ACCENTS[t.accentIndex],11,t.muted,true),margins(-1,-2,2,10));
+            for(int from=0;from<ThemePrefs.ACCENTS.length;from+=4){
+                LinearLayout row=horizontal();body.addView(row,margins(-1,75,0,2));
+                for(int j=from;j<Math.min(from+4,ThemePrefs.ACCENTS.length);j++){
+                    final int index=j;boolean selected=index==t.accentIndex;
+                    LinearLayout tile=vertical();tile.setGravity(Gravity.CENTER);
+                    tile.setPadding(dp(2),dp(7),dp(2),dp(5));
+                    tile.setBackground(outlined(selected?t.soft:t.panel,selected?t.accent:t.stroke,13));
+                    TextView dot=text(selected?"✓":"●",21,selected?contrast(ThemePrefs.PALETTE[index]):ThemePrefs.PALETTE[index],true);
+                    dot.setGravity(Gravity.CENTER);
+                    dot.setBackground(outlined(ThemePrefs.PALETTE[index],ThemePrefs.PALETTE[index],30));
+                    tile.addView(dot,margins(29,29,0,0));
+                    TextView label=text(ThemePrefs.ACCENTS[index],10,selected?t.accent:t.fg,selected);
+                    label.setGravity(Gravity.CENTER);label.setSingleLine(true);label.setEllipsize(android.text.TextUtils.TruncateAt.END);
+                    tile.addView(label,margins(-1,-2,0,3));
+                    LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(0,-1,1);
+                    lp.setMargins(dp(2),0,dp(2),0);row.addView(tile,lp);
+                    tile.setOnClickListener(v->{
+                        if(t.accentIndex==index)return;
+                        t.accentIndex=index;t.save(this);t=new ThemePrefs(this);settings();
+                    });
+                }
+            }
+        });
+        addSettingsSection(content,"motion","Анимация и отклик","Плавность и тактильная обратная связь","✦",body->{
+            settingsToggle(body,"Плавные анимации","Переходы карточек и смена состояний",t.animations,on->{t.animations=on;t.save(this);});
+            settingsToggle(body,"Тактильный отклик","Короткая вибрация при выборе",t.haptics,on->{t.haptics=on;t.save(this);});
+        });
+        addSettingsSection(content,"ota","Обновления приложения","OTA прямо в приложении, без браузера","↻",body->{
+            LinearLayout updateTile=vertical();updateTile.setPadding(dp(14),dp(14),dp(14),dp(14));
+            updateTile.setBackground(outlined(t.soft,t.stroke,14));
+            body.addView(updateTile,margins(-1,-2,0,6));
+            updateTile.addView(text("БПЛА ИНФО  ·  "+BuildConfig.VERSION_NAME,16,t.fg,true));
+            updateTile.addView(text("Проверка и установка обновлений через защищённый канал",12,t.muted,false),margins(-1,-2,0,8));
+            updateTile.addView(button("↻  ПРОВЕРИТЬ ОБНОВЛЕНИЯ",true,()->new OtaUpdater(this).check(false)),margins(-1,48,0,0));
+        });
+        addSettingsSection(content,"about","О приложении","Версия и управление каталогом","ⓘ",body->{
+            body.addView(text("БПЛА ИНФО",18,t.fg,true));
+            body.addView(text("Версия "+BuildConfig.VERSION_NAME+"  ·  INFEND",12,t.muted,false),margins(-1,-2,0,6));
+            body.addView(text("Локальный справочник БПЛА. Управление каталогом, импорт и экспорт доступны с главного экрана.",13,t.fg,false));
+        });
+    }
+    private int contrast(int color){
+        return (.299*Color.red(color)+.587*Color.green(color)+.114*Color.blue(color))>150?0xff0a1520:0xffffffff;
+    }
+    private GradientDrawable outlined(int color,int border,int radius){
+        GradientDrawable bg=new GradientDrawable();
+        bg.setColor(color);bg.setCornerRadius(dp(radius));bg.setStroke(dp(1),border);
+        return bg;
+    }
+    private interface SectionRenderer {void render(LinearLayout body);}
+    private void addSettingsSection(LinearLayout into,String id,String heading,String subtitle,String symbol,SectionRenderer renderer){
+        boolean opened=activeSettingsSection.equals(id);
+        LinearLayout wrapper=vertical();wrapper.setBackground(outlined(t.panel,t.stroke,20));
+        into.addView(wrapper,margins(-1,-2,0,7));
+        LinearLayout header=horizontal();header.setPadding(dp(14),dp(14),dp(14),dp(14));
+        wrapper.addView(header);
+        TextView icon=text(symbol,23,opened?t.accent:t.muted,true);icon.setGravity(Gravity.CENTER);
+        icon.setBackground(outlined(t.soft,t.stroke,13));header.addView(icon,margins(45,45,0,0));
+        LinearLayout labels=vertical();labels.setPadding(dp(12),0,0,0);
+        header.addView(labels,new LinearLayout.LayoutParams(0,-2,1));
+        labels.addView(text(heading,16,t.fg,true));
+        labels.addView(text(subtitle,11,t.muted,false));
+        TextView arrow=text(opened?"⌃":"⌄",21,opened?t.accent:t.muted,true);
+        header.addView(arrow);
+        LinearLayout body=vertical();body.setPadding(dp(14),0,dp(14),dp(14));
+        wrapper.addView(body);renderer.render(body);
+        body.setVisibility(opened?View.VISIBLE:View.GONE);
+        header.setOnClickListener(v->{
+            if(t.haptics)v.performHapticFeedback(android.view.HapticFeedbackConstants.KEYBOARD_TAP);
+            activeSettingsSection=opened?"":id;
+            if(t.animations&&body.getVisibility()!=View.VISIBLE){
+                body.setAlpha(0);body.setTranslationY(-dp(8));body.setVisibility(View.VISIBLE);
+                body.animate().alpha(1).translationY(0).setDuration(200).start();
+                arrow.setText("⌃");
+            }else if(t.animations&&body.getVisibility()==View.VISIBLE){
+                body.animate().alpha(0).translationY(-dp(8)).setDuration(120)
+                    .withEndAction(()->{body.setVisibility(View.GONE);arrow.setText("⌄");}).start();
+            }else{body.setVisibility(opened?View.GONE:View.VISIBLE);arrow.setText(opened?"⌄":"⌃");}
+            activeSettingsSection=body.getVisibility()==View.GONE?"":id;
+        });
+    }
+    private interface ToggleHandler {void set(boolean selected);}
+    private void settingsToggle(LinearLayout parent,String label,String description,boolean initial,ToggleHandler onChange){
+        LinearLayout row=horizontal();row.setPadding(dp(5),dp(12),dp(5),dp(12));
+        parent.addView(row,margins(-1,-2,0,4));
+        LinearLayout labels=vertical();row.addView(labels,new LinearLayout.LayoutParams(0,-2,1));
+        labels.addView(text(label,14,t.fg,true));
+        labels.addView(text(description,11,t.muted,false));
+        Switch toggle=new Switch(this);toggle.setChecked(initial);
+        toggle.setThumbTintList(android.content.res.ColorStateList.valueOf(t.accent));
+        toggle.setOnCheckedChangeListener((button,isChecked)->onChange.set(isChecked));
+        row.addView(toggle);
+        row.setOnClickListener(v->toggle.setChecked(!toggle.isChecked()));
     }
     private void importFile(){Intent i=new Intent(Intent.ACTION_OPEN_DOCUMENT);i.addCategory(Intent.CATEGORY_OPENABLE);i.setType("application/json");startActivityForResult(i,IMPORT_JSON);}
     private void exportFile(){Intent i=new Intent(Intent.ACTION_CREATE_DOCUMENT);i.addCategory(Intent.CATEGORY_OPENABLE);i.setType("application/json");i.putExtra(Intent.EXTRA_TITLE,"BPLA-INFO-catalog.json");startActivityForResult(i,EXPORT_JSON);}
@@ -316,5 +435,5 @@ public final class MainActivity extends Activity {
     private void toast(String s){Toast.makeText(this,s,Toast.LENGTH_LONG).show();}
     private void hideKeyboard(){try{((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(root.getWindowToken(),0);}catch(Exception ignored){}}
     @Override protected void onResume(){super.onResume();OtaUpdater.resumePending(this);}
-    @Override public void onBackPressed(){if(showingDetail){home();return;}super.onBackPressed();}
+    @Override public void onBackPressed(){if(showingDetail||showingSettings){home();return;}super.onBackPressed();}
 }
