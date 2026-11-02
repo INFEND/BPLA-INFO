@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Check authenticity metadata and Wikimedia media access for curated UAV photos."""
-import hashlib,json,pathlib,urllib.parse,urllib.request
+import hashlib,json,pathlib,urllib.error,urllib.parse,urllib.request
 root=pathlib.Path(__file__).resolve().parents[1]
 catalog=json.loads((root/"app/src/main/assets/catalog_lostarmour_2024_verified.json").read_text("utf-8"))
 data=json.loads((root/"app/src/main/assets/photo_sources.json").read_text("utf-8"))
@@ -18,6 +18,7 @@ print("Curated model count:",len(data["items"]),"verified-file references:",phot
 passed=0
 missing=[]
 blocked=0
+blocked_samples=[]
 for id,entry in data["items"].items():
     for record in entry["files"]:
         name=record["file"].replace(" ","_")
@@ -33,14 +34,24 @@ for id,entry in data["items"].items():
         except urllib.error.HTTPError as error:
             if error.code in (429,403,503):
                 blocked+=1
+                if len(blocked_samples)<8:blocked_samples.append((id,name,f'HTTP {error.code}'))
             else:missing.append((id,name,error.code))
         except Exception as error:
             blocked+=1
+            if len(blocked_samples)<8:blocked_samples.append((id,name,type(error).__name__))
         if (passed+len(missing)+blocked)%10==0:
             print("CHECK",passed,"confirmed",len(missing),"missing",blocked,"blocked",flush=True)
 print("FINAL:",passed,"of",photos,"accessible;",
       blocked,"rate-limited/unavailable;",len(missing),"missing")
 for row in missing:
     print("MISSING:",row)
+for row in blocked_samples:
+    print("UNVERIFIED:",row)
+# A green check must mean that *all* referenced images were reachable.
+# Network blocks are inconclusive, never evidence of valid Commons URLs.
 if missing:
     raise SystemExit("Manifest contains incorrect Commons filenames")
+if blocked:
+    raise SystemExit(f"INCONCLUSIVE: {blocked} of {photos} photo URLs could not be verified")
+if passed!=photos:
+    raise SystemExit("Verification did not check every photo URL")
