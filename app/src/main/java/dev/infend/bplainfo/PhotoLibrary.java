@@ -32,10 +32,11 @@ import java.util.concurrent.Executors;
  */
 public final class PhotoLibrary {
     public static final class Photo {
-        public final String file, url, attributionUrl;
+        public final String file, url, fallbackUrl, attributionUrl;
         public Photo(String file) {
             this.file=file;
             this.url=commonsUrl(file);
+            this.fallbackUrl=directCommonsUrl(file);
             String encoded;
             try{encoded=URLEncoder.encode(file.replace(' ','_'),"UTF-8").replace("+","%20");}
             catch(Exception e){encoded="";}
@@ -90,7 +91,18 @@ public final class PhotoLibrary {
         for(byte x:bytes)b.append(String.format(java.util.Locale.ROOT,"%02x",x&255));
         return b.toString();
     }
+    // MediaWiki's documented redirect endpoint serves an appropriately sized
+    // image and avoids downloading very large Commons originals on Android.
     private static String commonsUrl(String name){
+        try{
+            String canonical=name.replace(' ','_');
+            String encoded=URLEncoder.encode(canonical,"UTF-8").replace("+","%20");
+            return "https://commons.wikimedia.org/wiki/Special:Redirect/file/"+encoded+"?width=1600";
+        }catch(Exception e){return "";}
+    }
+    // Retained only as a fallback for installations where MediaWiki redirect
+    // is unavailable. This URL may point to a large original image.
+    private static String directCommonsUrl(String name){
         try{
             String canonical=name.replace(' ','_');
             String md5=hex(MessageDigest.getInstance("MD5").digest(canonical.getBytes("UTF-8")));
@@ -109,40 +121,52 @@ public final class PhotoLibrary {
                 String md5=hex(MessageDigest.getInstance("MD5").digest(photo.file.getBytes("UTF-8")));
                 File output=new File(folder,md5+".img");
                 if(!output.isFile()||output.length()<512){
-                    URL url=new URL(photo.url);
                     boolean complete=false;
-                    for(int attempt=0;attempt<3&&!complete;attempt++){
-                        throttle();
-                        HttpURLConnection connection=(HttpURLConnection)url.openConnection();
-                        connection.setConnectTimeout(12000);
-                        connection.setReadTimeout(35000);
-                        connection.setInstanceFollowRedirects(true);
-                        connection.setRequestProperty("User-Agent","BPLAINFO/1.0 (illustrated UAV reference)");
-                        try{
-                            int status=connection.getResponseCode();
-                            if(status==429||status==503){
-                                Thread.sleep(3000L*(attempt+1));
-                                continue;
-                            }
-                            if(status!=200)throw new java.io.IOException("Image HTTP "+status);
-                            String type=connection.getContentType();
-                            if(type==null||!type.toLowerCase(java.util.Locale.ROOT).startsWith("image/"))throw new java.io.IOException("Not an image");
+                    // Try Commons' supported width-limited redirect first.
+                    // If it fails, fall back to the traditional original URL.
+                    for(String address:new String[]{photo.url,photo.fallbackUrl}){
+                        if(address.isEmpty())continue;
+                        for(int attempt=0;attempt<2&&!complete;attempt++){
+                            HttpURLConnection connection=null;
                             File temp=new File(folder,md5+".part");
-                            long size=0;
-                            try(InputStream in=connection.getInputStream();FileOutputStream out=new FileOutputStream(temp)){
-                                byte[] buffer=new byte[32768];int n;
-                                while((n=in.read(buffer))!=-1){
-                                    size+=n;if(size>15_000_000L)throw new java.io.IOException("Image too large");
-                                    out.write(buffer,0,n);
+                            try{
+                                throttle();
+                                connection=(HttpURLConnection)new URL(address).openConnection();
+                                connection.setConnectTimeout(12000);
+                                connection.setReadTimeout(35000);
+                                connection.setInstanceFollowRedirects(true);
+                                connection.setRequestProperty("User-Agent","BPLAINFO/1.1 (https://github.com/INFEND/BPLA-INFO)");
+                                int status=connection.getResponseCode();
+                                if(status==429||status==503){
+                                    Thread.sleep(2500L*(attempt+1));
+                                    continue;
                                 }
+                                if(status!=200)break;
+                                String type=connection.getContentType();
+                                if(type==null||!type.toLowerCase(java.util.Locale.ROOT).startsWith("image/"))
+                                    throw new java.io.IOException("Response is not an image");
+                                long size=0;
+                                try(InputStream in=connection.getInputStream();FileOutputStream out=new FileOutputStream(temp)){
+                                    byte[] buffer=new byte[32768];int n;
+                                    while((n=in.read(buffer))!=-1){
+                                        size+=n;
+                                        if(size>15_000_000L)throw new java.io.IOException("Image too large");
+                                        out.write(buffer,0,n);
+                                    }
+                                }
+                                if(size<512||!temp.renameTo(output))
+                                    throw new java.io.IOException("Invalid image response");
+                                complete=true;
+                            }catch(java.io.IOException e){
+                                android.util.Log.w("BPLA-INFO","Photo request failed: "+photo.file+" ("+e.getMessage()+")");
+                            }finally{
+                                if(connection!=null)connection.disconnect();
+                                if(!complete)temp.delete();
                             }
-                            if(size<512||!temp.renameTo(output)){
-                                temp.delete();throw new java.io.IOException("Invalid image");
-                            }
-                            complete=true;
-                        }finally{connection.disconnect();}
+                        }
+                        if(complete)break;
                     }
-                    if(!complete)throw new java.io.IOException("Image temporarily rate-limited");
+                    if(!complete)throw new java.io.IOException("All Commons image endpoints unavailable");
                     trim(folder);
                 }
                 BitmapFactory.Options probe=new BitmapFactory.Options();
