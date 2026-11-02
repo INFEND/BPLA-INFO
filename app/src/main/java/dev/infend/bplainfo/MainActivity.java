@@ -190,6 +190,7 @@ public final class MainActivity extends Activity {
         group.addView(text(label,9,t.muted,true));
         group.addView(text(value.isEmpty()?"Н/Д":value,13,t.accent,true));
     }
+    private AlertDialog.Builder dialog(){return new AlertDialog.Builder(this,t.mode==2?android.R.style.Theme_Material_Light_Dialog_Alert:android.R.style.Theme_Material_Dialog_Alert);}
     private void save(){DroneStore.save(this,records);}
     private void detail(Drone d){
         hideKeyboard();showingDetail=true;setup();
@@ -223,10 +224,10 @@ public final class MainActivity extends Activity {
         content.addView(text("Проверяй данные по первоисточнику. Схемы носят исключительно иллюстративный характер.",11,t.muted,false),margins(-1,-2,4,10));
     }
     private void more(Drone d){
-        new AlertDialog.Builder(this).setTitle(d.name()).setItems(new String[]{"Добавить / сменить фото","Поделиться карточкой","Удалить карточку"},(dialog,which)->{
+        dialog().setTitle(d.name()).setItems(new String[]{"Добавить / сменить фото","Поделиться карточкой","Удалить карточку"},(dialog,which)->{
             if(which==0){pendingImage=d;Intent intent=new Intent(Intent.ACTION_OPEN_DOCUMENT);intent.setType("image/*");intent.addCategory(Intent.CATEGORY_OPENABLE);intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);startActivityForResult(intent,PICK_IMAGE);}
             if(which==1){StringBuilder b=new StringBuilder(d.name()+"\n");for(int i=1;i<Drone.FIELDS.length;i++)if(!d.get(i).isEmpty())b.append(Drone.TITLES[i]).append(": ").append(d.get(i)).append('\n');Intent intent=new Intent(Intent.ACTION_SEND);intent.setType("text/plain");intent.putExtra(Intent.EXTRA_TEXT,b.toString());startActivity(Intent.createChooser(intent,"Поделиться карточкой"));}
-            if(which==2)new AlertDialog.Builder(this).setTitle("Удалить «"+d.name()+"»?").setMessage("Карточка будет удалена из локального каталога.").setNegativeButton("ОТМЕНА",null).setPositiveButton("УДАЛИТЬ",(dd,w)->{records.remove(d);save();home();}).show();
+            if(which==2)dialog().setTitle("Удалить «"+d.name()+"»?").setMessage("Карточка будет удалена из локального каталога.").setNegativeButton("ОТМЕНА",null).setPositiveButton("УДАЛИТЬ",(dd,w)->{records.remove(d);save();home();}).show();
         }).show();
     }
     private void edit(Drone existing){
@@ -239,7 +240,7 @@ public final class MainActivity extends Activity {
             if(i==15)e.setMinLines(2);
             e.setHint(Drone.TITLES[i]);e.setSelectAllOnFocus(false);inputs[i]=e;fields.addView(e,margins(-1,43,0,4));
         }
-        AlertDialog dialog=new AlertDialog.Builder(this).setTitle(existing==null?"Новая карточка":"Редактирование").setView(sc)
+        AlertDialog dialog=dialog().setTitle(existing==null?"Новая карточка":"Редактирование").setView(sc)
             .setNegativeButton("ОТМЕНА",null).setPositiveButton("СОХРАНИТЬ",null).create();
         dialog.setOnShowListener(v->dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(b->{
             if(inputs[0].getText().toString().trim().isEmpty()){inputs[0].setError("Название обязательно");return;}
@@ -251,19 +252,19 @@ public final class MainActivity extends Activity {
     }
     private void sortDialog(){
         String[] names=new String[sortNames.length+1];System.arraycopy(sortNames,0,names,0,sortNames.length);names[sortNames.length]=descending?"Направление: ↓ убывание":"Направление: ↑ возрастание";
-        new AlertDialog.Builder(this).setTitle("Сортировка").setItems(names,(dialog,choice)->{
+        dialog().setTitle("Сортировка").setItems(names,(dialog,choice)->{
             if(choice==sortNames.length)descending=!descending;else sortBy=choice;
             home();
         }).show();
     }
     private void settings(){
         String[] options={"Тема: "+ThemePrefs.MODES[t.mode],"Акцент: "+ThemePrefs.ACCENTS[t.accentIndex],"Анимации: "+(t.animations?"ВКЛ":"ВЫКЛ"),"Проверить обновления OTA","О приложении"};
-        new AlertDialog.Builder(this).setTitle("НАСТРОЙКИ").setItems(options,(dialog,index)->{
-            if(index==0)new AlertDialog.Builder(this).setTitle("Оформление").setSingleChoiceItems(ThemePrefs.MODES,t.mode,(dd,i)->{t.mode=i;t.save(this);t=new ThemePrefs(this);dd.dismiss();home();}).show();
-            if(index==1)new AlertDialog.Builder(this).setTitle("Цветовой акцент").setSingleChoiceItems(ThemePrefs.ACCENTS,t.accentIndex,(dd,i)->{t.accentIndex=i;t.save(this);t=new ThemePrefs(this);dd.dismiss();home();}).show();
+        dialog().setTitle("НАСТРОЙКИ").setItems(options,(dialog,index)->{
+            if(index==0)dialog().setTitle("Оформление").setSingleChoiceItems(ThemePrefs.MODES,t.mode,(dd,i)->{t.mode=i;t.save(this);t=new ThemePrefs(this);dd.dismiss();home();}).show();
+            if(index==1)dialog().setTitle("Цветовой акцент").setSingleChoiceItems(ThemePrefs.ACCENTS,t.accentIndex,(dd,i)->{t.accentIndex=i;t.save(this);t=new ThemePrefs(this);dd.dismiss();home();}).show();
             if(index==2){t.animations=!t.animations;t.save(this);home();}
             if(index==3)new OtaUpdater(this).check(false);
-            if(index==4)new AlertDialog.Builder(this).setTitle("БПЛА ИНФО 1.0.0").setMessage("Справочник INFEND.\nЛокальные карточки, сортировки и фильтры, импорт/экспорт, темы и встроенное OTA.\n\nНачальные сведения переписаны с изображения и не проверены независимо.").setPositiveButton("ГОТОВО",null).show();
+            if(index==4)dialog().setTitle("БПЛА ИНФО 1.0.0").setMessage("Справочник INFEND.\nЛокальные карточки, сортировки и фильтры, импорт/экспорт, темы и встроенное OTA.\n\nНачальные сведения переписаны с изображения и не проверены независимо.").setPositiveButton("ГОТОВО",null).show();
         }).show();
     }
     private void importFile(){Intent i=new Intent(Intent.ACTION_OPEN_DOCUMENT);i.addCategory(Intent.CATEGORY_OPENABLE);i.setType("application/json");startActivityForResult(i,IMPORT_JSON);}
@@ -284,9 +285,10 @@ public final class MainActivity extends Activity {
                 try(InputStream in=getContentResolver().openInputStream(uri)){if(in==null)throw new IOException("Нет доступа");ByteArrayOutputStream out=new ByteArrayOutputStream();byte[] buf=new byte[8192];int n;while((n=in.read(buf))>=0){out.write(buf,0,n);if(out.size()>2_000_000)throw new IOException("Файл слишком большой");}content=out.toByteArray();}
                 int n=DroneStore.importJson(this,records,new String(content,StandardCharsets.UTF_8));toast("Импортировано / обновлено: "+n);home();
             }
-        }catch(Exception e){new AlertDialog.Builder(this).setTitle("Ошибка файла").setMessage(e.getMessage()).setPositiveButton("ОК",null).show();}
+        }catch(Exception e){dialog().setTitle("Ошибка файла").setMessage(e.getMessage()).setPositiveButton("ОК",null).show();}
     }
     private void toast(String s){Toast.makeText(this,s,Toast.LENGTH_LONG).show();}
     private void hideKeyboard(){try{((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(root.getWindowToken(),0);}catch(Exception ignored){}}
+    @Override protected void onResume(){super.onResume();OtaUpdater.resumePending(this);}
     @Override public void onBackPressed(){if(showingDetail){home();return;}super.onBackPressed();}
 }
