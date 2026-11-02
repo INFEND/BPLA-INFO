@@ -222,37 +222,56 @@ public final class MainActivity extends Activity {
         hideKeyboard();showingDetail=true;setup();
         titleBar(d.name(),"ТЕХНИЧЕСКАЯ КАРТОЧКА",this::home);
         LinearLayout content=vertical();content.setPadding(dp(15),0,dp(15),dp(26));scroll(root).addView(content);
-        LinearLayout visuals=vertical();visuals.setPadding(dp(10),dp(12),dp(10),dp(12));visuals.setBackground(panel(t.panel,22));
-        content.addView(visuals,margins(-1,-2,0,6));
-        if(!d.imageUri.isEmpty()){
-            ImageView iv=new ImageView(this);iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            try{iv.setImageURI(Uri.parse(d.imageUri));visuals.addView(iv,margins(-1,180,0,6));}
-            catch(Exception ex){visuals.addView(text("Фотография недоступна",12,t.muted,false));}
+        LinearLayout photos=vertical();photos.setPadding(dp(12),dp(13),dp(12),dp(13));
+        photos.setBackground(outlined(t.panel,t.stroke,20));
+        content.addView(photos,margins(-1,-2,0,7));
+        LinearLayout phototop=horizontal();photos.addView(phototop);
+        TextView photosTitle=text("ФОТОГРАФИИ МОДЕЛИ",12,t.accent,true);
+        phototop.addView(photosTitle,new LinearLayout.LayoutParams(0,-2,1));
+        phototop.addView(button("+ ФОТО",false,()->openPhotoPicker(d)),margins(-2,38,4,0));
+        java.util.LinkedHashSet<String> images=new java.util.LinkedHashSet<>(d.galleryUris);
+        if(images.isEmpty()&&!d.imageUri.isEmpty())images.add(d.imageUri);
+        if(images.isEmpty()){
+            LinearLayout empty=vertical();empty.setPadding(dp(18),dp(28),dp(18),dp(28));
+            empty.setGravity(Gravity.CENTER);empty.setBackground(outlined(t.soft,t.stroke,13));
+            photos.addView(empty,margins(-1,-2,0,7));
+            empty.addView(text("Фотографии пока не добавлены",14,t.fg,true));
+            empty.addView(text("В галерее используются фотографии самой модели, а не рисунки похожих аппаратов.",11,t.muted,false));
+        }else{
+            HorizontalScrollView horizontal=new HorizontalScrollView(this);horizontal.setHorizontalScrollBarEnabled(false);
+            photos.addView(horizontal,margins(-1,226,0,6));
+            LinearLayout gallery=horizontal();horizontal.addView(gallery);
+            int shown=0;
+            for(String path:images){
+                if(shown++>=15)break;
+                LinearLayout frame=vertical();frame.setBackground(outlined(t.soft,t.stroke,14));
+                gallery.addView(frame,margins(270,210,0,5));
+                ImageView image=new ImageView(this);image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                image.setPadding(dp(6),dp(6),dp(6),dp(6));
+                frame.addView(image,new LinearLayout.LayoutParams(-1,-1));
+                try{image.setImageURI(Uri.parse(path));}catch(Exception ignored){}
+                image.setOnClickListener(v->showFullPhoto(path));
+            }
+            photos.addView(text(images.size()+" фото  ·  листай горизонтально",11,t.muted,false));
         }
-        TextView tag=text("СХЕМАТИЧЕСКИЕ ИЛЛЮСТРАЦИИ · НЕ ЧЕРТЕЖИ",10,t.muted,true);visuals.addView(tag,margins(-1,-2,3,2));
-        visuals.addView(text("ВИД СНИЗУ",11,t.accent,true),margins(-1,-2,3,0));
-        visuals.addView(new SilhouetteView(this,t,0),margins(-1,160,0,2));
-        LinearLayout views=horizontal();visuals.addView(views);
-        for(int kind=1;kind<=2;kind++){LinearLayout half=vertical();views.addView(half,new LinearLayout.LayoutParams(0,-2,1));half.addView(text(kind==1?"ВИД СПЕРЕДИ":"ВИД СБОКУ",10,t.muted,true));half.addView(new SilhouetteView(this,t,kind),margins(-1,86,1,2));}
         LinearLayout actions=horizontal();content.addView(actions,margins(-1,49,0,6));
         actions.addView(button(d.favorite?"★ В ИЗБРАННОМ":"☆ ИЗБРАННОЕ",false,()->{d.favorite=!d.favorite;save();detail(d);}),new LinearLayout.LayoutParams(0,-1,1));
         actions.addView(button("✎ ИЗМЕНИТЬ",true,()->edit(d)),margins(-2,-1,4,0));
         actions.addView(button("⋮",false,()->more(d)),margins(45,-1,4,0));
         LinearLayout table=vertical();table.setPadding(dp(15),dp(14),dp(15),dp(14));table.setBackground(panel(t.panel,19));
         content.addView(table,margins(-1,-2,0,6));table.addView(text("ХАРАКТЕРИСТИКИ БПЛА",15,t.accent,true),margins(-1,-2,0,9));
-        for(int i=1;i<Drone.FIELDS.length;i++){
+        for(int i=1;i<14;i++){
             if(d.get(i).isEmpty())continue;
             LinearLayout row=vertical();row.setPadding(0,dp(6),0,dp(8));table.addView(row);
             row.addView(text(Drone.TITLES[i].toUpperCase(Locale.ROOT),10,t.muted,true));
             row.addView(text(d.get(i),15,t.fg,true));
             View divider=new View(this);divider.setBackgroundColor(t.stroke);table.addView(divider,new LinearLayout.LayoutParams(-1,dp(1)));
         }
-        content.addView(text("Проверяй данные по первоисточнику. Схемы носят исключительно иллюстративный характер.",11,t.muted,false),margins(-1,-2,4,10));
     }
     private void more(Drone d){
         dialog().setTitle(d.name()).setItems(new String[]{"Добавить / сменить фото","Поделиться карточкой","Удалить карточку"},(dialog,which)->{
-            if(which==0){pendingImage=d;Intent intent=new Intent(Intent.ACTION_OPEN_DOCUMENT);intent.setType("image/*");intent.addCategory(Intent.CATEGORY_OPENABLE);intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);startActivityForResult(intent,PICK_IMAGE);}
-            if(which==1){StringBuilder b=new StringBuilder(d.name()+"\n");for(int i=1;i<Drone.FIELDS.length;i++)if(!d.get(i).isEmpty())b.append(Drone.TITLES[i]).append(": ").append(d.get(i)).append('\n');Intent intent=new Intent(Intent.ACTION_SEND);intent.setType("text/plain");intent.putExtra(Intent.EXTRA_TEXT,b.toString());startActivity(Intent.createChooser(intent,"Поделиться карточкой"));}
+            if(which==0){openPhotoPicker(d);}
+            if(which==1){StringBuilder b=new StringBuilder(d.name()+"\n");for(int i=1;i<14;i++)if(!d.get(i).isEmpty())b.append(Drone.TITLES[i]).append(": ").append(d.get(i)).append('\n');Intent intent=new Intent(Intent.ACTION_SEND);intent.setType("text/plain");intent.putExtra(Intent.EXTRA_TEXT,b.toString());startActivity(Intent.createChooser(intent,"Поделиться карточкой"));}
             if(which==2)dialog().setTitle("Удалить «"+d.name()+"»?").setMessage("Карточка будет удалена из локального каталога.").setNegativeButton("ОТМЕНА",null).setPositiveButton("УДАЛИТЬ",(dd,w)->{records.remove(d);save();home();}).show();
         }).show();
     }
@@ -261,6 +280,7 @@ public final class MainActivity extends Activity {
         ScrollView sc=new ScrollView(this);LinearLayout fields=vertical();fields.setPadding(dp(18),dp(8),dp(18),dp(7));sc.addView(fields);
         EditText[] inputs=new EditText[Drone.FIELDS.length];
         for(int i=0;i<inputs.length;i++){
+            if(i>=14)continue;
             fields.addView(text(Drone.TITLES[i],12,t.mode==2?0xFF425348:t.muted,true),margins(-1,-2,0,0));
             EditText e=new EditText(this);e.setTextSize(15);e.setSingleLine(i!=15);e.setText(d.get(i));
             if(i==15)e.setMinLines(2);
@@ -270,7 +290,7 @@ public final class MainActivity extends Activity {
             .setNegativeButton("ОТМЕНА",null).setPositiveButton("СОХРАНИТЬ",null).create();
         dialog.setOnShowListener(v->dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(b->{
             if(inputs[0].getText().toString().trim().isEmpty()){inputs[0].setError("Название обязательно");return;}
-            for(int i=0;i<inputs.length;i++)d.set(i,inputs[i].getText().toString());
+            for(int i=0;i<inputs.length;i++)if(inputs[i]!=null)d.set(i,inputs[i].getText().toString());
             if(existing==null)records.add(d);
             save();dialog.dismiss();detail(d);
         }));
@@ -412,17 +432,54 @@ public final class MainActivity extends Activity {
         row.addView(toggle);
         row.setOnClickListener(v->toggle.setChecked(!toggle.isChecked()));
     }
+    private void openPhotoPicker(Drone d){
+        pendingImage=d;
+        Intent intent=new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.setType("image/*");intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+        startActivityForResult(intent,PICK_IMAGE);
+    }
+    private boolean savePickedPhoto(Uri uri,Drone drone){
+        try{
+            getContentResolver().takePersistableUriPermission(uri,Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            String value=uri.toString();
+            if(!drone.galleryUris.contains(value)&&drone.galleryUris.size()<15)drone.galleryUris.add(value);
+            if(drone.imageUri.isEmpty())drone.imageUri=value;
+            return true;
+        }catch(Exception e){return false;}
+    }
+    private void showFullPhoto(String uri){
+        ImageView viewer=new ImageView(this);viewer.setBackgroundColor(t.bg);
+        viewer.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        try{viewer.setImageURI(Uri.parse(uri));}catch(Exception ignored){}
+        android.app.Dialog dialog=new android.app.Dialog(this);
+        dialog.setContentView(viewer);
+        android.view.Window win=dialog.getWindow();
+        if(win!=null){win.setBackgroundDrawableResource(android.R.color.transparent);}
+        dialog.show();
+        if(dialog.getWindow()!=null)dialog.getWindow().setLayout(-1,-1);
+        viewer.setOnClickListener(v->dialog.dismiss());
+    }
     private void importFile(){Intent i=new Intent(Intent.ACTION_OPEN_DOCUMENT);i.addCategory(Intent.CATEGORY_OPENABLE);i.setType("application/json");startActivityForResult(i,IMPORT_JSON);}
     private void exportFile(){Intent i=new Intent(Intent.ACTION_CREATE_DOCUMENT);i.addCategory(Intent.CATEGORY_OPENABLE);i.setType("application/json");i.putExtra(Intent.EXTRA_TITLE,"BPLA-INFO-catalog.json");startActivityForResult(i,EXPORT_JSON);}
     @Override protected void onActivityResult(int request,int result,Intent data){
         super.onActivityResult(request,result,data);
-        if(result!=RESULT_OK||data==null||data.getData()==null)return;
+        if(result!=RESULT_OK||data==null)return;
         Uri uri=data.getData();
+        if(request==PICK_IMAGE&&pendingImage!=null){
+            int added=0;
+            if(data.getClipData()!=null){
+                for(int i=0;i<data.getClipData().getItemCount()&&i<15;i++){
+                    Uri photo=data.getClipData().getItemAt(i).getUri();
+                    added+=savePickedPhoto(photo,pendingImage)?1:0;
+                }
+            }else if(uri!=null)added+=savePickedPhoto(uri,pendingImage)?1:0;
+            save();toast("Добавлено фото: "+added);detail(pendingImage);return;
+        }
+        if(uri==null)return;
         try{
-            if(request==PICK_IMAGE&&pendingImage!=null){
-                getContentResolver().takePersistableUriPermission(uri,Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                pendingImage.imageUri=uri.toString();save();detail(pendingImage);
-            } else if(request==EXPORT_JSON){
+            if(request==EXPORT_JSON){
                 try(OutputStream out=getContentResolver().openOutputStream(uri,"wt")){if(out==null)throw new IOException("Нет доступа");out.write(DroneStore.exportJson(records).getBytes(StandardCharsets.UTF_8));}
                 toast("Каталог экспортирован");
             } else if(request==IMPORT_JSON){
