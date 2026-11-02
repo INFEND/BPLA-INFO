@@ -45,7 +45,7 @@ jobs:
         id: compilation
         run: gradle --no-daemon :app:assembleDebug :app:assembleRelease
       - name: Upload test APK before signing
-        if: github.event_name == 'pull_request'
+        if: steps.compilation.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: BPLA-INFO-debug-test
@@ -103,10 +103,10 @@ jobs:
       - name: Save last build status in the repository
         if: always() && github.event_name != 'pull_request'
         env:
-          BPLA_${{ job.status }}: JOB_STATUS
-          BPLA_${{ steps.compilation.outcome }}: COMPILE_STATUS
-          BPLA_${{ steps.signing.outcome }}: SIGN_STATUS
-          BPLA_${{ steps.publishing.outcome }}: PUBLISH_STATUS
+          BPLA_JOB_STATUS: ${{ job.status }}
+          BPLA_COMPILE_STATUS: ${{ steps.compilation.outcome }}
+          BPLA_SIGN_STATUS: ${{ steps.signing.outcome }}
+          BPLA_PUBLISH_STATUS: ${{ steps.publishing.outcome }}
         shell: bash
         run: |
           set -euo pipefail
