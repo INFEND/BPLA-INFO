@@ -1,0 +1,79 @@
+{
+  "schema": 1,
+  "revision": 3,
+  "checkedAt": "2026-11-02",
+  "entries": [
+    {
+      "id": "lostarmour-pdf-2024-004",
+      "name": "ELF-K",
+      "fields": [
+        [
+          "МАКСИМАЛЬНАЯ СКОРОСТЬ",
+          "160 км/ч (публикация 2026 г.)"
+        ]
+      ],
+      "source": "https://good-time-invest.com/blog/elf-k-strike-uav/",
+      "note": "Параметры версии, описанной в мае 2026 года; возможно отличие от архивного образца."
+    },
+    {
+      "id": "lostarmour-pdf-2024-061",
+      "name": "AQ 400 SCYTHE",
+      "fields": [
+        [
+          "МАКСИМАЛЬНАЯ СКОРОСТЬ",
+          "200 км/ч (по публикациям)"
+        ]
+      ],
+      "source": "https://www.weaponspecs.com/systems/terminal-autonomy/aq-400-scythe/",
+      "note": "Встречаются расходящиеся показатели; производитель указывает 144 км/ч без обозначения максимальной скорости."
+    },
+    {
+      "id": "lostarmour-pdf-2024-068",
+      "name": "PD-1",
+      "fields": [
+        [
+          "МАКСИМАЛЬНАЯ СКОРОСТЬ",
+          "140 км/ч"
+        ]
+      ],
+      "source": "https://www.unmannedsystemstechnology.com/wp-content/uploads/2016/06/PD-1-Fixed-Wing-UAV.pdf",
+      "note": "Брошюра производителя. Диапазон скоростей 70–140 км/ч."
+    },
+    {
+      "id": "lostarmour-pdf-2024-069",
+      "name": "PD-2",
+      "fields": [
+        [
+          "МАКСИМАЛЬНАЯ СКОРОСТЬ",
+          "140–160 км/ч (зависит от конфигурации)"
+        ]
+      ],
+      "source": "https://ukrspecsystems.com/uk/drones/pd-2-uas",
+      "note": "VTOL 140 км/ч, самолётная конфигурация 4 м до 160 км/ч."
+    },
+    {
+      "id": "lostarmour-pdf-2024-070",
+      "name": "PENGUIN-C",
+      "fields": [
+        [
+          "МАКСИМАЛЬНАЯ СКОРОСТЬ",
+          "до 115 км/ч (32 м/с)"
+        ]
+      ],
+      "source": "https://pdf.directindustry.com/pdf/uavfactory-ltd/penguin-c/181026-666726.html",
+      "note": "В брошюре производителя указана максимальная скорость 32 м/с."
+    },
+    {
+      "id": "lostarmour-pdf-2024-003",
+      "name": "ДОМАХА",
+      "fields": [
+        [
+          "ПРОИЗВОДИТЕЛЬ",
+          "Air Skyline"
+        ]
+      ],
+      "source": "https://clarity-project.info/tender/caf005e8eaa8470cbd3604a11ca701e4",
+      "note": "Название производителя подтверждено документацией о закупке DH-1 «Домаха»."
+    }
+  ]
+}
