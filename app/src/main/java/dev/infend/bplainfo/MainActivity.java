@@ -305,6 +305,10 @@ public final class MainActivity extends Activity {
     }
     private String activeSettingsSection="appearance";
     private boolean showingSettings=false;
+    private String appVersion(){
+        try{return getPackageManager().getPackageInfo(getPackageName(),0).versionName;}
+        catch(Exception ignored){return "—";}
+    }
     private void settings(){
         showingDetail=false;showingSettings=true;
         setup();
@@ -369,13 +373,13 @@ public final class MainActivity extends Activity {
             LinearLayout updateTile=vertical();updateTile.setPadding(dp(14),dp(14),dp(14),dp(14));
             updateTile.setBackground(outlined(t.soft,t.stroke,14));
             body.addView(updateTile,margins(-1,-2,0,6));
-            updateTile.addView(text("БПЛА ИНФО  ·  "+BuildConfig.VERSION_NAME,16,t.fg,true));
+            updateTile.addView(text("БПЛА ИНФО  ·  "+appVersion(),16,t.fg,true));
             updateTile.addView(text("Проверка и установка обновлений через защищённый канал",12,t.muted,false),margins(-1,-2,0,8));
             updateTile.addView(button("↻  ПРОВЕРИТЬ ОБНОВЛЕНИЯ",true,()->new OtaUpdater(this).check(false)),margins(-1,48,0,0));
         });
         addSettingsSection(content,"about","О приложении","Версия и управление каталогом","ⓘ",body->{
             body.addView(text("БПЛА ИНФО",18,t.fg,true));
-            body.addView(text("Версия "+BuildConfig.VERSION_NAME+"  ·  INFEND",12,t.muted,false),margins(-1,-2,0,6));
+            body.addView(text("Версия "+appVersion()+"  ·  INFEND",12,t.muted,false),margins(-1,-2,0,6));
             body.addView(text("Локальный справочник БПЛА. Управление каталогом, импорт и экспорт доступны с главного экрана.",13,t.fg,false));
         });
     }
