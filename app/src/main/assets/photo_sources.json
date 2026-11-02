@@ -199,6 +199,56 @@
           "source": "Wikimedia Commons"
         }
       ]
+    },
+    "lostarmour-pdf-2024-005": {
+      "name": "A1-СМ ФУРИЯ",
+      "files": [
+        {
+          "file": "Humvee and Furia UAV, Kyiv 2018, 38.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "Humvee and Furia UAV, Kyiv 2018, 41.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "Humvee and Furia UAV, Kyiv 2021, 12.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "UA 24th brigade Furia 01.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "UA 24th brigade Furia 02.jpg",
+          "source": "Wikimedia Commons"
+        }
+      ]
+    },
+    "lostarmour-pdf-2024-068": {
+      "name": "PD-1",
+      "files": [
+        {
+          "file": "Humvee and PD-1 UAV, Kyiv 2018, 40.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "Pd-1 uav 1.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "PD-1-assembly zoom.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "Pd-1.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "UAV PD-1 08.jpg",
+          "source": "Wikimedia Commons"
+        }
+      ]
     }
   }
 }
