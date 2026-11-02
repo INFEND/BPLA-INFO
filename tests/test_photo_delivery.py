@@ -48,6 +48,16 @@ class PhotoDeliveryRegressionTests(unittest.TestCase):
         self.assertIn("ЗАГРУЗКА ФОТО", activity)
         self.assertIn("PhotoLibrary.unavailableMessage(this)", activity)
 
+    def test_gallery_only_requests_visible_thumbnails(self):
+        activity = (ROOT / "app/src/main/java/dev/infend/bplainfo/MainActivity.java").read_text("utf-8")
+        self.assertIn("lazyFrames.add(frame)", activity)
+        self.assertIn("lazyLoads.add(()->{", activity)
+        self.assertIn("if(requested[0])return;", activity)
+        self.assertIn("strip.setOnScrollChangeListener(", activity)
+        self.assertIn("strip.post(()->loadVisibleDocumentaryPhotos(", activity)
+        self.assertIn("frame.getRight()>=left&&frame.getLeft()<=right", activity)
+        self.assertIn("ОЖИДАНИЕ ПРОСМОТРА", activity)
+
     def test_fullscreen_requests_jump_ahead_of_queued_thumbnails(self):
         self.assertIn("PriorityBlockingQueue<Runnable>", JAVA)
         self.assertIn("maxPixels>=2000?0:1", JAVA)
