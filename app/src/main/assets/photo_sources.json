@@ -1,0 +1,204 @@
+{
+  "schema": 1,
+  "description": "Curated real photographs matching UAV models. No generated images; each file links to Wikimedia Commons licensing and attribution. Model-specific variants are not conflated.",
+  "items": {
+    "lostarmour-pdf-2024-032": {
+      "name": "FLYEYE",
+      "files": [
+        {
+          "file": "FlyEye reconnaissance UAV - MSPO 2026, Poland, Kielce.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "FlyEye reconnaissance UAV, second view - MSPO 2026, Poland, Kielce.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "FlyEye reconnaissance UAV, third view - MSPO 2026, Poland, Kielce.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "FlyEye reconnaissance UAV, fourth view - MSPO 2026, Poland, Kielce.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "FlyEye and Warmate RR unmanned systems - MSPO 2026, Poland, Kielce.jpg",
+          "source": "Wikimedia Commons"
+        }
+      ]
+    },
+    "lostarmour-pdf-2024-063": {
+      "name": "BAYRAKTAR TB2",
+      "files": [
+        {
+          "file": "Baykar Bayraktar TB2 TEKNOFEST 2022.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "Baykar Bayraktar TB2 TEKNOFEST 2022 (2).jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "Bayraktar TB2 Ground.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "Bayraktar TB2 Runway.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "Bayraktar TB2 S-IHA TurkishArmy Teknofest2021 (1).jpg",
+          "source": "Wikimedia Commons"
+        }
+      ]
+    },
+    "lostarmour-pdf-2024-058": {
+      "name": "LELEKA-100 (BASIC)",
+      "files": [
+        {
+          "file": "Leleka-100 UAV, Kyiv 2021, 20.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "UA Leleka-100 in Avdiivka 01.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "UA Leleka-100 in Avdiivka 02.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "UA Leleka-100 in Avdiivka 03.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "UA NGU Leleka-100 01.jpg",
+          "source": "Wikimedia Commons"
+        }
+      ]
+    },
+    "lostarmour-pdf-2024-041": {
+      "name": "PUMA AE RQ-20",
+      "files": [
+        {
+          "file": "UA 148th bde RQ-20 Puma 01.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "UA 148th bde RQ-20 Puma 02.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "UA 148th bde RQ-20 Puma 03.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "UA 148th bde RQ-20 Puma 04.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "RQ-20 Puma Joint ISTAR Commando.jpg",
+          "source": "Wikimedia Commons"
+        }
+      ]
+    },
+    "lostarmour-pdf-2024-069": {
+      "name": "PD-2",
+      "files": [
+        {
+          "file": "Humvee and PD-2 UAV, Kyiv 2021, 11.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "PD-2 UAV, Kyiv 2021, 01.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "PD-2 UAV, Kyiv 2021, 02.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "UKRSPECSYSTEMS PD-2 photo 1.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "Ukrspecsystems PD-2 drone Peru.jpeg",
+          "source": "Wikimedia Commons"
+        }
+      ]
+    },
+    "lostarmour-pdf-2024-055": {
+      "name": "BAYRAKTAR MINI",
+      "files": [
+        {
+          "file": "Bayraktar Mini iha zorlu şartlar.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "Bayraktar Mini İHA Karlı Hava Durumunda İniş.JPG",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "Kalebaykarminiihakzlsngr.JPG",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "Mini2.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "Mini6.jpg",
+          "source": "Wikimedia Commons"
+        }
+      ]
+    },
+    "lostarmour-pdf-2024-051": {
+      "name": "SPECTATOR-M1",
+      "files": [
+        {
+          "file": "Spectator-M1, Kyiv 2018, 01.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "Spectator-M1, Kyiv 2018, 02.jpg",
+          "source": "Wikimedia Commons"
+        }
+      ]
+    },
+    "lostarmour-pdf-2024-081": {
+      "name": "VECTOR",
+      "files": [
+        {
+          "file": "1920x1080 Vector BG02.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "UA Quantum Vector 01.jpg",
+          "source": "Wikimedia Commons"
+        },
+        {
+          "file": "UA Quantum Vector 02.jpg",
+          "source": "Wikimedia Commons"
+        }
+      ]
+    },
+    "lostarmour-pdf-2024-002": {
+      "name": "DELTAQUAD PRO",
+      "files": [
+        {
+          "file": "DeltaQuad VTOL surveillance UAV.jpg",
+          "source": "Wikimedia Commons"
+        }
+      ]
+    },
+    "lostarmour-pdf-2024-036": {
+      "name": "МАРА-2М",
+      "files": [
+        {
+          "file": "Mara UAV.jpg",
+          "source": "Wikimedia Commons"
+        }
+      ]
+    }
+  }
+}
