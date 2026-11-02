@@ -57,7 +57,11 @@ class PhotoDeliveryRegressionTests(unittest.TestCase):
 
     def test_retry_after_and_download_size_guard(self):
         self.assertIn('connection.getHeaderField("Retry-After")', JAVA)
-        self.assertIn("seconds>15||attempt>0", JAVA)
+        self.assertIn("CommonsRetryPolicy.nextAllowedMillis(", JAVA)
+        self.assertIn('getLong("cooldown_until",0L)', JAVA)
+        self.assertIn('putLong("cooldown_until",nextAllowedNetworkAtMs)', JAVA)
+        self.assertIn("if(System.currentTimeMillis()<nextAllowedNetworkAtMs)break;", JAVA)
+        self.assertNotIn("seconds>15||attempt>0", JAVA)
         self.assertIn("connection.getContentLengthLong()", JAVA)
 
     def test_fullscreen_viewer_has_error_and_retry(self):

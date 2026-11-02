@@ -66,6 +66,9 @@ public final class PhotoLibrary {
         1,1,0L,TimeUnit.MILLISECONDS,new PriorityBlockingQueue<Runnable>());
     private static final Handler UI=new Handler(Looper.getMainLooper());
     private static long lastNetworkRequest=0;
+    // Shared cooldown prevents a blocked Commons host from being hit by every
+    // queued thumbnail, even when the user restarts the app.
+    private static long nextAllowedNetworkAtMs=0L;
     private static void throttle() throws InterruptedException {
         long elapsed=System.currentTimeMillis()-lastNetworkRequest;
         if(elapsed<1600)Thread.sleep(1600-elapsed);
@@ -150,10 +153,16 @@ public final class PhotoLibrary {
                 File output=new File(folder,md5+".img");
                 if(output.isFile()&&!validImage(output))output.delete();
                 if(!output.isFile()){
+                    long persistedCooldown=app.getSharedPreferences("photo_net",Context.MODE_PRIVATE)
+                            .getLong("cooldown_until",0L);
+                    nextAllowedNetworkAtMs=Math.max(nextAllowedNetworkAtMs,persistedCooldown);
+                    if(System.currentTimeMillis()<nextAllowedNetworkAtMs)
+                        throw new java.io.IOException("Commons cooldown active; cached photos remain available");
                     boolean complete=false;
                     // Try Commons' supported width-limited redirect first.
                     // If it fails, fall back to the traditional original URL.
                     for(String address:new String[]{photo.url,photo.fallbackUrl}){
+                        if(System.currentTimeMillis()<nextAllowedNetworkAtMs)break;
                         if(address.isEmpty())continue;
                         for(int attempt=0;attempt<2&&!complete;attempt++){
                             HttpURLConnection connection=null;
@@ -168,17 +177,18 @@ public final class PhotoLibrary {
                                 connection.setRequestProperty("Accept","image/jpeg,image/png,image/webp,image/*;q=0.8");
                                 int status=connection.getResponseCode();
                                 if(status==429||status==503){
-                                    // Commons can ask clients to wait for 10 minutes.
-                                    // Do not ignore that instruction and hammer the host.
+                                    // Respect Retry-After globally, not just for this
+                                    // image. Never switch to the original URL during
+                                    // a host cooldown: that doubles the blocked traffic.
                                     String header=connection.getHeaderField("Retry-After");
-                                    long seconds=0;
-                                    try{seconds=Long.parseLong(header);}catch(Exception ignored){}
-                                    if(seconds>15||attempt>0){
-                                        android.util.Log.w("BPLA-INFO","Commons rate limit: HTTP "+status+"; Retry-After "+header);
-                                        break;
-                                    }
-                                    Thread.sleep(Math.max(2500L*(attempt+1),seconds*1000L));
-                                    continue;
+                                    long until=CommonsRetryPolicy.nextAllowedMillis(
+                                            status,header,System.currentTimeMillis());
+                                    nextAllowedNetworkAtMs=Math.max(nextAllowedNetworkAtMs,until);
+                                    app.getSharedPreferences("photo_net",Context.MODE_PRIVATE)
+                                            .edit().putLong("cooldown_until",nextAllowedNetworkAtMs).apply();
+                                    android.util.Log.w("BPLA-INFO","Commons HTTP "+status+
+                                            "; retry after cooldown (header="+header+")");
+                                    break;
                                 }
                                 if(status!=200)break;
                                 String type=connection.getContentType();
@@ -205,7 +215,7 @@ public final class PhotoLibrary {
                                 if(!complete)temp.delete();
                             }
                         }
-                        if(complete)break;
+                        if(complete||System.currentTimeMillis()<nextAllowedNetworkAtMs)break;
                     }
                     if(!complete)throw new java.io.IOException("All Commons image endpoints unavailable");
                     trim(folder);
