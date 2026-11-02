@@ -7,25 +7,46 @@
       "files": [
         {
           "file": "FlyEye reconnaissance UAV - MSPO 2026, Poland, Kielce.jpg",
-          "source": "Wikimedia Commons"
+          "source": "Wikimedia Commons",
+          "author": "Krzysztof Popławski",
+          "license": "CC BY 4.0",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:FlyEye_reconnaissance_UAV_-_MSPO_2026%2C_Poland%2C_Kielce.jpg",
+          "reviewedOn": "2026-11-02",
+          "binaryVerified": false,
+          "processed": false
         },
         {
           "file": "FlyEye reconnaissance UAV, second view - MSPO 2026, Poland, Kielce.jpg",
-          "source": "Wikimedia Commons"
+          "source": "Wikimedia Commons",
+          "author": "Krzysztof Popławski",
+          "license": "CC BY 4.0",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:FlyEye_reconnaissance_UAV%2C_second_view_-_MSPO_2026%2C_Poland%2C_Kielce.jpg",
+          "reviewedOn": "2026-11-02",
+          "binaryVerified": false,
+          "processed": false
         },
         {
           "file": "FlyEye reconnaissance UAV, third view - MSPO 2026, Poland, Kielce.jpg",
-          "source": "Wikimedia Commons"
+          "source": "Wikimedia Commons",
+          "author": "Krzysztof Popławski",
+          "license": "CC BY 4.0",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:FlyEye_reconnaissance_UAV%2C_third_view_-_MSPO_2026%2C_Poland%2C_Kielce.jpg",
+          "reviewedOn": "2026-11-02",
+          "binaryVerified": false,
+          "processed": false
         },
         {
           "file": "FlyEye reconnaissance UAV, fourth view - MSPO 2026, Poland, Kielce.jpg",
-          "source": "Wikimedia Commons"
-        },
-        {
-          "file": "FlyEye and Warmate RR unmanned systems - MSPO 2026, Poland, Kielce.jpg",
-          "source": "Wikimedia Commons"
+          "source": "Wikimedia Commons",
+          "author": "Krzysztof Popławski",
+          "license": "CC BY 4.0",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:FlyEye_reconnaissance_UAV%2C_fourth_view_-_MSPO_2026%2C_Poland%2C_Kielce.jpg",
+          "reviewedOn": "2026-11-02",
+          "binaryVerified": false,
+          "processed": false
         }
-      ]
+      ],
+      "review": "Four distinct FlyEye exhibition views have Commons pages confirming author and CC BY 4.0. File binary GET, visual angle comparison and Android display remain unverified. Removed mixed FlyEye/Warmate RR exhibit from the model-only gallery."
     },
     "lostarmour-pdf-2024-063": {
       "name": "BAYRAKTAR TB2",
