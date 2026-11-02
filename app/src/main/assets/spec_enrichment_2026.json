@@ -86,6 +86,42 @@
       ],
       "source": "https://youcontrol.com.ua/catalog/company_details/37416579/",
       "note": "Подтверждено наименование производителя для аппарата Avenger."
+    },
+    {
+      "id": "lostarmour-pdf-2024-002",
+      "name": "DELTAQUAD PRO",
+      "fields": [
+        [
+          "ПОЛЕЗНАЯ НАГРУЗКА",
+          "до 1,2 кг (без дополнительной батареи)"
+        ]
+      ],
+      "source": "https://docs.deltaquad.com/deltaquad-pro-operations-manual-v2/vehicle-specifications",
+      "note": "Из руководства именно DeltaQuad Pro, не Evo."
+    },
+    {
+      "id": "lostarmour-pdf-2024-055",
+      "name": "BAYRAKTAR MINI",
+      "fields": [
+        [
+          "ПОЛЕЗНАЯ НАГРУЗКА",
+          "580 г"
+        ]
+      ],
+      "source": "https://www.baykartech.com/en/uav/bayraktar-mini-iha/",
+      "note": "Производитель Baykar, характеристика Mini UAV."
+    },
+    {
+      "id": "lostarmour-pdf-2024-067",
+      "name": "ONE 150",
+      "fields": [
+        [
+          "ПОЛЕЗНАЯ НАГРУЗКА",
+          "до 30 кг"
+        ]
+      ],
+      "source": "https://www.uncrewed-systems.com/how-making-this-uav-comply-with-a-raft-of-nato-standards-is-paying-dividends-in-its-use-for-military-missions/",
+      "note": "Primoco One 150, указана полезная нагрузка 30 кг."
     }
   ]
 }
