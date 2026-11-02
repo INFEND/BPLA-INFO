@@ -43,8 +43,14 @@ public final class PhotoLibrary {
         }
     }
     public interface Callback {void ready(Bitmap bitmap);}
-    private static final ExecutorService EXECUTOR=Executors.newFixedThreadPool(3);
+    private static final ExecutorService EXECUTOR=Executors.newSingleThreadExecutor();
     private static final Handler UI=new Handler(Looper.getMainLooper());
+    private static long lastNetworkRequest=0;
+    private static void throttle() throws InterruptedException {
+        long elapsed=System.currentTimeMillis()-lastNetworkRequest;
+        if(elapsed<1600)Thread.sleep(1600-elapsed);
+        lastNetworkRequest=System.currentTimeMillis();
+    }
     private static Map<String,List<Photo>> ITEMS;
     private PhotoLibrary(){}
     public static synchronized List<Photo> forDrone(Context c,Drone d){
@@ -104,29 +110,39 @@ public final class PhotoLibrary {
                 File output=new File(folder,md5+".img");
                 if(!output.isFile()||output.length()<512){
                     URL url=new URL(photo.url);
-                    HttpURLConnection connection=(HttpURLConnection)url.openConnection();
-                    connection.setConnectTimeout(12000);
-                    connection.setReadTimeout(25000);
-                    connection.setInstanceFollowRedirects(true);
-                    connection.setRequestProperty("User-Agent","BPLAINFO/1.0 (illustrated UAV reference)");
-                    try{
-                        int status=connection.getResponseCode();
-                        if(status!=200)throw new java.io.IOException("Image HTTP "+status);
-                        String type=connection.getContentType();
-                        if(type==null||!type.toLowerCase(java.util.Locale.ROOT).startsWith("image/"))throw new java.io.IOException("Not an image");
-                        File temp=new File(folder,md5+".part");
-                        long size=0;
-                        try(InputStream in=connection.getInputStream();FileOutputStream out=new FileOutputStream(temp)){
-                            byte[] buffer=new byte[32768];int n;
-                            while((n=in.read(buffer))!=-1){
-                                size+=n;if(size>15_000_000L)throw new java.io.IOException("Image too large");
-                                out.write(buffer,0,n);
+                    boolean complete=false;
+                    for(int attempt=0;attempt<3&&!complete;attempt++){
+                        throttle();
+                        HttpURLConnection connection=(HttpURLConnection)url.openConnection();
+                        connection.setConnectTimeout(12000);
+                        connection.setReadTimeout(35000);
+                        connection.setInstanceFollowRedirects(true);
+                        connection.setRequestProperty("User-Agent","BPLAINFO/1.0 (illustrated UAV reference)");
+                        try{
+                            int status=connection.getResponseCode();
+                            if(status==429||status==503){
+                                Thread.sleep(3000L*(attempt+1));
+                                continue;
                             }
-                        }
-                        if(size<512||!temp.renameTo(output)){
-                            temp.delete();throw new java.io.IOException("Invalid image");
-                        }
-                    }finally{connection.disconnect();}
+                            if(status!=200)throw new java.io.IOException("Image HTTP "+status);
+                            String type=connection.getContentType();
+                            if(type==null||!type.toLowerCase(java.util.Locale.ROOT).startsWith("image/"))throw new java.io.IOException("Not an image");
+                            File temp=new File(folder,md5+".part");
+                            long size=0;
+                            try(InputStream in=connection.getInputStream();FileOutputStream out=new FileOutputStream(temp)){
+                                byte[] buffer=new byte[32768];int n;
+                                while((n=in.read(buffer))!=-1){
+                                    size+=n;if(size>15_000_000L)throw new java.io.IOException("Image too large");
+                                    out.write(buffer,0,n);
+                                }
+                            }
+                            if(size<512||!temp.renameTo(output)){
+                                temp.delete();throw new java.io.IOException("Invalid image");
+                            }
+                            complete=true;
+                        }finally{connection.disconnect();}
+                    }
+                    if(!complete)throw new java.io.IOException("Image temporarily rate-limited");
                     trim(folder);
                 }
                 BitmapFactory.Options probe=new BitmapFactory.Options();
