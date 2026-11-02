@@ -249,7 +249,6 @@ public final class MainActivity extends Activity {
                 photo.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 photo.setImageResource(R.drawable.ic_airplane);photo.setColorFilter(t.muted);
                 frame.addView(photo,new LinearLayout.LayoutParams(-1,0,1));
-                photo.clearColorFilter();
                 PhotoLibrary.into(this,p,photo,1350);
 
                 frame.setOnClickListener(v->showDocumentaryPhoto(p));
@@ -557,7 +556,18 @@ public final class MainActivity extends Activity {
         bar.addView(blank,new LinearLayout.LayoutParams(0,-1,1));
         bar.addView(button("✕",false,overlay::dismiss),margins(45,40,0,0));
         ImageView photo=new ImageView(this);photo.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        photo.setImageResource(R.drawable.ic_airplane);photo.setColorFilter(t.muted);
         content.addView(photo,new LinearLayout.LayoutParams(-1,0,1));
+        String credit="Источник: Wikimedia Commons";
+        if(!item.author.isEmpty())credit+=" | "+item.author;
+        if(!item.license.isEmpty())credit+=" | "+item.license;
+        TextView attribution=text(credit+"  ↗",12,t.muted,false);
+        attribution.setPadding(dp(4),dp(8),dp(4),dp(8));
+        attribution.setOnClickListener(v->{
+            try{startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(item.attributionUrl)));}
+            catch(Exception e){toast("Не удалось открыть источник фотографии");}
+        });
+        content.addView(attribution,margins(-1,-2,0,0));
         overlay.setContentView(content);
         overlay.show();
         if(overlay.getWindow()!=null){

@@ -32,9 +32,11 @@ import java.util.concurrent.Executors;
  */
 public final class PhotoLibrary {
     public static final class Photo {
-        public final String file, url, fallbackUrl, attributionUrl;
-        public Photo(String file) {
+        public final String file, url, fallbackUrl, attributionUrl, author, license;
+        public Photo(String file,String author,String license) {
             this.file=file;
+            this.author=author;
+            this.license=license;
             this.url=commonsUrl(file);
             this.fallbackUrl=directCommonsUrl(file);
             String encoded;
@@ -74,7 +76,7 @@ public final class PhotoLibrary {
                     for(int i=0;i<photos.length()&&i<5;i++){
                         String name=photos.getJSONObject(i).optString("file","");
                         if(name.matches("[^/\\\\]{5,200}\\.(?i:jpg|jpeg|png|webp)"))
-                            result.add(new Photo(name));
+                            result.add(new Photo(name,photos.getJSONObject(i).optString("author",""),photos.getJSONObject(i).optString("license","")));
                     }
                     if(!result.isEmpty())ITEMS.put(id,Collections.unmodifiableList(result));
                 }
@@ -204,7 +206,15 @@ public final class PhotoLibrary {
     public static void into(Context c,Photo photo,ImageView image,int px){
         image.setTag(photo.file);
         load(c,photo,px,bitmap->{
-            if(bitmap!=null&&photo.file.equals(image.getTag()))image.setImageBitmap(bitmap);
+            if(photo.file.equals(image.getTag())){
+                if(bitmap!=null){
+                    image.clearColorFilter();
+                    image.setImageBitmap(bitmap);
+                    image.setContentDescription("Фотография БПЛА");
+                }else{
+                    image.setContentDescription("Фотография временно недоступна");
+                }
+            }
         });
     }
 }

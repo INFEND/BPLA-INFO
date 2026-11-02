@@ -12,6 +12,8 @@ class PhotoDeliveryRegressionTests(unittest.TestCase):
         self.assertIn("https://commons.wikimedia.org/wiki/Special:Redirect/file/", JAVA)
         self.assertIn("?width=1600", JAVA)
         self.assertIn("photo.fallbackUrl", JAVA)
+        self.assertIn('optString("license","")', JAVA)
+        self.assertIn('optString("author","")', JAVA)
 
     def test_cache_and_protective_limits_remain(self):
         self.assertIn('new File(app.getCacheDir(),"uav-photos")', JAVA)
