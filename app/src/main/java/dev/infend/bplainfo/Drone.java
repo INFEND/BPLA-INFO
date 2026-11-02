@@ -9,7 +9,7 @@ public final class Drone {
  public String[] values=new String[FIELDS.length];
  public java.util.ArrayList<String> galleryUris=new java.util.ArrayList<>();
  public boolean favorite;
- public String catalogSource="";
+ public String catalogSource="",sourceGroup="";
  public java.util.ArrayList<String[]> specRows=new java.util.ArrayList<>();
  public Drone(){for(int i=0;i<values.length;i++) values[i]="";}
  public String get(int i){return values[i]==null?"":values[i];}
@@ -19,7 +19,7 @@ public final class Drone {
  public String manufacturer(){return get(2);}
  public JSONObject json() throws JSONException {JSONObject j=new JSONObject();j.put("id",id);for(int i=0;i<FIELDS.length;i++)j.put(FIELDS[i],get(i));j.put("imageUri",imageUri);org.json.JSONArray gallery=new org.json.JSONArray();
  for(String image:galleryUris)gallery.put(image);j.put("galleryUris",gallery);
- j.put("favorite",favorite);j.put("catalogSource",catalogSource);
+ j.put("favorite",favorite);j.put("catalogSource",catalogSource);j.put("sourceGroup",sourceGroup);
  org.json.JSONArray specArray=new org.json.JSONArray();
  for(String[] row:specRows){if(row.length<2)continue;org.json.JSONArray pair=new org.json.JSONArray();pair.put(row[0]);pair.put(row[1]);specArray.put(pair);}
  j.put("specRows",specArray);return j;}
@@ -31,6 +31,7 @@ public final class Drone {
  if(d.galleryUris.isEmpty()&&!d.imageUri.isEmpty())d.galleryUris.add(d.imageUri);
  d.favorite=j.optBoolean("favorite");
  d.catalogSource=j.optString("catalogSource","");
+ d.sourceGroup=j.optString("sourceGroup","");
  org.json.JSONArray rows=j.optJSONArray("specRows");
  if(rows!=null)for(int i=0;i<rows.length()&&i<80;i++){
    org.json.JSONArray pair=rows.optJSONArray(i);

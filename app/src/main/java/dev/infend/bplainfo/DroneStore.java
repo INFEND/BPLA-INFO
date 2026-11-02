@@ -6,7 +6,7 @@ import java.util.*;
 public final class DroneStore {
  private static final String PREFS="bpla_store",KEY="catalog_v1";
  public static ArrayList<Drone> load(Context c){String raw=c.getSharedPreferences(PREFS,0).getString(KEY,null);ArrayList<Drone> out=new ArrayList<>();if(raw==null){out.add(Drone.mara());mergeSeed(c,out);save(c,out);return out;}try{JSONArray a=new JSONArray(raw);for(int i=0;i<a.length()&&i<5000;i++){JSONObject j=a.optJSONObject(i);if(j!=null)out.add(Drone.fromJson(j));}}catch(Exception e){out.add(Drone.mara());}mergeSeed(c,out);return out;}
- private static final int SEED_REVISION=1;
+ private static final int SEED_REVISION=2;
  private static void mergeSeed(Context c,ArrayList<Drone> drones){
    android.content.SharedPreferences prefs=c.getSharedPreferences(PREFS,0);
    if(prefs.getInt("seed_revision",0)>=SEED_REVISION)return;
@@ -44,6 +44,7 @@ public final class DroneStore {
        for(Drone existing:drones){
          if(existing.id.equals(d.id)||existing.name().equalsIgnoreCase(d.name())){
            exists=true;
+           if(existing.sourceGroup.isEmpty()&&!d.sourceGroup.isEmpty())existing.sourceGroup=d.sourceGroup;
            if(existing.specRows.isEmpty()&&existing.catalogSource.isEmpty()){
              existing.specRows.addAll(d.specRows);
              existing.catalogSource=d.catalogSource;

@@ -129,7 +129,7 @@ public final class MainActivity extends Activity {
         });
         HorizontalScrollView strip=new HorizontalScrollView(this);strip.setHorizontalScrollBarEnabled(false);
         LinearLayout chips=horizontal();strip.addView(chips);inner.addView(strip,margins(-1,47,0,6));
-        for(String group:new String[]{"Все","Самолётный","Мультикоптер","Другие"}){
+        for(String group:new String[]{"Все","Самолётный","Мультикоптер","Другие","Схема крыло","Одномоторный · винт спереди","Одномоторный · винт сзади","Двойная хвостовая балка","Многомоторный","Барражирующие боеприпасы"}){
             TextView chip=button(group,category.equals(group),()->{category=group;home();});
             chips.addView(chip,margins(-2,39,0,0));
         }
@@ -149,6 +149,7 @@ public final class MainActivity extends Activity {
             if(category.equals("Самолётный")&&!kind.contains("самол"))continue;
             if(category.equals("Мультикоптер")&&!(kind.contains("коптер")||kind.contains("мульт")||kind.contains("квадр")))continue;
             if(category.equals("Другие")&&(kind.contains("самол")||kind.contains("коптер")||kind.contains("мульт")||kind.contains("квадр")))continue;
+            if(!category.equals("Все")&&!category.equals("Самолётный")&&!category.equals("Мультикоптер")&&!category.equals("Другие")&&!category.equals(d.sourceGroup))continue;
             if(!q.isEmpty()){
                 boolean match=false;
                 for(String field:d.values){if(field!=null&&field.toLowerCase(Locale.ROOT).contains(q)){match=true;break;}}
@@ -199,6 +200,7 @@ public final class MainActivity extends Activity {
             LinearLayout labels=vertical();head.addView(labels,new LinearLayout.LayoutParams(0,-2,1));
             labels.addView(text(d.name(),20,t.fg,true));
             labels.addView(text(d.type()+"  •  "+d.manufacturer(),12,t.muted,false));
+            if(!d.sourceGroup.isEmpty())labels.addView(text(d.sourceGroup+" · 2024",10,t.muted,false));
             TextView star=button(d.favorite?"★":"☆",false,()->{d.favorite=!d.favorite;save();cards();});
             star.setTextColor(t.accent);head.addView(star,margins(42,42,3,0));
             LinearLayout preview=vertical();preview.setGravity(Gravity.CENTER);
@@ -230,7 +232,7 @@ public final class MainActivity extends Activity {
     private void save(){DroneStore.save(this,records);}
     private void detail(Drone d){
         hideKeyboard();showingDetail=true;setup();
-        titleBar(d.name(),"ТЕХНИЧЕСКАЯ КАРТОЧКА",this::home);
+        titleBar(d.name(),d.catalogSource.isEmpty()?"ТЕХНИЧЕСКАЯ КАРТОЧКА":"АРХИВ · КЛАССИФИКАТОР 2024",this::home);
         LinearLayout content=vertical();content.setPadding(dp(15),0,dp(15),dp(26));scroll(root).addView(content);
         LinearLayout photos=vertical();photos.setPadding(dp(12),dp(13),dp(12),dp(13));
         photos.setBackground(outlined(t.panel,t.stroke,20));
