@@ -41,11 +41,18 @@ for id,entry in data["items"].items():
                 if error.code==429 and attempt==0:
                     retry_after=error.headers.get("Retry-After","")
                     wait=int(retry_after) if retry_after.isdigit() else 4
-                    if wait>6:
-                        blocked+=1
-                        if len(blocked_samples)<8:blocked_samples.append((id,name,f"HTTP 429; Retry-After {wait}s"))
-                        print("RATE-LIMIT:",name,"deferred; server requests a long wait",flush=True)
-                        break
+                    if wait>30:
+                        # Do not keep issuing dozens of HEAD requests after Commons
+                        # explicitly asks this runner to stop for several minutes.
+                        # This is inconclusive, not a broken URL or a green check.
+                        checked=passed+len(missing)+blocked+1
+                        print("RATE-LIMIT:",name,f"Retry-After {wait}s; stopping to respect Commons",flush=True)
+                        raise SystemExit(
+                            f"INCONCLUSIVE: Wikimedia requests {wait}s cooldown; "
+                            f"only {checked}/{photos} media URLs attempted, "
+                            f"{passed} confirmed, {len(missing)} missing, "
+                            f"{blocked+1} blocked; remaining not tested"
+                        )
                     wait=max(3,wait)
                     print("RATE-LIMIT:",name,"retrying in",wait,"seconds",flush=True)
                     time.sleep(wait)
