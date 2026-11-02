@@ -55,7 +55,8 @@ class PhotoDeliveryRegressionTests(unittest.TestCase):
         self.assertIn("if(requested[0])return;", activity)
         self.assertIn("strip.setOnScrollChangeListener(", activity)
         self.assertIn("strip.post(()->loadVisibleDocumentaryPhotos(", activity)
-        self.assertIn("frame.getRight()>=left&&frame.getLeft()<=right", activity)
+        self.assertIn("frame.getWidth()>0&&frame.getRight()>=left&&frame.getLeft()<=right", activity)
+        self.assertIn("gallery.addOnLayoutChangeListener(", activity)
         self.assertIn("ОЖИДАНИЕ ПРОСМОТРА", activity)
 
     def test_fullscreen_requests_jump_ahead_of_queued_thumbnails(self):
