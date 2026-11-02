@@ -39,6 +39,13 @@ class PhotoDeliveryRegressionTests(unittest.TestCase):
         self.assertIn('if blocked:', verifier)
         self.assertIn('INCONCLUSIVE:', verifier)
 
+    def test_photo_loading_exposes_visible_failure_state(self):
+        activity = (ROOT / "app/src/main/java/dev/infend/bplainfo/MainActivity.java").read_text("utf-8")
+        self.assertIn("public interface ResultCallback", JAVA)
+        self.assertIn("status.complete(bitmap!=null)", JAVA)
+        self.assertIn("ЗАГРУЗКА ФОТО", activity)
+        self.assertIn("ФОТО НЕДОСТУПНО", activity)
+
     def test_photo_records_have_real_catalog_ids_and_no_duplicate_files(self):
         ids = {row["id"] for row in CATALOG["entries"]}
         self.assertEqual(len(ids), len(CATALOG["entries"]))
