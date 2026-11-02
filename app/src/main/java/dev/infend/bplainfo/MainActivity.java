@@ -274,7 +274,7 @@ public final class MainActivity extends Activity {
         content.addView(table,margins(-1,-2,0,6));table.addView(text("ХАРАКТЕРИСТИКИ БПЛА",15,t.accent,true),margins(-1,-2,0,9));
         if(!d.specRows.isEmpty()){
             for(String[] item:d.specRows){
-                if(item.length<2||item[1].isEmpty())continue;
+                if(item.length<2||SpecFormatter.display(item[1]).isEmpty())continue;
                 LinearLayout row=vertical();row.setPadding(0,dp(6),0,dp(8));table.addView(row);
                 row.addView(text(item[0].toUpperCase(Locale.ROOT),10,t.muted,true));
                 row.addView(text(SpecFormatter.display(item[1]),15,t.fg,true));
@@ -283,7 +283,7 @@ public final class MainActivity extends Activity {
             }
         }else{
             for(int i=1;i<14;i++){
-                if(d.get(i).isEmpty())continue;
+                if(SpecFormatter.display(d.get(i)).isEmpty())continue;
                 LinearLayout row=vertical();row.setPadding(0,dp(6),0,dp(8));table.addView(row);
                 row.addView(text(Drone.TITLES[i].toUpperCase(Locale.ROOT),10,t.muted,true));
                 row.addView(text(SpecFormatter.display(d.get(i)),15,t.fg,true));
