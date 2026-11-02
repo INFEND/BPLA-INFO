@@ -56,7 +56,13 @@ public final class OtaUpdater {
     private AlertDialog.Builder dialog(){ThemePrefs theme=new ThemePrefs(activity);return new AlertDialog.Builder(activity,theme.mode==2?android.R.style.Theme_Material_Light_Dialog_Alert:android.R.style.Theme_Material_Dialog_Alert);}
     private void ui(Runnable run){activity.runOnUiThread(()->{if(!activity.isFinishing())run.run();});}
     private void error(String message){ui(()->dialog().setTitle("OTA · Ошибка").setMessage(message).setPositiveButton("ОК",null).show());}
+    private OtaProgressDialog progress;
+    private void ensureProgress(){
+        if(progress==null)progress=new OtaProgressDialog(activity);
+        progress.show();
+    }
     public void check(boolean silent){
+        if(!silent)ui(()->{ensureProgress();progress.stage("Проверка обновлений","Подключение к серверу…");});
         new Thread(()->{
             try(InputStream in=open(MANIFEST_URL)){
                 JSONObject j=new JSONObject(new String(readLimited(in,512*1024),java.nio.charset.StandardCharsets.UTF_8));
@@ -65,63 +71,65 @@ public final class OtaUpdater {
                 PackageInfo installed=activity.getPackageManager().getPackageInfo(activity.getPackageName(),0);
                 long local=Build.VERSION.SDK_INT>=28?installed.getLongVersionCode():installed.versionCode;
                 if(remote<=local){
-                    if(!silent)ui(()->dialog().setTitle("БПЛА ИНФО").setMessage("Установлена актуальная версия. Обновлений нет.").setPositiveButton("ГОТОВО",null).show());
+                    if(!silent)ui(()->{ensureProgress();progress.current(installed.versionName);});
                     return;
                 }
                 version=j;
-                ui(()->dialog()
-                    .setTitle("Доступно обновление "+j.optString("versionName"))
-                    .setMessage("Изменения:\n"+j.optString("notes","Без описания"))
-                    .setNegativeButton("ПОЗЖЕ",null)
-                    .setPositiveButton("ОБНОВИТЬ",(d,w)->download()).show());
-            }catch(Exception e){if(!silent)error("Не удалось проверить релиз: "+e.getMessage());}
-        },"ota-manifest").start();
+                ui(()->{
+                    ensureProgress();
+                    progress.offer(j.optString("versionName"),j.optString("notes",""),this::download);
+                });
+            }catch(Exception e){
+                if(!silent)ui(()->{ensureProgress();progress.fail("Не удалось проверить обновления: "+e.getMessage(),()->check(false));});
+            }
+        },"bpla-ota-check").start();
     }
     private void download(){
         if(version==null)return;
         String url=version.optString("apkUrl","");
         String sha=version.optString("sha256","");
         long expectedBytes=version.optLong("sizeBytes",-1);
-        if(!url.startsWith("https://")||!sha.matches("[a-fA-F0-9]{64}")||expectedBytes<=0){
-            error("Некорректный подписанный манифест обновления");return;
+        if(!url.startsWith("https://")||!sha.matches("[a-fA-F0-9]{64}")||expectedBytes<=0||expectedBytes>300_000_000L){
+            ui(()->{ensureProgress();progress.fail("Некорректный манифест обновления",this::download);});
+            return;
         }
         cancelled=false;
-        LinearLayout box=new LinearLayout(activity);box.setOrientation(1);box.setPadding(35,25,35,10);
-        TextView label=new TextView(activity);label.setText("Соединение с сервером…");label.setTextSize(14);box.addView(label);
-        ProgressBar bar=new ProgressBar(activity,null,android.R.attr.progressBarStyleHorizontal);
-        bar.setMax(100);box.addView(bar,new LinearLayout.LayoutParams(-1,55));
-        AlertDialog dialog=dialog().setTitle("Загрузка обновления")
-            .setView(box).setNegativeButton("ОТМЕНА",(d,w)->cancelled=true).create();
-        dialog.setCancelable(false);dialog.show();
+        ui(()->{ensureProgress();progress.stage("Подключение к серверу…","Подготовка безопасной загрузки");});
         new Thread(()->{
             File tmp=new File(activity.getCacheDir(),"ota/BPLA-INFO.part");
             File dst=new File(activity.getCacheDir(),"ota/BPLA-INFO.apk");
             try{
                 if(!tmp.getParentFile().isDirectory()&&!tmp.getParentFile().mkdirs())throw new IOException("Нет каталога кэша");
                 MessageDigest digest=MessageDigest.getInstance("SHA-256");
-                long total=0,at=0;
+                long total=0,lastPercent=-1;
                 try(InputStream in=open(url);OutputStream out=new FileOutputStream(tmp)){
                     byte[] buf=new byte[64*1024];int n;
                     while((n=in.read(buf))!=-1){
                         if(cancelled)throw new InterruptedIOException("Отменено");
                         out.write(buf,0,n);digest.update(buf,0,n);total+=n;
-                        if(total>expectedBytes||total>300_000_000L)throw new IOException("Размер APK превышает ожидаемый");
-                        int percent=(int)Math.min(100,(total*100)/expectedBytes);
-                        if(percent!=at){at=percent;int shown=percent;ui(()->{bar.setProgress(shown);label.setText("Загружено "+shown+"%");});}
+                        if(total>expectedBytes)throw new IOException("Размер APK превышает ожидаемый");
+                        int percent=(int)Math.min(100,total*100L/expectedBytes);
+                        if(percent!=lastPercent){
+                            lastPercent=percent;long received=total;
+                            ui(()->{if(progress!=null)progress.downloading(received,expectedBytes);});
+                        }
                     }
                 }
                 if(cancelled)throw new InterruptedIOException("Отменено");
+                ui(()->{if(progress!=null)progress.stage("Проверка загруженного APK","Целостность, сертификат и версия");});
                 if(total!=expectedBytes)throw new SecurityException("Размер APK не совпадает");
                 if(!hex(digest.digest()).equalsIgnoreCase(sha))throw new SecurityException("SHA-256 APK не совпадает с манифестом");
                 verifySigner(tmp,version.optString("certificateSha256",""));
                 if(dst.exists()&&!dst.delete())throw new IOException("Не удалось заменить старый файл");
                 if(!tmp.renameTo(dst))throw new IOException("Не удалось сохранить APK");
-                ui(()->{dialog.dismiss();install();});
+                ui(()->{if(progress!=null)progress.dismiss();install();});
             }catch(Exception e){
                 tmp.delete();
-                ui(()->{dialog.dismiss();if(!(e instanceof InterruptedIOException))error(e.getMessage());});
+                if(!(e instanceof InterruptedIOException))ui(()->{
+                    ensureProgress();progress.fail("Загрузка не выполнена: "+e.getMessage(),this::download);
+                });
             }
-        },"ota-download").start();
+        },"bpla-ota-download").start();
     }
     private void verifySigner(File apk,String manifestCert) throws Exception{
         PackageManager pm=activity.getPackageManager();
