@@ -466,16 +466,25 @@ public final class MainActivity extends Activity {
         body.setVisibility(opened?View.VISIBLE:View.GONE);
         header.setOnClickListener(v->{
             if(t.haptics)v.performHapticFeedback(android.view.HapticFeedbackConstants.KEYBOARD_TAP);
-            activeSettingsSection=opened?"":id;
-            if(t.animations&&body.getVisibility()!=View.VISIBLE){
-                body.setAlpha(0);body.setTranslationY(-dp(8));body.setVisibility(View.VISIBLE);
-                body.animate().alpha(1).translationY(0).setDuration(200).start();
-                arrow.setText("⌃");
-            }else if(t.animations&&body.getVisibility()==View.VISIBLE){
-                body.animate().alpha(0).translationY(-dp(8)).setDuration(120)
-                    .withEndAction(()->{body.setVisibility(View.GONE);arrow.setText("⌄");}).start();
-            }else{body.setVisibility(opened?View.GONE:View.VISIBLE);arrow.setText(opened?"⌄":"⌃");}
-            activeSettingsSection=body.getVisibility()==View.GONE?"":id;
+            boolean expand=body.getVisibility()!=View.VISIBLE;
+            body.animate().cancel();
+            activeSettingsSection=expand?id:"";
+            arrow.setText(expand?"⌃":"⌄");
+            if(expand){
+                body.setVisibility(View.VISIBLE);
+                if(t.animations){
+                    body.setAlpha(0f);body.setTranslationY(-dp(8));
+                    body.animate().alpha(1f).translationY(0).setDuration(190).start();
+                }else{body.setAlpha(1f);body.setTranslationY(0);}
+            }else{
+                if(t.animations){
+                    body.animate().alpha(0f).translationY(-dp(6)).setDuration(110)
+                        .withEndAction(()->{
+                            body.setVisibility(View.GONE);
+                            body.setAlpha(1f);body.setTranslationY(0);
+                        }).start();
+                }else{body.setVisibility(View.GONE);body.setAlpha(1f);}
+            }
         });
     }
     private interface ToggleHandler {void set(boolean selected);}
