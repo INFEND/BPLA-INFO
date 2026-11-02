@@ -200,7 +200,7 @@ public final class MainActivity extends Activity {
             LinearLayout labels=vertical();head.addView(labels,new LinearLayout.LayoutParams(0,-2,1));
             labels.addView(text(d.name(),20,t.fg,true));
             String engine=d.engineType().trim();
-            labels.addView(text("Тип: "+d.displayType()+"  |  Тип двигателя: "+(engine.isEmpty()?"—":engine),12,t.muted,false));
+            labels.addView(text(d.displayType()+"  ·  "+(engine.isEmpty()?"—":engine),13,t.fg,true));
             TextView star=button(d.favorite?"★":"☆",false,()->{d.favorite=!d.favorite;save();cards();});
             star.setTextColor(t.accent);head.addView(star,margins(42,42,3,0));
             LinearLayout stats=horizontal();card.addView(stats);
