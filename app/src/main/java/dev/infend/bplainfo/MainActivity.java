@@ -575,13 +575,24 @@ public final class MainActivity extends Activity {
             catch(Exception e){toast("Не удалось открыть источник фотографии");}
         });
         content.addView(attribution,margins(-1,-2,0,0));
+        TextView loadStatus=text("ЗАГРУЗКА ФОТО…",11,t.muted,false);
+        loadStatus.setGravity(Gravity.CENTER);
+        content.addView(loadStatus,margins(-1,30,0,4));
+        // Retry without closing the viewer; an offline/cached image remains usable.
+        Runnable retry=()->{
+            loadStatus.setText("ЗАГРУЗКА ФОТО…");
+            PhotoLibrary.into(this,item,photo,2800,ok->
+                loadStatus.setText(ok?"СНИМОК ЗАГРУЖЕН":"ФОТО НЕДОСТУПНО • НАЖМИТЕ ДЛЯ ПОВТОРА"));
+        };
+        photo.setOnClickListener(v->retry.run());
+        loadStatus.setOnClickListener(v->retry.run());
         overlay.setContentView(content);
         overlay.show();
         if(overlay.getWindow()!=null){
             overlay.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
             overlay.getWindow().setLayout(-1,-1);
         }
-        PhotoLibrary.into(this,item,photo,2800);
+        retry.run();
     }
     private void showFullPhoto(String uri){
         ImageView viewer=new ImageView(this);viewer.setBackgroundColor(t.bg);
