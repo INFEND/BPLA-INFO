@@ -203,16 +203,29 @@ public final class MainActivity extends Activity {
             if(!d.sourceGroup.isEmpty())labels.addView(text(d.sourceGroup+" · 2024",10,t.muted,false));
             TextView star=button(d.favorite?"★":"☆",false,()->{d.favorite=!d.favorite;save();cards();});
             star.setTextColor(t.accent);head.addView(star,margins(42,42,3,0));
-            LinearLayout preview=vertical();preview.setGravity(Gravity.CENTER);
-            preview.setPadding(dp(10),dp(17),dp(10),dp(17));
-            preview.setBackground(panel(t.soft,13));
-            card.addView(preview,margins(-1,91,0,7));
-            TextView modelGlyph=text(d.type().toLowerCase(Locale.ROOT).contains("коптер")?"◈":"✈",29,t.accent,true);
-            modelGlyph.setGravity(Gravity.CENTER);
-            preview.addView(modelGlyph);
-            TextView imageLabel=text(d.galleryUris.isEmpty()?"ФОТО МОЖНО ДОБАВИТЬ":"ЕСТЬ ФОТОГРАФИИ",10,t.muted,false);
-            imageLabel.setGravity(Gravity.CENTER);
-            preview.addView(imageLabel);
+            java.util.List<PhotoLibrary.Photo> curated=PhotoLibrary.forDrone(this,d);
+            if(!curated.isEmpty()){
+                LinearLayout preview=vertical();preview.setBackground(panel(t.soft,13));
+                preview.setPadding(dp(6),dp(5),dp(6),dp(5));preview.setGravity(Gravity.CENTER);
+                card.addView(preview,margins(-1,117,0,7));
+                ImageView image=new ImageView(this);image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                image.setImageResource(R.drawable.ic_airplane);
+                image.setColorFilter(t.muted);
+                preview.addView(image,new LinearLayout.LayoutParams(-1,dp(103)));
+                image.clearColorFilter();
+                PhotoLibrary.into(this,curated.get(0),image,1000);
+            }else{
+                LinearLayout preview=vertical();preview.setGravity(Gravity.CENTER);
+                preview.setPadding(dp(10),dp(17),dp(10),dp(17));
+                preview.setBackground(panel(t.soft,13));
+                card.addView(preview,margins(-1,91,0,7));
+                TextView modelGlyph=text(d.type().toLowerCase(Locale.ROOT).contains("коптер")?"◈":"✈",29,t.accent,true);
+                modelGlyph.setGravity(Gravity.CENTER);
+                preview.addView(modelGlyph);
+                TextView imageLabel=text(d.galleryUris.isEmpty()?"НЕТ ПРОВЕРЕННЫХ ФОТО":"ЕСТЬ СВОИ ФОТО",10,t.muted,false);
+                imageLabel.setGravity(Gravity.CENTER);
+                preview.addView(imageLabel);
+            }
             LinearLayout stats=horizontal();card.addView(stats);
             stat(stats,"РАЗМАХ",d.previewSpan());
             stat(stats,"СКОРОСТЬ",d.previewSpeed());
@@ -241,27 +254,47 @@ public final class MainActivity extends Activity {
         TextView photosTitle=text("ФОТОГРАФИИ МОДЕЛИ",12,t.accent,true);
         phototop.addView(photosTitle,new LinearLayout.LayoutParams(0,-2,1));
         phototop.addView(button("+ ФОТО",false,()->openPhotoPicker(d)),margins(-2,38,4,0));
+        java.util.List<PhotoLibrary.Photo> documentary=PhotoLibrary.forDrone(this,d);
         java.util.LinkedHashSet<String> images=new java.util.LinkedHashSet<>(d.galleryUris);
         if(images.isEmpty()&&!d.imageUri.isEmpty())images.add(d.imageUri);
-        if(images.isEmpty()){
-            photos.addView(text("Фотографии не добавлены. Низкокачественные изображения удалены.",12,t.muted,false),margins(-1,-2,0,8));
+        int available=documentary.size()+images.size();
+        photos.addView(text("РЕАЛЬНЫЕ ФОТО  "+documentary.size()+" / 5  ·  СВОИ  "+images.size(),
+            11,t.muted,true),margins(-1,-2,0,8));
+        if(available==0){
+            photos.addView(text("Для этой модификации пока нет пяти достоверных снимков. Можно добавить свои фотографии.",12,t.muted,false),margins(-1,-2,0,8));
         }else{
             HorizontalScrollView strip=new HorizontalScrollView(this);
             strip.setHorizontalScrollBarEnabled(false);
-            photos.addView(strip,margins(-1,210,0,6));
+            photos.addView(strip,margins(-1,214,0,5));
             LinearLayout gallery=horizontal();strip.addView(gallery);
-            int count=0;
-            for(String path:images){
-                if(count++>=15)break;
-                LinearLayout frame=vertical();frame.setBackground(outlined(t.soft,t.stroke,14));
-                gallery.addView(frame,margins(230,190,0,5));
-                ImageView photo=new ImageView(this);photo.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                photo.setPadding(dp(6),dp(6),dp(6),dp(6));
-                frame.addView(photo,new LinearLayout.LayoutParams(-1,-1));
-                try{photo.setImageURI(Uri.parse(path));}catch(Exception ignored){}
-                photo.setOnClickListener(v->showFullPhoto(path));
+            int photoNumber=0;
+            for(PhotoLibrary.Photo p:documentary){
+                final int number=++photoNumber;
+                LinearLayout frame=vertical();frame.setPadding(dp(6),dp(6),dp(6),dp(4));
+                frame.setBackground(outlined(t.soft,t.stroke,14));
+                gallery.addView(frame,margins(250,202,0,5));
+                ImageView photo=new ImageView(this);
+                photo.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                photo.setImageResource(R.drawable.ic_airplane);photo.setColorFilter(t.muted);
+                frame.addView(photo,new LinearLayout.LayoutParams(-1,0,1));
+                photo.clearColorFilter();
+                PhotoLibrary.into(this,p,photo,1350);
+                TextView info=text("ФОТО "+number+" · WIKIMEDIA COMMONS",10,t.muted,true);
+                info.setGravity(Gravity.CENTER);frame.addView(info,margins(-1,23,0,0));
+                frame.setOnClickListener(v->showDocumentaryPhoto(p));
             }
-            photos.addView(text(images.size()+" фото  ·  листай горизонтально",11,t.muted,false));
+            for(String path:images){
+                if(photoNumber++>=15)break;
+                LinearLayout frame=vertical();frame.setPadding(dp(6),dp(6),dp(6),dp(4));
+                frame.setBackground(outlined(t.soft,t.stroke,14));
+                gallery.addView(frame,margins(250,202,0,5));
+                ImageView photo=new ImageView(this);photo.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                frame.addView(photo,new LinearLayout.LayoutParams(-1,0,1));
+                try{photo.setImageURI(Uri.parse(path));}catch(Exception ignored){}
+                TextView label=text("СВОЯ ФОТОГРАФИЯ",10,t.muted,true);label.setGravity(Gravity.CENTER);
+                frame.addView(label,margins(-1,23,0,0));
+                frame.setOnClickListener(v->showFullPhoto(path));
+            }
         }
         LinearLayout actions=horizontal();content.addView(actions,margins(-1,49,0,6));
         actions.addView(button(d.favorite?"★ В ИЗБРАННОМ":"☆ ИЗБРАННОЕ",false,()->{d.favorite=!d.favorite;save();detail(d);}),new LinearLayout.LayoutParams(0,-1,1));
@@ -488,6 +521,30 @@ public final class MainActivity extends Activity {
             dialog.getWindow().setLayout(-1,-1);
         }
         viewer.setOnClickListener(v->dialog.dismiss());
+    }
+    private void showDocumentaryPhoto(PhotoLibrary.Photo item){
+        android.app.Dialog overlay=new android.app.Dialog(this);
+        LinearLayout content=vertical();
+        content.setPadding(dp(13),dp(13),dp(13),dp(22));
+        content.setBackgroundColor(t.bg);
+        LinearLayout bar=horizontal();content.addView(bar,margins(-1,47,0,0));
+        TextView title=text("ПОДЛИННАЯ ФОТОГРАФИЯ",12,t.accent,true);
+        bar.addView(title,new LinearLayout.LayoutParams(0,-1,1));
+        bar.addView(button("✕",false,overlay::dismiss),margins(45,40,0,0));
+        ImageView photo=new ImageView(this);photo.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        content.addView(photo,new LinearLayout.LayoutParams(-1,0,1));
+        content.addView(text("Wikimedia Commons · автор и условия использования на странице файла",11,t.muted,false),margins(-1,-2,0,8));
+        content.addView(button("ОТКРЫТЬ ОРИГИНАЛ И ЛИЦЕНЗИЮ",false,()->{
+            try{startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(item.attributionUrl)));}
+            catch(Exception e){toast("Не удалось открыть источник");}
+        }),margins(-1,44,0,5));
+        overlay.setContentView(content);
+        overlay.show();
+        if(overlay.getWindow()!=null){
+            overlay.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            overlay.getWindow().setLayout(-1,-1);
+        }
+        PhotoLibrary.into(this,item,photo,2800);
     }
     private void showFullPhoto(String uri){
         ImageView viewer=new ImageView(this);viewer.setBackgroundColor(t.bg);
