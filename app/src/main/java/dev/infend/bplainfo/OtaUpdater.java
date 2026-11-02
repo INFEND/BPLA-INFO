@@ -53,8 +53,9 @@ public final class OtaUpdater {
         while((n=in.read(buf))!=-1){out.write(buf,0,n);if(out.size()>max)throw new IOException("Слишком большой ответ сервера");}
         return out.toByteArray();
     }
+    private AlertDialog.Builder dialog(){ThemePrefs theme=new ThemePrefs(activity);return new AlertDialog.Builder(activity,theme.mode==2?android.R.style.Theme_Material_Light_Dialog_Alert:android.R.style.Theme_Material_Dialog_Alert);}
     private void ui(Runnable run){activity.runOnUiThread(()->{if(!activity.isFinishing())run.run();});}
-    private void error(String message){ui(()->new AlertDialog.Builder(activity).setTitle("OTA · Ошибка").setMessage(message).setPositiveButton("ОК",null).show());}
+    private void error(String message){ui(()->dialog().setTitle("OTA · Ошибка").setMessage(message).setPositiveButton("ОК",null).show());}
     public void check(boolean silent){
         new Thread(()->{
             try(InputStream in=open(MANIFEST_URL)){
@@ -64,11 +65,11 @@ public final class OtaUpdater {
                 PackageInfo installed=activity.getPackageManager().getPackageInfo(activity.getPackageName(),0);
                 long local=Build.VERSION.SDK_INT>=28?installed.getLongVersionCode():installed.versionCode;
                 if(remote<=local){
-                    if(!silent)ui(()->new AlertDialog.Builder(activity).setTitle("БПЛА ИНФО").setMessage("Установлена актуальная версия. Обновлений нет.").setPositiveButton("ГОТОВО",null).show());
+                    if(!silent)ui(()->dialog().setTitle("БПЛА ИНФО").setMessage("Установлена актуальная версия. Обновлений нет.").setPositiveButton("ГОТОВО",null).show());
                     return;
                 }
                 version=j;
-                ui(()->new AlertDialog.Builder(activity)
+                ui(()->dialog()
                     .setTitle("Доступно обновление "+j.optString("versionName"))
                     .setMessage("Изменения:\n"+j.optString("notes","Без описания"))
                     .setNegativeButton("ПОЗЖЕ",null)
@@ -89,7 +90,7 @@ public final class OtaUpdater {
         TextView label=new TextView(activity);label.setText("Соединение с сервером…");label.setTextSize(14);box.addView(label);
         ProgressBar bar=new ProgressBar(activity,null,android.R.attr.progressBarStyleHorizontal);
         bar.setMax(100);box.addView(bar,new LinearLayout.LayoutParams(-1,55));
-        AlertDialog dialog=new AlertDialog.Builder(activity).setTitle("Загрузка обновления")
+        AlertDialog dialog=dialog().setTitle("Загрузка обновления")
             .setView(box).setNegativeButton("ОТМЕНА",(d,w)->cancelled=true).create();
         dialog.setCancelable(false);dialog.show();
         new Thread(()->{
@@ -142,7 +143,7 @@ public final class OtaUpdater {
     private void install(){
         if(Build.VERSION.SDK_INT>=26&&!activity.getPackageManager().canRequestPackageInstalls()){
             activity.getPreferences(0).edit().putBoolean("ota_pending_install",true).apply();
-            new AlertDialog.Builder(activity).setTitle("Разрешение установки")
+            dialog().setTitle("Разрешение установки")
                 .setMessage("Android требует один раз разрешить установку обновлений из БПЛА ИНФО. После возврата установка продолжится автоматически.")
                 .setNegativeButton("ПОЗЖЕ",null).setPositiveButton("ОТКРЫТЬ НАСТРОЙКИ",(d,w)->{
                     Intent intent=new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,Uri.parse("package:"+activity.getPackageName()));
