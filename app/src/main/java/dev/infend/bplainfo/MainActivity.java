@@ -249,7 +249,10 @@ public final class MainActivity extends Activity {
                 photo.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 photo.setImageResource(R.drawable.ic_airplane);photo.setColorFilter(t.muted);
                 frame.addView(photo,new LinearLayout.LayoutParams(-1,0,1));
-                PhotoLibrary.into(this,p,photo,1350);
+                TextView photoStatus=text("ЗАГРУЗКА ФОТО…",10,t.muted,false);
+                frame.addView(photoStatus,margins(-1,-2,0,2));
+                PhotoLibrary.into(this,p,photo,1350,ok->
+                    photoStatus.setText(ok?"СНИМОК "+number:"ФОТО НЕДОСТУПНО • НАЖМИТЕ ДЛЯ ПОВТОРА"));
 
                 frame.setOnClickListener(v->showDocumentaryPhoto(p));
             }
