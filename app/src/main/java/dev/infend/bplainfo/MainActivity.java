@@ -100,18 +100,11 @@ public final class MainActivity extends Activity {
         if(back==null)bar.addView(button("⚙",false,this::settings),margins(46,46,4,0));
     }
     private void home(){
-        showingDetail=false;showingSettings=false;
+        showingDetail=false;showingSettings=false;activeSettingsSection="";
         setup();
-        titleBar("БПЛА  ИНФО","КАТАЛОГ  /  СПРАВОЧНИК  /  INFEND",null);
+        titleBar("БПЛА  ИНФО","Каталог БПЛА",null);
         LinearLayout inner=vertical();inner.setPadding(dp(14),0,dp(14),dp(30));
         ScrollView sc=scroll(root);sc.addView(inner);
-        LinearLayout hero=vertical();hero.setPadding(dp(18),dp(17),dp(18),dp(14));
-        hero.setBackground(panel(t.panel,22));inner.addView(hero,margins(-1,-2,0,4));
-        hero.addView(text("АВИАЦИОННЫЙ АРХИВ",11,t.accent,true));
-        hero.addView(text("Изучай. Сортируй. Сохраняй.",18,t.fg,true),margins(-1,-2,0,6));
-        hero.addView(text("Личный справочник с редактированием и офлайн-доступом",12,t.muted,false));
-        RadarView radar=new RadarView(this,t);
-        hero.addView(radar,margins(-1,108,0,1));
         LinearLayout controls=horizontal();inner.addView(controls,margins(-1,-2,0,9));
         controls.addView(button("+ ДОБАВИТЬ",true,()->edit(null)),new LinearLayout.LayoutParams(0,dp(43),1));
         controls.addView(button("⇅ СОРТИРОВКА",false,this::sortDialog),margins(-2,43,5,0));
@@ -178,7 +171,7 @@ public final class MainActivity extends Activity {
         listHost.removeAllViews();
         List<Drone> found=filtered();
         View parent=(View)listHost.getParent();
-        if(parent!=null){View count=((View)parent).getRootView().findViewById(1234001);if(count instanceof TextView)((TextView)count).setText("НАЙДЕНО: "+found.size()+"   ·   ВСЕГО: "+records.size());}
+        if(parent!=null){View count=((View)parent).getRootView().findViewById(1234001);if(count instanceof TextView)((TextView)count).setText("НАЙДЕНО: "+found.size()+"   |   ВСЕГО: "+records.size());}
         if(found.isEmpty()){
             LinearLayout empty=vertical();empty.setPadding(dp(20),dp(36),dp(20),dp(36));empty.setGravity(Gravity.CENTER);
             empty.setBackground(panel(t.panel,22));
@@ -200,7 +193,9 @@ public final class MainActivity extends Activity {
             LinearLayout labels=vertical();head.addView(labels,new LinearLayout.LayoutParams(0,-2,1));
             labels.addView(text(d.name(),20,t.fg,true));
             String engine=d.engineType().trim();
-            labels.addView(text(d.displayType()+"  ·  "+(engine.isEmpty()?"—":engine),13,t.fg,true));
+            String modelType=d.displayType();
+            String subtitle=engine.isEmpty()?modelType:modelType+" | "+engine;
+            labels.addView(text(subtitle,13,t.fg,true));
             TextView star=button(d.favorite?"★":"☆",false,()->{d.favorite=!d.favorite;save();cards();});
             star.setTextColor(t.accent);head.addView(star,margins(42,42,3,0));
             LinearLayout stats=horizontal();card.addView(stats);
@@ -213,15 +208,17 @@ public final class MainActivity extends Activity {
         }
     }
     private void stat(LinearLayout row,String label,String value){
+        String formatted=SpecFormatter.display(value);
+        if(formatted.isEmpty())return;
         LinearLayout group=vertical();group.setPadding(dp(4),dp(3),dp(3),dp(2));
         row.addView(group,new LinearLayout.LayoutParams(0,-2,1));
         group.addView(text(label,9,t.muted,true));
-        group.addView(text(value==null||value.trim().isEmpty()?"—":value,13,t.accent,true));
+        group.addView(text(formatted,13,t.accent,true));
     }
     private void save(){DroneStore.save(this,records);}
     private void detail(Drone d){
         hideKeyboard();showingDetail=true;setup();
-        titleBar(d.name(),d.catalogSource.isEmpty()?"ТЕХНИЧЕСКАЯ КАРТОЧКА":"АРХИВ · КЛАССИФИКАТОР 2024",this::home);
+        titleBar(d.name(),d.catalogSource.isEmpty()?"ТЕХНИЧЕСКАЯ КАРТОЧКА":"АРХИВ | КЛАССИФИКАТОР 2024",this::home);
         LinearLayout content=vertical();content.setPadding(dp(15),0,dp(15),dp(26));scroll(root).addView(content);
         LinearLayout photos=vertical();photos.setPadding(dp(12),dp(13),dp(12),dp(13));
         photos.setBackground(outlined(t.panel,t.stroke,20));
@@ -280,7 +277,7 @@ public final class MainActivity extends Activity {
                 if(item.length<2||item[1].isEmpty())continue;
                 LinearLayout row=vertical();row.setPadding(0,dp(6),0,dp(8));table.addView(row);
                 row.addView(text(item[0].toUpperCase(Locale.ROOT),10,t.muted,true));
-                row.addView(text(item[1],15,t.fg,true));
+                row.addView(text(SpecFormatter.display(item[1]),15,t.fg,true));
                 View divider=new View(this);divider.setBackgroundColor(t.stroke);
                 table.addView(divider,new LinearLayout.LayoutParams(-1,dp(1)));
             }
@@ -289,7 +286,7 @@ public final class MainActivity extends Activity {
                 if(d.get(i).isEmpty())continue;
                 LinearLayout row=vertical();row.setPadding(0,dp(6),0,dp(8));table.addView(row);
                 row.addView(text(Drone.TITLES[i].toUpperCase(Locale.ROOT),10,t.muted,true));
-                row.addView(text(d.get(i),15,t.fg,true));
+                row.addView(text(SpecFormatter.display(d.get(i)),15,t.fg,true));
                 View divider=new View(this);divider.setBackgroundColor(t.stroke);
                 table.addView(divider,new LinearLayout.LayoutParams(-1,dp(1)));
             }
@@ -359,7 +356,7 @@ public final class MainActivity extends Activity {
             home();
         });
     }
-    private String activeSettingsSection="appearance";
+    private String activeSettingsSection="";
     private boolean showingSettings=false;
     private String appVersion(){
         try{return getPackageManager().getPackageInfo(getPackageName(),0).versionName;}
@@ -379,14 +376,14 @@ public final class MainActivity extends Activity {
 
         addSettingsSection(content,"appearance","Оформление","Тема и цветовые акценты","◈",body->{
             body.addView(text("ТЕМА ИНТЕРФЕЙСА",11,t.muted,true),margins(-1,-2,1,10));
-            LinearLayout themes=horizontal();body.addView(themes,margins(-1,88,0,7));
-            String[] names={"AMOLED","Тёмная","Светлая"},glyphs={"◉","☾","☀"};
+            LinearLayout themes=horizontal();body.addView(themes,margins(-1,96,0,7));
+            String[] names={"AMOLED","Тёмная","Светлая"},iconKinds={"amoled","dark","light"};
             for(int i=0;i<3;i++){
                 final int index=i;boolean selected=t.mode==i;
                 LinearLayout tile=vertical();tile.setGravity(Gravity.CENTER);tile.setPadding(dp(3),dp(6),dp(3),dp(6));
                 tile.setBackground(outlined(selected?t.soft:t.buttonBg,selected?t.accent:t.stroke,14));
-                TextView glyph=text(glyphs[i],27,selected?t.accent:t.muted,true);
-                glyph.setGravity(Gravity.CENTER);tile.addView(glyph);
+                SettingsIconView glyph=new SettingsIconView(this,iconKinds[i],selected?t.accent:t.muted);
+                tile.addView(glyph,margins(34,34,0,4));
                 TextView title=text(names[i],12,selected?t.accent:t.fg,selected);
                 title.setGravity(Gravity.CENTER);tile.addView(title);
                 LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(0,-1,1);
@@ -397,7 +394,7 @@ public final class MainActivity extends Activity {
                     t.mode=index;t.save(this);t=new ThemePrefs(this);settings();
                 });
             }
-            body.addView(text("АКЦЕНТНЫЙ ЦВЕТ  ·  "+ThemePrefs.ACCENTS[t.accentIndex],11,t.muted,true),margins(-1,-2,2,10));
+            body.addView(text("АКЦЕНТНЫЙ ЦВЕТ  |  "+ThemePrefs.ACCENTS[t.accentIndex],11,t.muted,true),margins(-1,-2,2,10));
             for(int from=0;from<ThemePrefs.ACCENTS.length;from+=4){
                 LinearLayout row=horizontal();body.addView(row,margins(-1,75,0,2));
                 for(int j=from;j<Math.min(from+4,ThemePrefs.ACCENTS.length);j++){
@@ -429,13 +426,13 @@ public final class MainActivity extends Activity {
             LinearLayout updateTile=vertical();updateTile.setPadding(dp(14),dp(14),dp(14),dp(14));
             updateTile.setBackground(outlined(t.soft,t.stroke,14));
             body.addView(updateTile,margins(-1,-2,0,6));
-            updateTile.addView(text("БПЛА ИНФО  ·  "+appVersion(),16,t.fg,true));
+            updateTile.addView(text("БПЛА ИНФО  |  "+appVersion(),16,t.fg,true));
             updateTile.addView(text("Проверка и установка обновлений через защищённый канал",12,t.muted,false),margins(-1,-2,0,8));
             updateTile.addView(button("↻  ПРОВЕРИТЬ ОБНОВЛЕНИЯ",true,()->new OtaUpdater(this).check(false)),margins(-1,48,0,0));
         });
         addSettingsSection(content,"about","О приложении","Версия и управление каталогом","ⓘ",body->{
             body.addView(text("БПЛА ИНФО",18,t.fg,true));
-            body.addView(text("Версия "+appVersion()+"  ·  INFEND",12,t.muted,false),margins(-1,-2,0,6));
+            body.addView(text("Версия "+appVersion()+"  |  INFEND",12,t.muted,false),margins(-1,-2,0,6));
             body.addView(text("Локальный справочник БПЛА. Управление каталогом, импорт и экспорт доступны с главного экрана.",13,t.fg,false));
         });
     }
@@ -454,8 +451,10 @@ public final class MainActivity extends Activity {
         into.addView(wrapper,margins(-1,-2,0,7));
         LinearLayout header=horizontal();header.setPadding(dp(14),dp(14),dp(14),dp(14));
         wrapper.addView(header);
-        TextView icon=text(symbol,23,opened?t.accent:t.muted,true);icon.setGravity(Gravity.CENTER);
-        icon.setBackground(outlined(t.soft,t.stroke,13));header.addView(icon,margins(45,45,0,0));
+        SettingsIconView icon=new SettingsIconView(this,id,opened?t.accent:t.muted);
+        icon.setBackground(outlined(t.soft,t.stroke,13));
+        icon.setPadding(dp(9),dp(9),dp(9),dp(9));
+        header.addView(icon,margins(45,45,0,0));
         LinearLayout labels=vertical();labels.setPadding(dp(12),0,0,0);
         header.addView(labels,new LinearLayout.LayoutParams(0,-2,1));
         labels.addView(text(heading,16,t.fg,true));
