@@ -152,6 +152,9 @@ public final class MainActivity extends Activity {
             if(!q.isEmpty()){
                 boolean match=false;
                 for(String field:d.values){if(field!=null&&field.toLowerCase(Locale.ROOT).contains(q)){match=true;break;}}
+                if(!match)for(String[] row:d.specRows){
+                    if(row.length>=2&&(row[0].toLowerCase(Locale.ROOT).contains(q)||row[1].toLowerCase(Locale.ROOT).contains(q))){match=true;break;}
+                }
                 if(!match)continue;
             }
             a.add(d);
@@ -198,22 +201,20 @@ public final class MainActivity extends Activity {
             labels.addView(text(d.type()+"  •  "+d.manufacturer(),12,t.muted,false));
             TextView star=button(d.favorite?"★":"☆",false,()->{d.favorite=!d.favorite;save();cards();});
             star.setTextColor(t.accent);head.addView(star,margins(42,42,3,0));
-            if(MaraGallery.isMara(d)){
-                ImageView graphic=new ImageView(this);
-                graphic.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                graphic.setImageBitmap(MaraGallery.get(this,0));
-                graphic.setPadding(dp(6),dp(7),dp(6),dp(7));
-                graphic.setBackground(panel(t.soft,13));
-                card.addView(graphic,margins(-1,122,0,7));
-            }else{
-                SilhouetteView graphic=new SilhouetteView(this,t,0);
-                graphic.setBackground(panel(t.soft,13));
-                card.addView(graphic,margins(-1,112,0,7));
-            }
+            LinearLayout preview=vertical();preview.setGravity(Gravity.CENTER);
+            preview.setPadding(dp(10),dp(17),dp(10),dp(17));
+            preview.setBackground(panel(t.soft,13));
+            card.addView(preview,margins(-1,91,0,7));
+            TextView modelGlyph=text(d.type().toLowerCase(Locale.ROOT).contains("коптер")?"◈":"✈",29,t.accent,true);
+            modelGlyph.setGravity(Gravity.CENTER);
+            preview.addView(modelGlyph);
+            TextView imageLabel=text(d.galleryUris.isEmpty()?"ФОТО МОЖНО ДОБАВИТЬ":"ЕСТЬ ФОТОГРАФИИ",10,t.muted,false);
+            imageLabel.setGravity(Gravity.CENTER);
+            preview.addView(imageLabel);
             LinearLayout stats=horizontal();card.addView(stats);
-            stat(stats,"РАЗМАХ",d.get(3));
-            stat(stats,"СКОРОСТЬ",d.get(5));
-            stat(stats,"ДАЛЬНОСТЬ",d.get(6));
+            stat(stats,"РАЗМАХ",d.previewSpan());
+            stat(stats,"СКОРОСТЬ",d.previewSpeed());
+            stat(stats,"ДАЛЬНОСТЬ",d.previewRange());
             card.setOnClickListener(v->detail(d));
             if(t.animations){card.setAlpha(0f);card.setTranslationY(dp(13));card.animate().alpha(1).translationY(0).setDuration(180).setStartDelay(Math.min(index,8)*25L).start();}
             index++;
@@ -235,53 +236,30 @@ public final class MainActivity extends Activity {
         photos.setBackground(outlined(t.panel,t.stroke,20));
         content.addView(photos,margins(-1,-2,0,7));
         LinearLayout phototop=horizontal();photos.addView(phototop);
-        boolean hasBuiltIn=MaraGallery.isMara(d);
-        TextView photosTitle=text(hasBuiltIn?"РАКУРСЫ МОДЕЛИ":"ФОТОГРАФИИ МОДЕЛИ",12,t.accent,true);
+        TextView photosTitle=text("ФОТОГРАФИИ МОДЕЛИ",12,t.accent,true);
         phototop.addView(photosTitle,new LinearLayout.LayoutParams(0,-2,1));
         phototop.addView(button("+ ФОТО",false,()->openPhotoPicker(d)),margins(-2,38,4,0));
         java.util.LinkedHashSet<String> images=new java.util.LinkedHashSet<>(d.galleryUris);
         if(images.isEmpty()&&!d.imageUri.isEmpty())images.add(d.imageUri);
-        if(hasBuiltIn){
-            photos.addView(text("Визуализации по референсам, не документальные фотографии",11,t.muted,false),margins(-1,-2,0,9));
-        }
-        if(!hasBuiltIn&&images.isEmpty()){
-            LinearLayout empty=vertical();empty.setPadding(dp(18),dp(28),dp(18),dp(28));
-            empty.setGravity(Gravity.CENTER);empty.setBackground(outlined(t.soft,t.stroke,13));
-            photos.addView(empty,margins(-1,-2,0,7));
-            empty.addView(text("Фотографии пока не добавлены",14,t.fg,true));
-            empty.addView(text("Добавь изображения этой модели кнопкой «+ ФОТО»",11,t.muted,false));
+        if(images.isEmpty()){
+            photos.addView(text("Фотографии не добавлены. Низкокачественные изображения удалены.",12,t.muted,false),margins(-1,-2,0,8));
         }else{
             HorizontalScrollView strip=new HorizontalScrollView(this);
             strip.setHorizontalScrollBarEnabled(false);
             photos.addView(strip,margins(-1,210,0,6));
             LinearLayout gallery=horizontal();strip.addView(gallery);
-            if(hasBuiltIn){
-                for(int index=0;index<4;index++){
-                    final int viewIndex=index;
-                    android.graphics.Bitmap bitmap=MaraGallery.get(this,index);
-                    if(bitmap==null)continue;
-                    LinearLayout frame=vertical();frame.setBackground(outlined(t.soft,t.stroke,14));
-                    gallery.addView(frame,margins(230,190,0,5));
-                    ImageView image=new ImageView(this);image.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                    image.setPadding(dp(6),dp(6),dp(6),dp(6));
-                    image.setImageBitmap(bitmap);frame.addView(image,new LinearLayout.LayoutParams(-1,-1));
-                    image.setContentDescription("Ракурс МАРА-2М "+(viewIndex+1));
-                    image.setOnClickListener(v->showFullBitmap(bitmap));
-                }
-            }
-            int shown=0;
+            int count=0;
             for(String path:images){
-                if(shown++>=15)break;
+                if(count++>=15)break;
                 LinearLayout frame=vertical();frame.setBackground(outlined(t.soft,t.stroke,14));
                 gallery.addView(frame,margins(230,190,0,5));
-                ImageView image=new ImageView(this);image.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                image.setPadding(dp(6),dp(6),dp(6),dp(6));
-                frame.addView(image,new LinearLayout.LayoutParams(-1,-1));
-                try{image.setImageURI(Uri.parse(path));}catch(Exception ignored){}
-                image.setOnClickListener(v->showFullPhoto(path));
+                ImageView photo=new ImageView(this);photo.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                photo.setPadding(dp(6),dp(6),dp(6),dp(6));
+                frame.addView(photo,new LinearLayout.LayoutParams(-1,-1));
+                try{photo.setImageURI(Uri.parse(path));}catch(Exception ignored){}
+                photo.setOnClickListener(v->showFullPhoto(path));
             }
-            int count=images.size()+(hasBuiltIn?4:0);
-            photos.addView(text(count+" изображений  ·  листай горизонтально",11,t.muted,false));
+            photos.addView(text(images.size()+" фото  ·  листай горизонтально",11,t.muted,false));
         }
         LinearLayout actions=horizontal();content.addView(actions,margins(-1,49,0,6));
         actions.addView(button(d.favorite?"★ В ИЗБРАННОМ":"☆ ИЗБРАННОЕ",false,()->{d.favorite=!d.favorite;save();detail(d);}),new LinearLayout.LayoutParams(0,-1,1));
@@ -289,12 +267,24 @@ public final class MainActivity extends Activity {
         actions.addView(button("⋮",false,()->more(d)),margins(45,-1,4,0));
         LinearLayout table=vertical();table.setPadding(dp(15),dp(14),dp(15),dp(14));table.setBackground(panel(t.panel,19));
         content.addView(table,margins(-1,-2,0,6));table.addView(text("ХАРАКТЕРИСТИКИ БПЛА",15,t.accent,true),margins(-1,-2,0,9));
-        for(int i=1;i<14;i++){
-            if(d.get(i).isEmpty())continue;
-            LinearLayout row=vertical();row.setPadding(0,dp(6),0,dp(8));table.addView(row);
-            row.addView(text(Drone.TITLES[i].toUpperCase(Locale.ROOT),10,t.muted,true));
-            row.addView(text(d.get(i),15,t.fg,true));
-            View divider=new View(this);divider.setBackgroundColor(t.stroke);table.addView(divider,new LinearLayout.LayoutParams(-1,dp(1)));
+        if(!d.specRows.isEmpty()){
+            for(String[] item:d.specRows){
+                if(item.length<2||item[1].isEmpty())continue;
+                LinearLayout row=vertical();row.setPadding(0,dp(6),0,dp(8));table.addView(row);
+                row.addView(text(item[0].toUpperCase(Locale.ROOT),10,t.muted,true));
+                row.addView(text(item[1],15,t.fg,true));
+                View divider=new View(this);divider.setBackgroundColor(t.stroke);
+                table.addView(divider,new LinearLayout.LayoutParams(-1,dp(1)));
+            }
+        }else{
+            for(int i=1;i<14;i++){
+                if(d.get(i).isEmpty())continue;
+                LinearLayout row=vertical();row.setPadding(0,dp(6),0,dp(8));table.addView(row);
+                row.addView(text(Drone.TITLES[i].toUpperCase(Locale.ROOT),10,t.muted,true));
+                row.addView(text(d.get(i),15,t.fg,true));
+                View divider=new View(this);divider.setBackgroundColor(t.stroke);
+                table.addView(divider,new LinearLayout.LayoutParams(-1,dp(1)));
+            }
         }
     }
     private void more(Drone d){
