@@ -154,7 +154,7 @@ public final class PhotoLibrary {
                 int sample=1;
                 while(Math.max(probe.outWidth,probe.outHeight)/sample>Math.max(maxPixels,800))sample*=2;
                 BitmapFactory.Options opts=new BitmapFactory.Options();
-                opts.inSampleSize=sample;opts.inPreferredConfig=Bitmap.Config.RGB_565;
+                opts.inSampleSize=sample;opts.inPreferredConfig=Bitmap.Config.ARGB_8888;
                 result=BitmapFactory.decodeFile(output.getAbsolutePath(),opts);
                 output.setLastModified(System.currentTimeMillis());
             }catch(Exception e){
