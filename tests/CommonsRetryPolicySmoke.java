@@ -11,10 +11,19 @@ public final class CommonsRetryPolicySmoke {
         check(now + 600_000L, CommonsRetryPolicy.nextAllowedMillis(429, "600", now));
         check(now + 900_000L, CommonsRetryPolicy.nextAllowedMillis(429, "9999999999999999999999", now));
         check(now + 60_000L, CommonsRetryPolicy.nextAllowedMillis(429, null, now));
+        check(now + 120_000L, CommonsRetryPolicy.nextAllowedMillis(403, null, now));
+        check(now + 300_000L, CommonsRetryPolicy.nextAllowedMillis(403, "300", now));
+        if (!CommonsRetryPolicy.isHostCooldownStatus(403)
+                || !CommonsRetryPolicy.isHostCooldownStatus(429)
+                || !CommonsRetryPolicy.isHostCooldownStatus(503)
+                || CommonsRetryPolicy.isHostCooldownStatus(404)
+                || CommonsRetryPolicy.isHostCooldownStatus(200)) {
+            throw new AssertionError("Unexpected Wikimedia cooldown status classification");
+        }
         check(now + 15_000L, CommonsRetryPolicy.nextAllowedMillis(503, "invalid", now));
         check(now + 1_000L, CommonsRetryPolicy.nextAllowedMillis(429, "-10", now));
         long dateNow = Instant.parse("2026-11-02T19:00:00Z").toEpochMilli();
         check(dateNow + 120_000L, CommonsRetryPolicy.nextAllowedMillis(429, "Mon, 02 Nov 2026 19:02:00 GMT", dateNow));
-        System.out.println("Commons retry policy: 6 cases passed");
+        System.out.println("Commons retry policy: 9 cases passed (including status classification)");
     }
 }

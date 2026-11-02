@@ -176,9 +176,10 @@ public final class PhotoLibrary {
                                 connection.setRequestProperty("User-Agent","BPLAINFO/1.1 (https://github.com/INFEND/BPLA-INFO)");
                                 connection.setRequestProperty("Accept","image/jpeg,image/png,image/webp,image/*;q=0.8");
                                 int status=connection.getResponseCode();
-                                if(status==429||status==503){
+                                if(CommonsRetryPolicy.isHostCooldownStatus(status)){
                                     // Respect Retry-After globally, not just for this
-                                    // image. Never switch to the original URL during
+                                    // image. HTTP 403 may also mean Wikimedia has temporarily
+                                    // denied this client. Never switch to the original URL during
                                     // a host cooldown: that doubles the blocked traffic.
                                     String header=connection.getHeaderField("Retry-After");
                                     long until=CommonsRetryPolicy.nextAllowedMillis(

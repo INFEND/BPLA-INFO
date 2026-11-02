@@ -7,8 +7,13 @@ import java.time.format.DateTimeFormatter;
 final class CommonsRetryPolicy {
     private CommonsRetryPolicy() {}
 
+    static boolean isHostCooldownStatus(int status) {
+        // Wikimedia sometimes signals request blocking with 403 rather than 429.
+        return status == 403 || status == 429 || status == 503;
+    }
+
     static long nextAllowedMillis(int status, String retryAfter, long nowMillis) {
-        long defaultSeconds = status == 429 ? 60 : 15;
+        long defaultSeconds = status == 403 ? 120 : (status == 429 ? 60 : 15);
         long seconds = defaultSeconds;
         if (retryAfter != null && !retryAfter.trim().isEmpty()) {
             String value = retryAfter.trim();
