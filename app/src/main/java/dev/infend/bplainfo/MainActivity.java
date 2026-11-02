@@ -198,9 +198,18 @@ public final class MainActivity extends Activity {
             labels.addView(text(d.type()+"  •  "+d.manufacturer(),12,t.muted,false));
             TextView star=button(d.favorite?"★":"☆",false,()->{d.favorite=!d.favorite;save();cards();});
             star.setTextColor(t.accent);head.addView(star,margins(42,42,3,0));
-            SilhouetteView graphic=new SilhouetteView(this,t,0);
-            graphic.setBackground(panel(t.mode==2?0xFFEAF4EE:0xFF091B15,13));
-            card.addView(graphic,margins(-1,112,0,7));
+            if(MaraGallery.isMara(d)){
+                ImageView graphic=new ImageView(this);
+                graphic.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                graphic.setImageBitmap(MaraGallery.get(this,0));
+                graphic.setPadding(dp(6),dp(7),dp(6),dp(7));
+                graphic.setBackground(panel(t.soft,13));
+                card.addView(graphic,margins(-1,122,0,7));
+            }else{
+                SilhouetteView graphic=new SilhouetteView(this,t,0);
+                graphic.setBackground(panel(t.soft,13));
+                card.addView(graphic,margins(-1,112,0,7));
+            }
             LinearLayout stats=horizontal();card.addView(stats);
             stat(stats,"РАЗМАХ",d.get(3));
             stat(stats,"СКОРОСТЬ",d.get(5));
@@ -226,33 +235,53 @@ public final class MainActivity extends Activity {
         photos.setBackground(outlined(t.panel,t.stroke,20));
         content.addView(photos,margins(-1,-2,0,7));
         LinearLayout phototop=horizontal();photos.addView(phototop);
-        TextView photosTitle=text("ФОТОГРАФИИ МОДЕЛИ",12,t.accent,true);
+        boolean hasBuiltIn=MaraGallery.isMara(d);
+        TextView photosTitle=text(hasBuiltIn?"РАКУРСЫ МОДЕЛИ":"ФОТОГРАФИИ МОДЕЛИ",12,t.accent,true);
         phototop.addView(photosTitle,new LinearLayout.LayoutParams(0,-2,1));
         phototop.addView(button("+ ФОТО",false,()->openPhotoPicker(d)),margins(-2,38,4,0));
         java.util.LinkedHashSet<String> images=new java.util.LinkedHashSet<>(d.galleryUris);
         if(images.isEmpty()&&!d.imageUri.isEmpty())images.add(d.imageUri);
-        if(images.isEmpty()){
+        if(hasBuiltIn){
+            photos.addView(text("Визуализации по референсам, не документальные фотографии",11,t.muted,false),margins(-1,-2,0,9));
+        }
+        if(!hasBuiltIn&&images.isEmpty()){
             LinearLayout empty=vertical();empty.setPadding(dp(18),dp(28),dp(18),dp(28));
             empty.setGravity(Gravity.CENTER);empty.setBackground(outlined(t.soft,t.stroke,13));
             photos.addView(empty,margins(-1,-2,0,7));
             empty.addView(text("Фотографии пока не добавлены",14,t.fg,true));
-            empty.addView(text("В галерее используются фотографии самой модели, а не рисунки похожих аппаратов.",11,t.muted,false));
+            empty.addView(text("Добавь изображения этой модели кнопкой «+ ФОТО»",11,t.muted,false));
         }else{
-            HorizontalScrollView horizontal=new HorizontalScrollView(this);horizontal.setHorizontalScrollBarEnabled(false);
-            photos.addView(horizontal,margins(-1,226,0,6));
-            LinearLayout gallery=horizontal();horizontal.addView(gallery);
+            HorizontalScrollView strip=new HorizontalScrollView(this);
+            strip.setHorizontalScrollBarEnabled(false);
+            photos.addView(strip,margins(-1,210,0,6));
+            LinearLayout gallery=horizontal();strip.addView(gallery);
+            if(hasBuiltIn){
+                for(int index=0;index<4;index++){
+                    final int viewIndex=index;
+                    android.graphics.Bitmap bitmap=MaraGallery.get(this,index);
+                    if(bitmap==null)continue;
+                    LinearLayout frame=vertical();frame.setBackground(outlined(t.soft,t.stroke,14));
+                    gallery.addView(frame,margins(230,190,0,5));
+                    ImageView image=new ImageView(this);image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    image.setPadding(dp(6),dp(6),dp(6),dp(6));
+                    image.setImageBitmap(bitmap);frame.addView(image,new LinearLayout.LayoutParams(-1,-1));
+                    image.setContentDescription("Ракурс МАРА-2М "+(viewIndex+1));
+                    image.setOnClickListener(v->showFullBitmap(bitmap));
+                }
+            }
             int shown=0;
             for(String path:images){
                 if(shown++>=15)break;
                 LinearLayout frame=vertical();frame.setBackground(outlined(t.soft,t.stroke,14));
-                gallery.addView(frame,margins(270,210,0,5));
+                gallery.addView(frame,margins(230,190,0,5));
                 ImageView image=new ImageView(this);image.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 image.setPadding(dp(6),dp(6),dp(6),dp(6));
                 frame.addView(image,new LinearLayout.LayoutParams(-1,-1));
                 try{image.setImageURI(Uri.parse(path));}catch(Exception ignored){}
                 image.setOnClickListener(v->showFullPhoto(path));
             }
-            photos.addView(text(images.size()+" фото  ·  листай горизонтально",11,t.muted,false));
+            int count=images.size()+(hasBuiltIn?4:0);
+            photos.addView(text(count+" изображений  ·  листай горизонтально",11,t.muted,false));
         }
         LinearLayout actions=horizontal();content.addView(actions,margins(-1,49,0,6));
         actions.addView(button(d.favorite?"★ В ИЗБРАННОМ":"☆ ИЗБРАННОЕ",false,()->{d.favorite=!d.favorite;save();detail(d);}),new LinearLayout.LayoutParams(0,-1,1));
@@ -452,6 +481,21 @@ public final class MainActivity extends Activity {
             if(drone.imageUri.isEmpty())drone.imageUri=value;
             return true;
         }catch(Exception e){return false;}
+    }
+    private void showFullBitmap(android.graphics.Bitmap bitmap){
+        if(bitmap==null)return;
+        ImageView viewer=new ImageView(this);
+        viewer.setBackgroundColor(t.bg);
+        viewer.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        viewer.setImageBitmap(bitmap);
+        android.app.Dialog dialog=new android.app.Dialog(this);
+        dialog.setContentView(viewer);
+        dialog.show();
+        if(dialog.getWindow()!=null){
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.getWindow().setLayout(-1,-1);
+        }
+        viewer.setOnClickListener(v->dialog.dismiss());
     }
     private void showFullPhoto(String uri){
         ImageView viewer=new ImageView(this);viewer.setBackgroundColor(t.bg);
