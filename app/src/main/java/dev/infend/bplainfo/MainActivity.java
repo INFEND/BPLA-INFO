@@ -9,6 +9,10 @@ import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Build;
+import android.graphics.Insets;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -67,7 +71,21 @@ public final class MainActivity extends Activity {
         int flags=t.mode==2?View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR|View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR:0;
         getWindow().getDecorView().setSystemUiVisibility(flags);
         root=vertical();root.setBackgroundColor(t.bg);
+        if(Build.VERSION.SDK_INT>=30) {
+            getWindow().setDecorFitsSystemWindows(false);
+            WindowInsetsController ctl=getWindow().getInsetsController();
+            if(ctl!=null){
+                int mask=WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS|WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS;
+                ctl.setSystemBarsAppearance(t.mode==2?mask:0,mask);
+            }
+            root.setOnApplyWindowInsetsListener((view,insets)->{
+                Insets bars=insets.getInsets(WindowInsets.Type.statusBars()|WindowInsets.Type.navigationBars());
+                view.setPadding(bars.left,bars.top,bars.right,bars.bottom);
+                return insets;
+            });
+        }else root.setFitsSystemWindows(true);
         setContentView(root);
+        if(Build.VERSION.SDK_INT>=30)root.requestApplyInsets();
     }
     private ScrollView scroll(LinearLayout into){
         ScrollView sc=new ScrollView(this);sc.setFillViewport(false);sc.setClipToPadding(false);
