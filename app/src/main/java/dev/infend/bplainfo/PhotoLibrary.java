@@ -1,6 +1,9 @@
 package dev.infend.bplainfo;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
@@ -108,6 +111,18 @@ public final class PhotoLibrary {
         List<Photo> result=ITEMS.get(id);
         return result==null?Collections.emptyList():result;
     }
+    // An offline device should never queue multiple long HTTP timeouts. The
+    // existing on-disk cache is checked first, so offline gallery viewing works.
+    // NET_CAPABILITY_INTERNET is intentionally used instead of VALIDATED:
+    // Android validation can be unavailable even when Wikimedia is reachable.
+    private static boolean hasNetwork(Context context){
+        ConnectivityManager manager=(ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(manager==null)return true; // Fail open if the service is unavailable.
+        Network active=manager.getActiveNetwork();
+        if(active==null)return false;
+        NetworkCapabilities capabilities=manager.getNetworkCapabilities(active);
+        return capabilities==null||capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+    }
     private static String hex(byte[] bytes){
         StringBuilder b=new StringBuilder();
         for(byte x:bytes)b.append(String.format(java.util.Locale.ROOT,"%02x",x&255));
@@ -153,6 +168,7 @@ public final class PhotoLibrary {
                 File output=new File(folder,md5+".img");
                 if(output.isFile()&&!validImage(output))output.delete();
                 if(!output.isFile()){
+                    if(!hasNetwork(app))throw new java.io.IOException("No active network; cached photos remain available");
                     long persistedCooldown=app.getSharedPreferences("photo_net",Context.MODE_PRIVATE)
                             .getLong("cooldown_until",0L);
                     nextAllowedNetworkAtMs=Math.max(nextAllowedNetworkAtMs,persistedCooldown);
@@ -262,6 +278,7 @@ public final class PhotoLibrary {
      * Previously cached images can still be viewed during this interval.
      */
     public static String unavailableMessage(Context context){
+        if(!hasNetwork(context.getApplicationContext()))return "НЕТ ИНТЕРНЕТА · СОХРАНЁННЫЕ ФОТО ДОСТУПНЫ";
         long persisted=context.getApplicationContext()
                 .getSharedPreferences("photo_net",Context.MODE_PRIVATE)
                 .getLong("cooldown_until",0L);
