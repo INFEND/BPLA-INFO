@@ -557,7 +557,11 @@ public final class MainActivity extends Activity {
         bar.addView(button("✕",false,overlay::dismiss),margins(45,40,0,0));
         ImageView photo=new ImageView(this);photo.setScaleType(ImageView.ScaleType.FIT_CENTER);
         photo.setImageResource(R.drawable.ic_airplane);photo.setColorFilter(t.muted);
-        content.addView(photo,new LinearLayout.LayoutParams(-1,0,1));
+        // A weighted zero-height child inside a wrap-content dialog can render
+        // as an invisible image on some Android window implementations.
+        int screenHeight=getResources().getDisplayMetrics().heightPixels;
+        int photoHeight=Math.max(dp(240),Math.min((int)(screenHeight*0.68f),dp(760)));
+        content.addView(photo,new LinearLayout.LayoutParams(-1,photoHeight));
         String credit="Источник: Wikimedia Commons";
         if(!item.author.isEmpty())credit+=" | "+item.author;
         if(!item.license.isEmpty())credit+=" | "+item.license;
