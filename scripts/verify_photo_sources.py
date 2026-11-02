@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Check authenticity metadata and Wikimedia media access for curated UAV photos."""
-import hashlib,json,pathlib,urllib.error,urllib.parse,urllib.request
+import hashlib,json,pathlib,time,urllib.error,urllib.parse,urllib.request
 root=pathlib.Path(__file__).resolve().parents[1]
 catalog=json.loads((root/"app/src/main/assets/catalog_lostarmour_2024_verified.json").read_text("utf-8"))
 data=json.loads((root/"app/src/main/assets/photo_sources.json").read_text("utf-8"))
@@ -25,20 +25,35 @@ for id,entry in data["items"].items():
         md5=hashlib.md5(name.encode("utf-8")).hexdigest()
         encoded=urllib.parse.quote(name,safe="")
         url=f"https://upload.wikimedia.org/wikipedia/commons/{md5[0]}/{md5[:2]}/{encoded}"
-        req=urllib.request.Request(url,headers={"User-Agent":"BPLAINFO-verification/1.0 (INFEND/BPLA-INFO)"},method="HEAD")
-        try:
-            with urllib.request.urlopen(req,timeout=16) as r:
-                if r.status==200 and r.headers.get("Content-Type","").startswith("image/"):
-                    passed+=1
-                else:missing.append((id,name,r.status))
-        except urllib.error.HTTPError as error:
-            if error.code in (429,403,503):
+        # Wikimedia applies 429 when CI probes dozens of files at once.
+        # Pace requests and retry once with backoff before marking unknown.
+        time.sleep(1.8)
+        for attempt in range(2):
+            req=urllib.request.Request(url,headers={"User-Agent":"BPLAINFO-verification/1.0 (INFEND/BPLA-INFO)"},method="HEAD")
+            try:
+                with urllib.request.urlopen(req,timeout=16) as response:
+                    if response.status==200 and response.headers.get("Content-Type","").startswith("image/"):
+                        passed+=1
+                    else:
+                        missing.append((id,name,response.status))
+                break
+            except urllib.error.HTTPError as error:
+                if error.code==429 and attempt==0:
+                    retry_after=error.headers.get("Retry-After","")
+                    wait=min(20,max(6,int(retry_after))) if retry_after.isdigit() else 8
+                    print("RATE-LIMIT:",name,"retrying in",wait,"seconds",flush=True)
+                    time.sleep(wait)
+                    continue
+                if error.code in (429,403,503):
+                    blocked+=1
+                    if len(blocked_samples)<8:blocked_samples.append((id,name,f"HTTP {error.code}"))
+                else:
+                    missing.append((id,name,error.code))
+                break
+            except Exception as error:
                 blocked+=1
-                if len(blocked_samples)<8:blocked_samples.append((id,name,f'HTTP {error.code}'))
-            else:missing.append((id,name,error.code))
-        except Exception as error:
-            blocked+=1
-            if len(blocked_samples)<8:blocked_samples.append((id,name,type(error).__name__))
+                if len(blocked_samples)<8:blocked_samples.append((id,name,type(error).__name__))
+                break
         if (passed+len(missing)+blocked)%10==0:
             print("CHECK",passed,"confirmed",len(missing),"missing",blocked,"blocked",flush=True)
 print("FINAL:",passed,"of",photos,"accessible;",
