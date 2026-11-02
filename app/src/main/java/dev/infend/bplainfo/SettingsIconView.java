@@ -2,80 +2,82 @@ package dev.infend.bplainfo;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.view.View;
 
-/** Unified 24x24 vector icons, stroke width 1.8, optically centered. */
+/** One stroke language for every theme and settings icon, centered on a 48x48 grid. */
 public final class SettingsIconView extends View {
     private final String kind;
-    private final Paint p=new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final int color;
-
-    public SettingsIconView(Context context,String kind,int color){
-        super(context);this.kind=kind;this.color=color;
-        setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+    private final Paint pen=new Paint(Paint.ANTI_ALIAS_FLAG);
+    public SettingsIconView(Context context,String kind,int tint){
+        super(context);
+        this.kind=kind;
+        pen.setColor(tint);pen.setStrokeWidth(2.35f);
+        pen.setStrokeJoin(Paint.Join.ROUND);pen.setStrokeCap(Paint.Cap.ROUND);
+        pen.setStyle(Paint.Style.STROKE);
     }
+    private void line(Canvas c,float a,float b,float x,float y){c.drawLine(a,b,x,y,pen);}
+    private void circle(Canvas c,float x,float y,float r){c.drawCircle(x,y,r,pen);}
     @Override protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
         float size=Math.min(getWidth(),getHeight());
         if(size<=0)return;
         canvas.save();
         canvas.translate((getWidth()-size)/2f,(getHeight()-size)/2f);
-        canvas.scale(size/24f,size/24f);
-        p.setColor(color);p.setStyle(Paint.Style.STROKE);p.setStrokeWidth(1.8f);
-        p.setStrokeCap(Paint.Cap.ROUND);p.setStrokeJoin(Paint.Join.ROUND);
+        canvas.scale(size/48f,size/48f);
         switch(kind){
-            case "appearance":
-                canvas.drawCircle(12,12,8.3f,p);
-                line(canvas,12,3.7f,12,20.3f);
-                canvas.drawArc(5.7f,5.7f,18.3f,18.3f,95,170,false,p);
-                canvas.drawCircle(16.3f,9.3f,1f,p);
-                break;
-            case "motion":
-                line(canvas,12,2.8f,12,21.2f);
-                line(canvas,2.8f,12,21.2f,12);
-                line(canvas,6.8f,6.8f,17.2f,17.2f);
-                line(canvas,17.2f,6.8f,6.8f,17.2f);
-                break;
-            case "ota":
-                canvas.drawArc(3.6f,3.6f,20.4f,20.4f,-72,291,false,p);
-                line(canvas,17,2.9f,20.5f,4.7f);
-                line(canvas,20.5f,4.7f,20.1f,9f);
-                break;
-            case "about":
-                canvas.drawCircle(12,12,9,p);
-                p.setStyle(Paint.Style.FILL);
-                canvas.drawCircle(12,7.6f,1.1f,p);
-                canvas.drawRoundRect(11.1f,10.2f,12.9f,17.1f,0.9f,0.9f,p);
-                break;
             case "amoled":
-                canvas.drawRoundRect(4,4,20,20,4,4,p);
-                p.setStyle(Paint.Style.FILL);
-                canvas.drawCircle(12,12,4.25f,p);
+                circle(canvas,24,24,12);circle(canvas,24,24,7);
+                pen.setStyle(Paint.Style.FILL);circle(canvas,24,24,2);
                 break;
-            case "dark":
-                p.setStyle(Paint.Style.FILL);
-                Path moon=new Path();
-                moon.moveTo(15.8f,3.2f);
-                moon.cubicTo(8f,3.5f,5.5f,9f,7.7f,14.3f);
-                moon.cubicTo(9.8f,19.5f,15.8f,19.2f,19.8f,16.1f);
-                moon.cubicTo(17.3f,20.5f,11.2f,22f,7f,18.8f);
-                moon.cubicTo(1.2f,14.5f,2.2f,4.2f,15.8f,3.2f);
-                canvas.drawPath(moon,p);
-                break;
-            case "light":
-                canvas.drawCircle(12,12,4.4f,p);
+            case "moon":{
+                Path moon=new Path();moon.moveTo(28,9);
+                moon.cubicTo(17,12,13,24,18,32);
+                moon.cubicTo(21,37,27,39,34,35);
+                moon.cubicTo(25,43,10,35,11,23);
+                moon.cubicTo(12,14,19,9,28,9);
+                canvas.drawPath(moon,pen);break;
+            }
+            case "sun":
+                circle(canvas,24,24,7.5f);
                 for(int i=0;i<8;i++){
-                    double a=i*Math.PI/4;
-                    float c=(float)Math.cos(a),s=(float)Math.sin(a);
-                    line(canvas,12+7*c,12+7*s,12+9.5f*c,12+9.5f*s);
+                    double a=i*Math.PI/4d;
+                    line(canvas,24+(float)Math.cos(a)*12,24+(float)Math.sin(a)*12,
+                        24+(float)Math.cos(a)*16,24+(float)Math.sin(a)*16);
                 }
                 break;
-            default:canvas.drawCircle(12,12,5,p);
+            case "palette":{
+                Path palette=new Path();palette.moveTo(23,9);
+                palette.cubicTo(9,9,6,20,10,30);
+                palette.cubicTo(13,38,23,41,30,35);
+                palette.cubicTo(34,31,25,29,27,25);
+                palette.cubicTo(29,22,39,28,39,23);
+                palette.cubicTo(39,14,32,9,23,9);
+                canvas.drawPath(palette,pen);
+                pen.setStyle(Paint.Style.FILL);
+                circle(canvas,16,19,2);circle(canvas,24,15,2);
+                circle(canvas,32,18,2);circle(canvas,17,28,2);
+                break;
+            }
+            case "motion":{
+                Path star=new Path();star.moveTo(24,9);star.lineTo(28,20);
+                star.lineTo(39,24);star.lineTo(28,28);star.lineTo(24,39);
+                star.lineTo(20,28);star.lineTo(9,24);star.lineTo(20,20);star.close();
+                canvas.drawPath(star,pen);break;
+            }
+            case "refresh":
+                canvas.drawArc(11,11,37,37,-53,292,false,pen);
+                line(canvas,31,11,37,12);line(canvas,37,12,37,18);
+                break;
+            case "info":
+                circle(canvas,24,24,14);
+                line(canvas,24,22,24,32);
+                pen.setStyle(Paint.Style.FILL);circle(canvas,24,16.5f,1.7f);
+                break;
+            default:circle(canvas,24,24,13);
         }
+        pen.setStyle(Paint.Style.STROKE);
         canvas.restore();
     }
-    private void line(Canvas c,float x1,float y1,float x2,float y2){c.drawLine(x1,y1,x2,y2,p);}
 }
