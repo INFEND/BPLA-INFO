@@ -239,6 +239,11 @@ public final class MainActivity extends Activity {
             strip.setHorizontalScrollBarEnabled(false);
             photos.addView(strip,margins(-1,214,0,5));
             LinearLayout gallery=horizontal();strip.addView(gallery);
+            // Only fetch thumbnails that are on screen (or about to enter it).
+            // Eagerly downloading all five on every card opening quickly triggers
+            // Commons rate limits and makes the first visible photo wait.
+            java.util.ArrayList<View> lazyFrames=new java.util.ArrayList<>();
+            java.util.ArrayList<Runnable> lazyLoads=new java.util.ArrayList<>();
             int photoNumber=0;
             for(PhotoLibrary.Photo p:documentary){
                 final int number=++photoNumber;
@@ -249,10 +254,17 @@ public final class MainActivity extends Activity {
                 photo.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 photo.setImageResource(R.drawable.ic_airplane);photo.setColorFilter(t.muted);
                 frame.addView(photo,new LinearLayout.LayoutParams(-1,0,1));
-                TextView photoStatus=text("ЗАГРУЗКА ФОТО…",10,t.muted,false);
+                TextView photoStatus=text("ОЖИДАНИЕ ПРОСМОТРА…",10,t.muted,false);
                 frame.addView(photoStatus,margins(-1,-2,0,2));
-                PhotoLibrary.into(this,p,photo,1350,ok->
-                    photoStatus.setText(ok?"СНИМОК "+number:PhotoLibrary.unavailableMessage(this)));
+                final boolean[] requested={false};
+                lazyFrames.add(frame);
+                lazyLoads.add(()->{
+                    if(requested[0])return;
+                    requested[0]=true;
+                    photoStatus.setText("ЗАГРУЗКА ФОТО…");
+                    PhotoLibrary.into(this,p,photo,1350,ok->
+                        photoStatus.setText(ok?"СНИМОК "+number:PhotoLibrary.unavailableMessage(this)));
+                });
 
                 frame.setOnClickListener(v->showDocumentaryPhoto(p));
             }
@@ -267,6 +279,9 @@ public final class MainActivity extends Activity {
 
                 frame.setOnClickListener(v->showFullPhoto(path));
             }
+            strip.setOnScrollChangeListener((v,x,y,oldX,oldY)->
+                loadVisibleDocumentaryPhotos(strip,lazyFrames,lazyLoads));
+            strip.post(()->loadVisibleDocumentaryPhotos(strip,lazyFrames,lazyLoads));
         }
         LinearLayout actions=horizontal();content.addView(actions,margins(-1,49,0,6));
         actions.addView(button(d.favorite?"★ В ИЗБРАННОМ":"☆ ИЗБРАННОЕ",false,()->{d.favorite=!d.favorite;save();detail(d);}),new LinearLayout.LayoutParams(0,-1,1));
@@ -292,6 +307,17 @@ public final class MainActivity extends Activity {
                 View divider=new View(this);divider.setBackgroundColor(t.stroke);
                 table.addView(divider,new LinearLayout.LayoutParams(-1,dp(1)));
             }
+        }
+    }
+    private void loadVisibleDocumentaryPhotos(HorizontalScrollView strip,
+                                             java.util.List<View> frames,
+                                             java.util.List<Runnable> loaders){
+        if(strip.getWidth()<=0)return;
+        int left=strip.getScrollX()-dp(60);
+        int right=strip.getScrollX()+strip.getWidth()+dp(60);
+        for(int i=0;i<frames.size();i++){
+            View frame=frames.get(i);
+            if(frame.getRight()>=left&&frame.getLeft()<=right)loaders.get(i).run();
         }
     }
     private void more(Drone d){
