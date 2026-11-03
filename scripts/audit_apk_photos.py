@@ -6,7 +6,7 @@ import re
 import sys
 import zipfile
 
-PHOTO_PATTERN = re.compile(r"photos/[a-z0-9][a-z0-9_-]{2,100}\\.(?:webp|png|jpg|jpeg)\\Z")
+PHOTO_PATTERN = re.compile(r"photos/[a-z0-9][a-z0-9_-]{2,100}\.(?:webp|png|jpg|jpeg)\Z")
 LEGACY = ("assets/photo_sources.json",)
 MAX_SIZE = 12_000_000
 
