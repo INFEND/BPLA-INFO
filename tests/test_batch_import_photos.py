@@ -117,6 +117,12 @@ class BatchPhotoImporterTests(unittest.TestCase):
         im=Image.new("RGBA",(640,480),(0,0,0,0))
         from PIL import ImageDraw
         ImageDraw.Draw(im).rectangle((70,60,570,420),fill=(100,100,100,255))
+        # Add deterministic synthetic pixel variation so the lossless WebP fixture
+        # exceeds the importer\'s 512-byte minimum (a flat rectangle does not).
+        # This is only a unit-test fixture, never a published UAV photograph.
+        for y in range(75, 415, 11):
+            for x in range(75, 565, 11):
+                im.putpixel((x, y), ((x * 7) % 256, (y * 11) % 256, 130, 255))
         im.save(prepared,format="WEBP",lossless=True)
         self.batch([first])
         path,manifest,pending=importer.prepare(self.stage,self.repo)
