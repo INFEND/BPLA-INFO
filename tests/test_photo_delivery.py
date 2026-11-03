@@ -46,6 +46,9 @@ class LocalPhotoRegressionTests(unittest.TestCase):
                 self.assertNotIn(file,files)
                 files.add(file)
                 self.assertTrue(record["author"] and record["license"] and record["source"])
+                self.assertIn(record["processing_status"], ("needs_background_review", "background_removed_verified", "verified_clean_original"))
+                if record["processing_status"] != "needs_background_review":
+                    self.assertRegex(record["original_sha256"], r"^[0-9a-f]{64}$")
                 self.assertNotIn("url",json.dumps(record).lower())
                 real=ASSETS/file
                 self.assertTrue(real.is_file(),file)

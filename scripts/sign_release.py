@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 """Verify permanent key identity and sign the Android release APK."""
-import os,base64,hashlib,io,json,pathlib,subprocess,tempfile,zipfile
+import os,base64,hashlib,hmac,io,json,pathlib,subprocess,tempfile,zipfile
 ROOT=pathlib.Path(__file__).resolve().parents[1]
+# Pinned to the certificate used by published v1.0.13 (CI run 151).
+EXPECTED_SIGNING_CERT_SHA256="6ba5b3c9cccdd4abed63e39685493312b75240e40d212b9bca44dc6708775153"
+def verify_signing_identity(actual, declared):
+    if not hmac.compare_digest(actual.lower(), declared.lower()):
+        raise ValueError("Key certificate does not match signing.json")
+    if not hmac.compare_digest(actual.lower(), EXPECTED_SIGNING_CERT_SHA256):
+        raise ValueError("Signing certificate differs from published v1.0.13; OTA blocked")
 ENV_KEYS=("BPLA_INFO_SIGNING_BUNDLE","INFEND_SIGNING_BUNDLE","ANDROID_SIGNING_BUNDLE","QR_LINK_SIGNING_BUNDLE")
 def run(args,env=None):return subprocess.run(args,check=True,capture_output=True,text=True,env=env)
 def main():
@@ -30,7 +37,7 @@ def main():
         env["BPLA_STORE_PASS"]=info["keystore_password"];env["BPLA_KEY_PASS"]=info["key_password"]
         run(["keytool","-exportcert","-alias",info["alias"],"-keystore",str(key),"-storetype","PKCS12","-storepass:env","BPLA_STORE_PASS","-file",str(cert)],env)
         actual=hashlib.sha256(cert.read_bytes()).hexdigest()
-        if actual.casefold()!=info["certificate_sha256"].casefold():raise SystemExit("Key certificate does not match signing.json")
+        verify_signing_identity(actual, info["certificate_sha256"])
         aligned=folder/"aligned.apk"
         run([str(sdk/"zipalign"),"-f","-p","4",str(files[0]),str(aligned)])
         out=dist/"BPLA-INFO.apk"

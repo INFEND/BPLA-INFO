@@ -33,10 +33,22 @@ class ApkPhotoAuditTests(unittest.TestCase):
             path=Path(folder)/"test.apk"
             manifest={"schema":2,"storage":"apk-assets-only","items":{"model":{"files":[{
                 "file":"photos/model_front.webp","sha256":"0"*64,
-                "author":"A","license":"CC0","source":"archive"
+                "author":"A","license":"CC0","source":"archive", "processing_status":"needs_background_review"
             }]}}}
             self.make_apk(path,manifest)
             with self.assertRaisesRegex(ValueError,"Missing photo binary"):
+                audit.audit(path)
+
+    def test_rejects_false_processing_claim(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path=Path(folder)/"test.apk"
+            manifest={"schema":2,"storage":"apk-assets-only","items":{"test":{"files":[{
+                "file":"photos/test_front.webp", "sha256":"0"*64,
+                "author":"A", "license":"CC0", "source":"archive",
+                "processing_status":"background_removed_verified"
+            }]}}}
+            self.make_apk(path,manifest)
+            with self.assertRaisesRegex(ValueError,"original SHA-256"):
                 audit.audit(path)
 
 if __name__=="__main__":

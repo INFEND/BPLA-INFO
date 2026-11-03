@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
 """Verify physical APK photo contents, not just manifest source text."""
 import hashlib
+import io
 import json
 import re
 import sys
 import zipfile
+from PIL import Image, UnidentifiedImageError
 
 PHOTO_PATTERN = re.compile(r"photos/[a-z0-9][a-z0-9_-]{2,100}\.(?:webp|png|jpg|jpeg)\Z")
 LEGACY = ("assets/photo_sources.json",)
 MAX_SIZE = 12_000_000
+Image.MAX_IMAGE_PIXELS = 30_000_000
+VALID_PROCESSING = {"needs_background_review", "background_removed_verified", "verified_clean_original"}
 
 def valid_image_header(file, binary):
     if file.endswith(".webp"):
@@ -16,6 +20,25 @@ def valid_image_header(file, binary):
     if file.endswith(".png"):
         return binary.startswith(bytes.fromhex("89504e470d0a1a0a"))
     return binary.startswith(bytes.fromhex("ffd8ff"))
+
+def verify_decodable_image(file, binary, processing_status):
+    expected = "WEBP" if file.endswith(".webp") else ("PNG" if file.endswith(".png") else "JPEG")
+    try:
+        with Image.open(io.BytesIO(binary)) as image:
+            if image.format != expected:
+                raise ValueError("Photo format mismatch: " + file)
+            width, height = image.size
+            if min(width, height) < 300 or max(width, height) < 500:
+                raise ValueError("Photo dimensions too small: " + file)
+            image.load()
+            if processing_status == "background_removed_verified":
+                if "A" not in image.getbands():
+                    raise ValueError("Background-removed photo has no alpha channel: " + file)
+                low, high = image.getchannel("A").getextrema()
+                if low > 0 or high < 255:
+                    raise ValueError("Background-removed photo has no usable transparency: " + file)
+    except (UnidentifiedImageError, OSError, Image.DecompressionBombError) as error:
+        raise ValueError("Photo decoding failed: " + file) from error
 
 def audit(path):
     with zipfile.ZipFile(path) as apk:
@@ -36,6 +59,11 @@ def audit(path):
                 raise ValueError("Invalid photo count: " + model_id)
             for record in photos:
                 file = record["file"]
+                status = record.get("processing_status")
+                if status not in VALID_PROCESSING:
+                    raise ValueError("Missing or invalid photo processing status: " + file)
+                if status != "needs_background_review" and not re.fullmatch(r"[a-f0-9]{64}", record.get("original_sha256", "")):
+                    raise ValueError("Verified photo lacks original SHA-256: " + file)
                 if not PHOTO_PATTERN.fullmatch(file):
                     raise ValueError("Invalid embedded photo path: " + file)
                 if file in referenced:
@@ -51,13 +79,14 @@ def audit(path):
                     raise ValueError("Invalid photo size: " + asset)
                 if not valid_image_header(file, binary):
                     raise ValueError("Invalid image format: " + asset)
+                verify_decodable_image(file, binary, status)
                 if hashlib.sha256(binary).hexdigest() != record["sha256"]:
                     raise ValueError("Photo checksum mismatch: " + asset)
         actual = {name.removeprefix("assets/") for name in names
                   if name.startswith("assets/photos/") and not name.endswith("/")}
         if actual != referenced:
             raise ValueError("Unindexed photo binaries: " + repr(actual - referenced))
-        print(f"PASS: {path}: {len(manifest['items'])} model galleries, {len(referenced)} physical photos, no legacy photo manifest")
+        print(f"PASS: {path}: {len(manifest['items'])} model galleries, {len(referenced)} physical photos decoded with Pillow, no legacy photo manifest")
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

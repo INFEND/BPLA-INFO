@@ -39,6 +39,8 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.6.1'
+      - name: Install independent photo decoder
+        run: python3 -m pip install --disable-pip-version-check 'Pillow==11.3.0'
       - name: Test manifest logic
         run: python3 -m unittest discover -s tests -v
       - name: Verify measurement display on JVM
@@ -85,6 +87,9 @@ jobs:
         env:
           BPLA_INFO_SIGNING_BUNDLE: ${{ secrets.BPLA_INFO_SIGNING_BUNDLE || secrets.INFEND_SIGNING_BUNDLE || secrets.ANDROID_SIGNING_BUNDLE }}
         run: python3 scripts/sign_release.py
+      - name: Audit signed APK photo bytes
+        if: github.event_name != 'pull_request'
+        run: python3 scripts/audit_apk_photos.py dist/BPLA-INFO.apk
       - name: Generate and verify update.json
         if: github.event_name != 'pull_request'
         id: info
