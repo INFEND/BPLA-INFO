@@ -59,6 +59,12 @@ jobs:
           mkdir -p /tmp/bpla-photo-dimensions
           javac -encoding UTF-8 -d /tmp/bpla-photo-dimensions app/src/main/java/dev/infend/bplainfo/PhotoDimensions.java tests/PhotoDimensionsSmoke.java
           java -cp /tmp/bpla-photo-dimensions dev.infend.bplainfo.PhotoDimensionsSmoke
+      - name: Verify public Commons CDN URL generation on JVM
+        shell: bash
+        run: |
+          mkdir -p /tmp/bpla-commons-urls
+          javac -encoding UTF-8 -d /tmp/bpla-commons-urls app/src/main/java/dev/infend/bplainfo/CommonsImageUrls.java tests/CommonsImageUrlsSmoke.java
+          java -cp /tmp/bpla-commons-urls dev.infend.bplainfo.CommonsImageUrlsSmoke
       - name: Compile Android debug and release
         id: compilation
         run: gradle --no-daemon :app:assembleDebug :app:assembleRelease
