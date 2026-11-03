@@ -33,6 +33,13 @@ class PhotoDeliveryRegressionTests(unittest.TestCase):
         self.assertIn("!validImage(temp)||!temp.renameTo(output)", JAVA)
         self.assertIn('throw new java.io.IOException("Cached photo could not be decoded")', JAVA)
 
+    def test_corrupt_photo_bounds_probe_is_guarded_against_oom(self):
+        validator = JAVA.split("private static boolean validImage(File file){", 1)[1].split("public static void load(", 1)[0]
+        self.assertLess(validator.index("try{"), validator.index("BitmapFactory.decodeFile(file.getAbsolutePath(),bounds)"))
+        self.assertIn("catch(RuntimeException | OutOfMemoryError e)", validator)
+        self.assertIn("if(decoded==null)return false;", validator)
+        self.assertIn("decoded.recycle();", validator)
+
     def test_fullscreen_photo_is_not_zero_height_in_wrap_content_dialog(self):
         activity = (ROOT / "app/src/main/java/dev/infend/bplainfo/MainActivity.java").read_text("utf-8")
         viewer = activity.split("private void showDocumentaryPhoto(", 1)[1].split("private void showFullPhoto(", 1)[0]
