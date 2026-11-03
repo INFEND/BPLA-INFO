@@ -8,9 +8,14 @@ MANIFEST = json.loads((ROOT / "app/src/main/assets/photo_sources.json").read_tex
 CATALOG = json.loads((ROOT / "app/src/main/assets/catalog_lostarmour_2024_verified.json").read_text("utf-8"))
 
 class PhotoDeliveryRegressionTests(unittest.TestCase):
-    def test_primary_uses_documented_mediawiki_redirect_for_thumbnails(self):
-        self.assertIn("https://commons.wikimedia.org/wiki/Special:Redirect/file/", JAVA)
-        self.assertIn("?width=1600", JAVA)
+    def test_primary_uses_public_thumbnail_cdn_with_original_fallback(self):
+        helper = (ROOT / "app/src/main/java/dev/infend/bplainfo/CommonsImageUrls.java").read_text("utf-8")
+        self.assertIn("https://thumb.wikimedia.org/wikipedia/commons/thumb/", helper)
+        self.assertIn("https://upload.wikimedia.org/wikipedia/commons/", helper)
+        self.assertIn("1280px-", helper)
+        self.assertIn("CommonsImageUrls.thumbnail(file)", JAVA)
+        self.assertIn("CommonsImageUrls.original(file)", JAVA)
+        self.assertIn("CommonsImageUrls.attribution(file)", JAVA)
         self.assertIn("photo.fallbackUrl", JAVA)
         self.assertIn('optString("license","")', JAVA)
         self.assertIn('optString("author","")', JAVA)
