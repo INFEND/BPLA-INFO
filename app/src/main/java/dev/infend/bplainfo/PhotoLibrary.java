@@ -224,6 +224,8 @@ public final class PhotoLibrary {
                                         out.write(buffer,0,n);
                                     }
                                 }
+                                if(announced>=0 && size!=announced)
+                                    throw new java.io.IOException("Incomplete image response: "+size+"/"+announced);
                                 if(size<512||!validImage(temp)||!temp.renameTo(output))
                                     throw new java.io.IOException("Invalid image response");
                                 complete=true;
