@@ -161,7 +161,11 @@ public final class PhotoLibrary {
                 if(!folder.isDirectory()&&!folder.mkdirs())throw new java.io.IOException("No cache directory");
                 String md5=hex(MessageDigest.getInstance("MD5").digest(photo.file.getBytes("UTF-8")));
                 File output=new File(folder,md5+".img");
-                if(output.isFile()&&!validImage(output))output.delete();
+                if(output.isFile()&&!validImage(output)){
+                    // A corrupt cache entry must never be reused. If deletion
+                    // fails (e.g. storage error), stop instead of decoding it.
+                    if(!output.delete())throw new java.io.IOException("Cannot remove corrupt photo cache entry");
+                }
                 if(!output.isFile()){
                     if(!hasNetwork(app))throw new java.io.IOException("No active network; cached photos remain available");
                     long persistedCooldown=app.getSharedPreferences("photo_net",Context.MODE_PRIVATE)
