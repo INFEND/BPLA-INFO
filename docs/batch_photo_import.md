@@ -16,3 +16,19 @@ Then, only after reviewing results:
 A complete batch adds the prepared bytes to app/src/main/assets/photos, archives untouched originals in photo_originals/<model_id>/ outside APK, and adds author, license, source, rights evidence, SHA-256 of both original and processed images, and visual-review status to bundled_photos.json.
 
 Never add synthetic test fixtures to the real app. Never modify or erase user-selected local photos. Do not bump version or publish OTA without successful CI and confirmed new release content.
+
+Original hashes must also be unique across the batch and existing galleries:
+different crops or recompressed copies of one source are not distinct angles.
+An optional `prepared_sha256` is checked against the exact prepared bytes.
+Transparent cutouts need padding around the complete aircraft outline. Existing
+unindexed destination files are never overwritten. Output paths cannot escape
+the repository through symbolic links.
+
+All writes are staged in the destination filesystem before any replacement.
+Failed staging writes and failed replacements restore prior file contents and
+remove new files and temporary fragments. This is process-failure recovery,
+not a power-loss transaction.
+
+Six unmodified downloaded source renditions and the next photo candidates are
+documented in `research/photos/source_index.json` and `research/photos/README.md`.
+They are research inputs, not new APK gallery photos.

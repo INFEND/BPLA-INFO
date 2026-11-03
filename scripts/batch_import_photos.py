@@ -5,8 +5,10 @@ import copy
 import hashlib
 import io
 import json
+import os
 import re
 import sys
+import tempfile
 from pathlib import Path
 from PIL import Image, UnidentifiedImageError
 
@@ -60,6 +62,9 @@ def image_data(path,limit,alpha_required=False):
                 low,high=im.getchannel("A").getextrema()
                 if low != 0 or high != 255:
                     raise ValueError("Invalid transparency: "+path.name)
+                bounds=im.getchannel("A").getbbox()
+                if bounds is None or 0 in bounds[:2] or bounds[2]==im.width or bounds[3]==im.height:
+                    raise ValueError("Cutout touches image edges; review complete aircraft outline: "+path.name)
     except (OSError,UnidentifiedImageError,Image.DecompressionBombError) as err:
         raise ValueError("Image decode failed: "+path.name) from err
     return data
@@ -79,6 +84,7 @@ def prepare(staging, repo):
         raise ValueError("Empty photo batch")
     new=copy.deepcopy(manifest)
     used={x["sha256"] for g in new["items"].values() for x in g["files"]}
+    originals={x["original_sha256"] for g in new["items"].values() for x in g["files"] if x.get("original_sha256")}
     paths={x["file"] for g in new["items"].values() for x in g["files"]}
     pending=[]
     for entry in batch["photos"]:
@@ -93,6 +99,8 @@ def prepare(staging, repo):
         target="photos/"+name
         if target in paths:
             raise ValueError("Duplicate photo path: "+target)
+        if (assets/target).exists():
+            raise ValueError("Unindexed destination already exists: "+target)
         paths.add(target)
         status=entry.get("processing_status")
         if status not in STATES:
@@ -117,11 +125,20 @@ def prepare(staging, repo):
         original_sha=sha256(original)
         if not SHA_RE.fullmatch(entry.get("original_sha256","")) or entry["original_sha256"]!=original_sha:
             raise ValueError("Original SHA-256 mismatch: "+target)
+        if original_sha in originals:
+            raise ValueError("Same original reused as multiple photos or angles: "+target)
+        originals.add(original_sha)
         digest=sha256(prepared)
+        expected_prepared=entry.get("prepared_sha256")
+        if expected_prepared is not None and expected_prepared!=digest:
+            raise ValueError("Prepared SHA-256 mismatch: "+target)
         if digest in used:
             raise ValueError("Duplicate photo bytes: "+target)
         used.add(digest)
         original_rel="photo_originals/"+model+"/"+original_sha+original_path.suffix.lower()
+        for output in (assets/target,repo/original_rel):
+            if not output.resolve().is_relative_to(repo) or output.is_symlink():
+                raise ValueError("Output path escapes repository: "+str(output))
         gallery=new["items"].setdefault(model,{"name":models[model],"files":[]})["files"]
         if len(gallery)>=5:
             raise ValueError("Gallery photo limit exceeded: "+model)
@@ -139,24 +156,43 @@ def apply_batch(manifest_path,manifest,pending,write=False):
             "models":sorted({old.parent.name for _,_,old,_ in pending})}
     if not write:
         return result
-    original_manifest=manifest_path.read_bytes()
-    made=[]
+    # Stage every file before replacing anything. A short write or failed replace
+    # must never leave a partial photo, an orphan original or a truncated manifest.
+    repo=manifest_path.resolve().parents[4]
+    writes={}
+    for photo_path,photo_data,original_path,original_data in pending:
+        for path,data in ((photo_path,photo_data),(original_path,original_data)):
+            if path in writes and writes[path]!=data:
+                raise ValueError("Conflicting batch output: "+str(path))
+            if path.exists() and path.read_bytes()!=data:
+                raise ValueError("Existing file differs: "+str(path))
+            writes[path]=data
+    writes[manifest_path]=(json.dumps(manifest,ensure_ascii=False,indent=2)+"\n").encode("utf-8")
+    staged={}
+    previous={}
+    applied=[]
     try:
-        for photo_path,photo_data,original_path,original_data in pending:
-            for path,data in ((photo_path,photo_data),(original_path,original_data)):
-                if path.exists():
-                    if path.read_bytes()!=data:
-                        raise ValueError("Existing file differs: "+str(path))
-                    continue
-                path.parent.mkdir(parents=True,exist_ok=True)
-                path.write_bytes(data)
-                made.append(path)
-        manifest_path.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+"\n","utf-8")
-    except Exception:
-        manifest_path.write_bytes(original_manifest)
-        for p in made:
-            p.unlink(missing_ok=True)
+        for path,data in writes.items():
+            if not path.resolve().is_relative_to(repo) or path.is_symlink():
+                raise ValueError("Output path escapes repository: "+str(path))
+            path.parent.mkdir(parents=True,exist_ok=True)
+            previous[path]=path.read_bytes() if path.exists() else None
+            with tempfile.NamedTemporaryFile(dir=path.parent,prefix=".photo-import-",delete=False) as temp:
+                staged[path]=Path(temp.name)
+                temp.write(data)
+        for path,temp_path in staged.items():
+            os.replace(temp_path,path)
+            applied.append(path)
+    except BaseException:
+        for path in reversed(applied):
+            if previous[path] is None:
+                path.unlink(missing_ok=True)
+            else:
+                path.write_bytes(previous[path])
         raise
+    finally:
+        for temp_path in staged.values():
+            temp_path.unlink(missing_ok=True)
     return result
 
 def main():

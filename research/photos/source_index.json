@@ -1,0 +1,156 @@
+{
+  "schema": 1,
+  "reviewed_date": "2026-11-03",
+  "purpose": "Developer research only. These originals are NOT APK gallery images or approved cutouts.",
+  "source_policy": "DVIDS source pages reviewed; no Wikipedia/Wikimedia sources. Photo URLs are developer provenance outside Android assets, never runtime loaders.",
+  "copyright_notice": "https://www.dvidshub.net/about/copyright",
+  "non_endorsement_notice": "The appearance of U.S. Department of War (DoW) visual information does not imply or constitute DoW endorsement.",
+  "entries": [
+    {
+      "source_id": "DVIDS 8347955",
+      "model_id": "lostarmour-pdf-2024-041",
+      "model_name": "PUMA AE RQ-20",
+      "author": "Daniel Amburg, U.S. Army",
+      "license": "Public domain (U.S. Government), as marked on the official DVIDS photo page",
+      "source_page": "https://www.dvidshub.net/image/8347955/joint-base-mcguire-dix-lakehurst-2nd-bn-254th-rgt-rg-86-puma-rq-20a-15-april-2024",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2404/8347955/2000w_q95.jpg",
+      "download_kind": "Unmodified public 2000w DVIDS rendition; not the full-resolution camera original",
+      "archived_original": "research/photos/originals/fa278255f952c53200120bba8a6abe8ac7577f026cfe6fc48d6f627919cb813f.jpg",
+      "sha256": "fa278255f952c53200120bba8a6abe8ac7577f026cfe6fc48d6f627919cb813f",
+      "dimensions": [
+        1999,
+        1333
+      ],
+      "rights_evidence": "Official photo page marks PUBLIC DOMAIN and credits a U.S. Government photographer. DVIDS public-use notice applies.",
+      "publication_status": "not_approved",
+      "processing_status": "needs_background_review",
+      "visual_notes": "Existing photo; background extraction attempt rejected for halos and repainted details."
+    },
+    {
+      "source_id": "DVIDS 6381574",
+      "model_id": "lostarmour-pdf-2024-041",
+      "model_name": "PUMA AE RQ-20",
+      "author": "LCpl Jose Gonzalez, U.S. Marine Corps",
+      "license": "Public domain (U.S. Government), as marked on the official DVIDS photo page",
+      "source_page": "https://www.dvidshub.net/image/6381574/us-marines-soldiers-train-personnel-recovery-honduras",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2010/6381574/2000w_q95.jpg",
+      "download_kind": "Unmodified public 2000w DVIDS rendition; not the full-resolution camera original",
+      "archived_original": "research/photos/originals/6c97b913429c5cbf76718a0935bea67a76a7aa5b9afcc9bb2383b2919fd33742.jpg",
+      "sha256": "6c97b913429c5cbf76718a0935bea67a76a7aa5b9afcc9bb2383b2919fd33742",
+      "dimensions": [
+        2000,
+        1125
+      ],
+      "rights_evidence": "Official photo page marks PUBLIC DOMAIN and credits a U.S. Government photographer. DVIDS public-use notice applies.",
+      "publication_status": "not_approved",
+      "processing_status": "needs_background_review",
+      "visual_notes": "Existing photo; background extraction attempt rejected for halos and invented detail."
+    },
+    {
+      "source_id": "DVIDS 9457880",
+      "model_id": "lostarmour-pdf-2024-042",
+      "model_name": "PUMA LE",
+      "author": "PO3 Roberto Nieves, U.S. Coast Guard",
+      "license": "Public domain (U.S. Government), as marked on the official DVIDS photo page",
+      "source_page": "https://www.dvidshub.net/image/9457880/coast-guard-members-conduct-uas-training-aboard-cutter",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2512/9457880/2000w_q95.jpg",
+      "download_kind": "Unmodified public 2000w DVIDS rendition; not the full-resolution camera original",
+      "archived_original": "research/photos/originals/dce6b7b299000e32f6560903505852a3550db5378cd60655d357de8352e9baa5.jpg",
+      "sha256": "dce6b7b299000e32f6560903505852a3550db5378cd60655d357de8352e9baa5",
+      "dimensions": [
+        1999,
+        1333
+      ],
+      "rights_evidence": "Official photo page marks PUBLIC DOMAIN and credits a U.S. Government photographer. DVIDS public-use notice applies.",
+      "publication_status": "not_approved",
+      "processing_status": "needs_background_review",
+      "visual_notes": "Airframe on deck; inspect overlap and remove surroundings without repainting."
+    },
+    {
+      "source_id": "DVIDS 9457884",
+      "model_id": "lostarmour-pdf-2024-042",
+      "model_name": "PUMA LE",
+      "author": "PO3 Roberto Nieves, U.S. Coast Guard",
+      "license": "Public domain (U.S. Government), as marked on the official DVIDS photo page",
+      "source_page": "https://www.dvidshub.net/image/9457884/coast-guard-members-conduct-uas-training-aboard-cutter",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2512/9457884/2000w_q95.jpg",
+      "download_kind": "Unmodified public 2000w DVIDS rendition; not the full-resolution camera original",
+      "archived_original": "research/photos/originals/5f50b0f210398a207c911f2e41e5df55d889dbb388655f55d70657bfb43de303.jpg",
+      "sha256": "5f50b0f210398a207c911f2e41e5df55d889dbb388655f55d70657bfb43de303",
+      "dimensions": [
+        2000,
+        1153
+      ],
+      "rights_evidence": "Official photo page marks PUBLIC DOMAIN and credits a U.S. Government photographer. DVIDS public-use notice applies.",
+      "publication_status": "not_approved",
+      "processing_status": "needs_background_review",
+      "visual_notes": "Rear launch angle; hands may occlude the fuselage; publish only if complete real outline can be preserved."
+    },
+    {
+      "source_id": "DVIDS 9499015",
+      "model_id": "lostarmour-pdf-2024-081",
+      "model_name": "VECTOR",
+      "author": "Cpl Emily Hazelbaker, U.S. Marine Corps",
+      "license": "Public domain (U.S. Government), as marked on the official DVIDS photo page",
+      "source_page": "https://www.dvidshub.net/image/9499015/22nd-meusoc-uas-operations-camp-santiago",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2601/9499015/2000w_q95.jpg",
+      "download_kind": "Unmodified public 2000w DVIDS rendition; not the full-resolution camera original",
+      "archived_original": "research/photos/originals/521db4089373bf7565c487c97944c6a81dc83b0ca5442b67570d7ddc561d2c08.jpg",
+      "sha256": "521db4089373bf7565c487c97944c6a81dc83b0ca5442b67570d7ddc561d2c08",
+      "dimensions": [
+        2000,
+        1333
+      ],
+      "rights_evidence": "Official photo page marks PUBLIC DOMAIN and credits a U.S. Government photographer. DVIDS public-use notice applies.",
+      "publication_status": "not_approved",
+      "processing_status": "needs_background_review",
+      "visual_notes": "Front angle; inspect human overlap before approving any cutout."
+    },
+    {
+      "source_id": "DVIDS 9499028",
+      "model_id": "lostarmour-pdf-2024-081",
+      "model_name": "VECTOR",
+      "author": "Cpl Emily Hazelbaker, U.S. Marine Corps",
+      "license": "Public domain (U.S. Government), as marked on the official DVIDS photo page",
+      "source_page": "https://www.dvidshub.net/image/9499028/22nd-meusoc-uas-operations-camp-santiago",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2601/9499028/2000w_q95.jpg",
+      "download_kind": "Unmodified public 2000w DVIDS rendition; not the full-resolution camera original",
+      "archived_original": "research/photos/originals/3ed1840b359f87fa2af1544ed9f187589f98f20f83526f1854dcf61fcdfc8aea.jpg",
+      "sha256": "3ed1840b359f87fa2af1544ed9f187589f98f20f83526f1854dcf61fcdfc8aea",
+      "dimensions": [
+        1999,
+        1333
+      ],
+      "rights_evidence": "Official photo page marks PUBLIC DOMAIN and credits a U.S. Government photographer. DVIDS public-use notice applies.",
+      "publication_status": "not_approved",
+      "processing_status": "needs_background_review",
+      "visual_notes": "Full aircraft on grass; remove ground and person, preserve real aircraft geometry."
+    }
+  ],
+  "this_session": {
+    "downloaded_source_images": 23,
+    "archived_source_images": 6,
+    "reviewed_models": 3,
+    "background_extraction_attempts": 2,
+    "accepted_cutouts": 0,
+    "new_apk_gallery_photos": 0
+  },
+  "rejected_examples": [
+    {
+      "source_id": "DVIDS 9457897",
+      "reason": "Aircraft too small in the downloaded 2000w image for a detailed catalog cutout."
+    },
+    {
+      "source_id": "DVIDS 8991915",
+      "reason": "Aircraft too small in the downloaded 2000w image; no invented enlargement."
+    },
+    {
+      "source_id": "DVIDS 9498976",
+      "reason": "Shows the operator, not the aircraft."
+    },
+    {
+      "source_id": "DVIDS 8483113",
+      "reason": "Aircraft is distant and out of focus."
+    }
+  ]
+}

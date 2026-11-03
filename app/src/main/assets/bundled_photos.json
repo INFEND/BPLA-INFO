@@ -12,7 +12,8 @@
           "author": "Daniel Amburg, U.S. Army",
           "license": "Public domain (U.S. Government)",
           "source": "DVIDS photo 8347955; 15.04.2024; RQ-20A Puma in flight",
-          "processing_status": "needs_background_review"
+          "processing_status": "needs_background_review",
+          "original_sha256": "fa278255f952c53200120bba8a6abe8ac7577f026cfe6fc48d6f627919cb813f"
         },
         {
           "file": "photos/rq20_puma_inflight_honduras.webp",
@@ -20,7 +21,8 @@
           "author": "LCpl Jose Gonzalez, U.S. Marine Corps",
           "license": "Public domain (U.S. Government)",
           "source": "DVIDS photo 6381574; 14.09.2020; RQ-20 Puma in flight",
-          "processing_status": "needs_background_review"
+          "processing_status": "needs_background_review",
+          "original_sha256": "6c97b913429c5cbf76718a0935bea67a76a7aa5b9afcc9bb2383b2919fd33742"
         }
       ]
     }
