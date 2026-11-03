@@ -10,6 +10,13 @@ PHOTO_PATTERN = re.compile(r"photos/[a-z0-9][a-z0-9_-]{2,100}\.(?:webp|png|jpg|j
 LEGACY = ("assets/photo_sources.json",)
 MAX_SIZE = 12_000_000
 
+def valid_image_header(file, binary):
+    if file.endswith(".webp"):
+        return binary[:4] == b"RIFF" and binary[8:12] == b"WEBP"
+    if file.endswith(".png"):
+        return binary.startswith(b"\\x89PNG\\r\\n\\x1a\\n")
+    return binary.startswith(b"\\xff\\xd8\\xff")
+
 def audit(path):
     with zipfile.ZipFile(path) as apk:
         names = set(apk.namelist())
@@ -20,6 +27,8 @@ def audit(path):
         manifest = json.loads(raw)
         if manifest.get("schema") != 2 or manifest.get("storage") != "apk-assets-only":
             raise ValueError("APK is missing offline-only photo manifest")
+        if "wikimedia" in json.dumps(manifest, ensure_ascii=False).lower() or "http://" in json.dumps(manifest).lower() or "https://" in json.dumps(manifest).lower():
+            raise ValueError("Remote photo references are forbidden")
         referenced = set()
         for model_id, model in manifest["items"].items():
             photos = model["files"]
@@ -40,6 +49,8 @@ def audit(path):
                 binary = apk.read(asset)
                 if not 512 <= len(binary) <= MAX_SIZE:
                     raise ValueError("Invalid photo size: " + asset)
+                if not valid_image_header(file, binary):
+                    raise ValueError("Invalid image format: " + asset)
                 if hashlib.sha256(binary).hexdigest() != record["sha256"]:
                     raise ValueError("Photo checksum mismatch: " + asset)
         actual = {name.removeprefix("assets/") for name in names
