@@ -31,7 +31,7 @@ public final class CommonsImageUrls {
     public static String thumbnail(String name) {
         try {
             String canonical = encodedName(name);
-            return "https://thumb.wikimedia.org/wikipedia/commons/thumb/"
+            return "https://upload.wikimedia.org/wikipedia/commons/thumb/"
                     + hashPath(name) + "/" + canonical + "/1280px-" + canonical;
         } catch (Exception ignored) {
             return "";
