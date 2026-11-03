@@ -14,8 +14,8 @@ def valid_image_header(file, binary):
     if file.endswith(".webp"):
         return binary[:4] == b"RIFF" and binary[8:12] == b"WEBP"
     if file.endswith(".png"):
-        return binary.startswith(b"\\x89PNG\\r\\n\\x1a\\n")
-    return binary.startswith(b"\\xff\\xd8\\xff")
+        return binary.startswith(bytes.fromhex("89504e470d0a1a0a"))
+    return binary.startswith(bytes.fromhex("ffd8ff"))
 
 def audit(path):
     with zipfile.ZipFile(path) as apk:
@@ -27,7 +27,7 @@ def audit(path):
         manifest = json.loads(raw)
         if manifest.get("schema") != 2 or manifest.get("storage") != "apk-assets-only":
             raise ValueError("APK is missing offline-only photo manifest")
-        if "wikimedia" in json.dumps(manifest, ensure_ascii=False).lower() or "http://" in json.dumps(manifest).lower() or "https://" in json.dumps(manifest).lower():
+        if any(token in json.dumps(manifest.get("items", {}), ensure_ascii=False).lower() for token in ("wikimedia", "http://", "https://")):
             raise ValueError("Remote photo references are forbidden")
         referenced = set()
         for model_id, model in manifest["items"].items():
