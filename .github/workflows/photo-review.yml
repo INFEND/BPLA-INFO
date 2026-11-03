@@ -1,0 +1,37 @@
+name: BPLA original photo review sheets
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'research/photos/**'
+      - 'scripts/make_photo_review_sheets.py'
+      - 'tests/test_photo_review_sheets.py'
+      - '.github/workflows/photo-review.yml'
+permissions:
+  contents: read
+jobs:
+  prepare-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install image decoder
+        run: python -m pip install --disable-pip-version-check Pillow==11.3.0
+      - name: Test non-destructive review generation
+        run: python -m unittest discover -s tests -p 'test_photo_review_sheets.py' -v
+      - name: Verify originals and assemble per-model sheets
+        run: |
+          python scripts/make_photo_review_sheets.py --repo . --out review_sheets
+          cat review_sheets/SUMMARY.txt
+      - name: Save review sheets (not APK photos)
+        uses: actions/upload-artifact@v4
+        with:
+          name: BPLA-original-photo-review
+          path: review_sheets/
+          retention-days: 30
+          if-no-files-found: error
