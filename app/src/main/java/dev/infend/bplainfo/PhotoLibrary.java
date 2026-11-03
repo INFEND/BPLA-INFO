@@ -1,9 +1,6 @@
 package dev.infend.bplainfo;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkCapabilities;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
@@ -13,297 +10,165 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.PriorityBlockingQueue;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
- * Hand-curated high-resolution documentary photos. Originals are fetched over
- * HTTPS and stored in a bounded cache; generated artwork is never used.
+ * Photographs are supplied as verifiable APK assets, never from remote URLs.
+ * User-selected content:// photos remain managed separately by MainActivity.
  */
 public final class PhotoLibrary {
     public static final class Photo {
-        public final String file, url, fallbackUrl, attributionUrl, author, license;
-        public Photo(String file,String author,String license) {
+        public final String file, sha256, author, license, source;
+        public Photo(String file,String sha256,String author,String license,String source) {
             this.file=file;
+            this.sha256=sha256;
             this.author=author;
             this.license=license;
-            this.url=CommonsImageUrls.thumbnail(file);
-            this.fallbackUrl=CommonsImageUrls.original(file);
-            this.attributionUrl=CommonsImageUrls.attribution(file);
+            this.source=source;
         }
     }
-    public interface Callback {void ready(Bitmap bitmap);}
-    // One download at a time protects the on-disk .part files and limits Commons traffic.
-    // A full-screen request should not wait behind every gallery thumbnail.
-    private static final AtomicLong NEXT_TASK=new AtomicLong();
-    private static final class LoadTask implements Runnable,Comparable<LoadTask> {
-        final int priority;
-        final long order=NEXT_TASK.getAndIncrement();
-        final Runnable work;
-        LoadTask(int maxPixels,Runnable work){this.priority=maxPixels>=2000?0:1;this.work=work;}
-        @Override public int compareTo(LoadTask other){
-            int byPriority=Integer.compare(priority,other.priority);
-            return byPriority!=0?byPriority:Long.compare(order,other.order);
-        }
-        @Override public void run(){work.run();}
-    }
-    private static final ThreadPoolExecutor EXECUTOR=new ThreadPoolExecutor(
-        1,1,0L,TimeUnit.MILLISECONDS,new PriorityBlockingQueue<Runnable>());
+    public interface Callback { void ready(Bitmap bitmap); }
+    public interface ResultCallback { void complete(boolean success); }
+
+    private static final ExecutorService EXECUTOR=Executors.newFixedThreadPool(2);
     private static final Handler UI=new Handler(Looper.getMainLooper());
-    private static long lastNetworkRequest=0;
-    // Shared cooldown prevents a blocked Commons host from being hit by every
-    // queued thumbnail, even when the user restarts the app.
-    private static volatile long nextAllowedNetworkAtMs=0L;
-    private static void throttle() throws InterruptedException {
-        long elapsed=System.currentTimeMillis()-lastNetworkRequest;
-        if(elapsed<1600)Thread.sleep(1600-elapsed);
-        lastNetworkRequest=System.currentTimeMillis();
-    }
     private static Map<String,List<Photo>> ITEMS;
     private PhotoLibrary(){}
-    public static synchronized List<Photo> forDrone(Context c,Drone d){
-        if(ITEMS==null){
-            ITEMS=new HashMap<>();
-            try(InputStream input=c.getAssets().open("photo_sources.json")){
-                ByteArrayOutputStream output=new ByteArrayOutputStream();
-                byte[] buffer=new byte[8192];int n;
-                while((n=input.read(buffer))!=-1){
-                    output.write(buffer,0,n);
-                    if(output.size()>300_000)throw new java.io.IOException("Invalid photo manifest size");
-                }
-                JSONObject root=new JSONObject(output.toString("UTF-8"));
-                JSONObject items=root.getJSONObject("items");
-                java.util.Iterator<String> iter=items.keys();
-                while(iter.hasNext()){
-                    String id=iter.next();
-                    JSONArray photos=items.getJSONObject(id).getJSONArray("files");
-                    List<Photo> result=new ArrayList<>();
-                    for(int i=0;i<photos.length()&&i<5;i++){
-                        String name=photos.getJSONObject(i).optString("file","");
-                        if(name.matches("[^/\\\\]{5,200}\\.(?i:jpg|jpeg|png|webp)"))
-                            result.add(new Photo(name,photos.getJSONObject(i).optString("author",""),photos.getJSONObject(i).optString("license","")));
-                    }
-                    if(!result.isEmpty())ITEMS.put(id,Collections.unmodifiableList(result));
-                }
-            }catch(Exception e){android.util.Log.w("BPLA-INFO","Photo catalog unavailable",e);}
+
+    /** Removes all old downloaded media, including incomplete .part files. */
+    public static void purgeLegacyCache(Context context){
+        Context app=context.getApplicationContext();
+        if(app.getSharedPreferences("offline_photos",Context.MODE_PRIVATE)
+                .getBoolean("legacy_purged",false))return;
+        File dir=new File(app.getCacheDir(),"uav-photos");
+        boolean clean=true;
+        if(dir.isDirectory()){
+            File[] files=dir.listFiles();
+            if(files==null)clean=false;
+            else for(File file:files)if(!file.delete())clean=false;
+            if(clean&&!dir.delete())clean=false;
+        }else if(dir.exists()&&!dir.delete())clean=false;
+        if(clean){
+            app.getSharedPreferences("photo_net",Context.MODE_PRIVATE).edit().clear().apply();
+            app.getSharedPreferences("offline_photos",Context.MODE_PRIVATE)
+                    .edit().putBoolean("legacy_purged",true).apply();
         }
-        if(d==null)return Collections.emptyList();
-        String id=d.id;
-        if("seed-mara-2m".equals(id))id="lostarmour-pdf-2024-036";
-        List<Photo> result=ITEMS.get(id);
-        return result==null?Collections.emptyList():result;
     }
-    // An offline device should never queue multiple long HTTP timeouts. The
-    // existing on-disk cache is checked first, so offline gallery viewing works.
-    // NET_CAPABILITY_INTERNET is intentionally used instead of VALIDATED:
-    // Android validation can be unavailable even when Wikimedia is reachable.
-    private static boolean hasNetwork(Context context){
-        ConnectivityManager manager=(ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if(manager==null)return true; // Fail open if the service is unavailable.
-        Network active=manager.getActiveNetwork();
-        if(active==null)return false;
-        NetworkCapabilities capabilities=manager.getNetworkCapabilities(active);
-        return capabilities==null||capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+
+    private static byte[] readManifest(Context c)throws Exception{
+        try(InputStream in=c.getAssets().open("bundled_photos.json")){
+            ByteArrayOutputStream out=new ByteArrayOutputStream();
+            byte[] buf=new byte[4096];int n;
+            while((n=in.read(buf))!=-1){
+                out.write(buf,0,n);
+                if(out.size()>500_000)throw new java.io.IOException("Photo manifest too large");
+            }
+            return out.toByteArray();
+        }
     }
-    private static String hex(byte[] bytes){
-        StringBuilder b=new StringBuilder();
-        for(byte x:bytes)b.append(String.format(java.util.Locale.ROOT,"%02x",x&255));
+    private static boolean safePath(String value){
+        return value.matches("photos/[a-z0-9][a-z0-9_-]{2,100}\\.(?i:webp|png|jpg|jpeg)");
+    }
+    public static synchronized List<Photo> forDrone(Context context,Drone drone){
+        if(ITEMS==null){
+            Map<String,List<Photo>> built=new HashMap<>();
+            try{
+                JSONObject root=new JSONObject(new String(readManifest(context),"UTF-8"));
+                if(root.getInt("schema")!=2 ||
+                   !"apk-assets-only".equals(root.getString("storage")))
+                    throw new java.io.IOException("Unsupported photo manifest");
+                JSONObject items=root.getJSONObject("items");
+                java.util.Iterator<String> keys=items.keys();
+                while(keys.hasNext()){
+                    String id=keys.next();
+                    JSONArray photos=items.getJSONObject(id).getJSONArray("files");
+                    ArrayList<Photo> list=new ArrayList<>();
+                    for(int i=0;i<photos.length()&&i<5;i++){
+                        JSONObject record=photos.getJSONObject(i);
+                        String file=record.optString("file","");
+                        String sha=record.optString("sha256","");
+                        String author=record.optString("author","");
+                        String license=record.optString("license","");
+                        String source=record.optString("source","");
+                        if(!safePath(file)||!sha.matches("[a-f0-9]{64}") ||
+                            author.isEmpty()||license.isEmpty()||source.isEmpty())continue;
+                        try(InputStream check=context.getAssets().open(file)){
+                            if(check.read()==-1)continue;
+                        }catch(Exception missing){continue;}
+                        list.add(new Photo(file,sha,author,license,source));
+                    }
+                    if(!list.isEmpty())built.put(id,Collections.unmodifiableList(list));
+                }
+            }catch(Exception e){
+                android.util.Log.w("BPLA-INFO","Bundled photo manifest invalid",e);
+            }
+            ITEMS=Collections.unmodifiableMap(built);
+        }
+        if(drone==null)return Collections.emptyList();
+        String id="seed-mara-2m".equals(drone.id)?"lostarmour-pdf-2024-036":drone.id;
+        List<Photo> list=ITEMS.get(id);
+        return list==null?Collections.emptyList():list;
+    }
+    private static String sha256(Context c,String path)throws Exception{
+        MessageDigest digest=MessageDigest.getInstance("SHA-256");
+        long size=0;
+        try(InputStream in=c.getAssets().open(path)){
+            byte[] buffer=new byte[16384];int n;
+            while((n=in.read(buffer))!=-1){
+                size+=n;
+                if(size>12_000_000L)throw new java.io.IOException("Asset image too large");
+                digest.update(buffer,0,n);
+            }
+        }
+        if(size<512)throw new java.io.IOException("Asset image too small");
+        StringBuilder b=new StringBuilder(64);
+        for(byte v:digest.digest())b.append(String.format(java.util.Locale.ROOT,"%02x",v&255));
         return b.toString();
     }
-    // Primary URL: public thumbnail CDN (no Commons page redirect).
-    // Original-file fallback is used when a thumbnail was never generated,
-    // including images smaller than the requested 1280-pixel width.
-    // Validate cached/downloaded bytes before accepting them. A failed or partial
-    // decode must not poison subsequent offline gallery views.
-    private static boolean validImage(File file){
-        if(!file.isFile()||file.length()<512)return false;
-        try{
-            BitmapFactory.Options bounds=new BitmapFactory.Options();
-            bounds.inJustDecodeBounds=true;
-            BitmapFactory.decodeFile(file.getAbsolutePath(),bounds);
-            if(!PhotoDimensions.acceptable(bounds.outWidth,bounds.outHeight))return false;
-            // Header-only decoding accepts some truncated JPEG/PNG downloads.
-            // Decode a sampled bitmap before committing the .part file to cache.
-            BitmapFactory.Options check=new BitmapFactory.Options();
-            check.inSampleSize=1;
-            while(Math.max(bounds.outWidth,bounds.outHeight)/check.inSampleSize>1024)
-                check.inSampleSize*=2;
-            Bitmap decoded=BitmapFactory.decodeFile(file.getAbsolutePath(),check);
-            if(decoded==null)return false;
-            decoded.recycle();
-            return true;
-        }catch(RuntimeException | OutOfMemoryError e){
-            // Even the bounds probe can fail on corrupt files or memory pressure.
-            // Reject the entry so it cannot poison subsequent offline opens.
-            android.util.Log.w("BPLA-INFO","Invalid or oversized photo decode",e);
-            return false;
-        }
-    }
-    public static void load(Context c,Photo photo,int maxPixels,Callback callback){
-        if(photo==null){callback.ready(null);return;}
-        Context app=c.getApplicationContext();
-        EXECUTOR.execute(new LoadTask(maxPixels,()->{
+    public static void load(Context context,Photo photo,int maxPixels,Callback callback){
+        if(photo==null){UI.post(()->callback.ready(null));return;}
+        Context app=context.getApplicationContext();
+        EXECUTOR.execute(()->{
             Bitmap result=null;
             try{
-                File folder=new File(app.getCacheDir(),"uav-photos");
-                if(!folder.isDirectory()&&!folder.mkdirs())throw new java.io.IOException("No cache directory");
-                String md5=hex(MessageDigest.getInstance("MD5").digest(photo.file.getBytes("UTF-8")));
-                File output=new File(folder,md5+".img");
-                if(output.isFile()&&!validImage(output)){
-                    // A corrupt cache entry must never be reused. If deletion
-                    // fails (e.g. storage error), stop instead of decoding it.
-                    if(!output.delete())throw new java.io.IOException("Cannot remove corrupt photo cache entry");
-                }
-                if(!output.isFile()){
-                    if(!hasNetwork(app))throw new java.io.IOException("No active network; cached photos remain available");
-                    long persistedCooldown=app.getSharedPreferences("photo_net",Context.MODE_PRIVATE)
-                            .getLong("cooldown_until",0L);
-                    nextAllowedNetworkAtMs=Math.max(nextAllowedNetworkAtMs,persistedCooldown);
-                    if(System.currentTimeMillis()<nextAllowedNetworkAtMs)
-                        throw new java.io.IOException("Commons cooldown active; cached photos remain available");
-                    boolean complete=false;
-                    // Prefer the public thumbnail CDN, then the original file.
-                    // Both use deterministic Commons file paths without API keys.
-                    for(String address:new String[]{photo.url,photo.fallbackUrl}){
-                        if(System.currentTimeMillis()<nextAllowedNetworkAtMs)break;
-                        if(address.isEmpty())continue;
-                        for(int attempt=0;attempt<2&&!complete &&
-                                System.currentTimeMillis()>=nextAllowedNetworkAtMs;attempt++){
-                            HttpURLConnection connection=null;
-                            File temp=new File(folder,md5+".part");
-                            try{
-                                throttle();
-                                connection=(HttpURLConnection)new URL(address).openConnection();
-                                connection.setConnectTimeout(12000);
-                                connection.setReadTimeout(35000);
-                                connection.setInstanceFollowRedirects(true);
-                                connection.setRequestProperty("User-Agent","BPLAINFO/1.1 (https://github.com/INFEND/BPLA-INFO)");
-                                connection.setRequestProperty("Accept","image/jpeg,image/png,image/webp,image/*;q=0.8");
-                                int status=connection.getResponseCode();
-                                if(CommonsRetryPolicy.isHostCooldownStatus(status)){
-                                    // Respect Retry-After globally, not just for this
-                                    // image. HTTP 403 may also mean Wikimedia has temporarily
-                                    // denied this client. Never switch to the original URL during
-                                    // a host cooldown: that doubles the blocked traffic.
-                                    String header=connection.getHeaderField("Retry-After");
-                                    long until=CommonsRetryPolicy.nextAllowedMillis(
-                                            status,header,System.currentTimeMillis());
-                                    nextAllowedNetworkAtMs=Math.max(nextAllowedNetworkAtMs,until);
-                                    app.getSharedPreferences("photo_net",Context.MODE_PRIVATE)
-                                            .edit().putLong("cooldown_until",nextAllowedNetworkAtMs).apply();
-                                    android.util.Log.w("BPLA-INFO","Commons HTTP "+status+
-                                            "; retry after cooldown (header="+header+")");
-                                    break;
-                                }
-                                if(status!=200){
-                                    // A permanent HTTP error cannot be fixed by retrying
-                                    // the identical URL; try the original endpoint instead.
-                                    android.util.Log.w("BPLA-INFO","Commons HTTP "+status+
-                                            " for "+photo.file);
-                                    break;
-                                }
-                                String type=connection.getContentType();
-                                if(type==null||!type.toLowerCase(java.util.Locale.ROOT).startsWith("image/"))
-                                    throw new java.io.IOException("Response is not an image");
-                                long announced=connection.getContentLengthLong();
-                                if(announced>15_000_000L)throw new java.io.IOException("Image too large");
-                                long size=0;
-                                try(InputStream in=connection.getInputStream();FileOutputStream out=new FileOutputStream(temp)){
-                                    byte[] buffer=new byte[32768];int n;
-                                    while((n=in.read(buffer))!=-1){
-                                        size+=n;
-                                        if(size>15_000_000L)throw new java.io.IOException("Image too large");
-                                        out.write(buffer,0,n);
-                                    }
-                                }
-                                if(announced>=0 && size!=announced)
-                                    throw new java.io.IOException("Incomplete image response: "+size+"/"+announced);
-                                if(size<512||!validImage(temp)||!temp.renameTo(output))
-                                    throw new java.io.IOException("Invalid image response");
-                                complete=true;
-                            }catch(java.io.IOException e){
-                                android.util.Log.w("BPLA-INFO","Photo request failed: "+photo.file+" ("+e.getMessage()+")");
-                            }finally{
-                                if(connection!=null)connection.disconnect();
-                                if(!complete)temp.delete();
-                            }
-                        }
-                        if(complete||System.currentTimeMillis()<nextAllowedNetworkAtMs)break;
-                    }
-                    if(!complete)throw new java.io.IOException("All Commons image endpoints unavailable");
-                    trim(folder);
-                }
+                if(!photo.sha256.equals(sha256(app,photo.file)))
+                    throw new java.io.IOException("Bundled photo checksum mismatch");
                 BitmapFactory.Options probe=new BitmapFactory.Options();
                 probe.inJustDecodeBounds=true;
-                BitmapFactory.decodeFile(output.getAbsolutePath(),probe);
-                if(!PhotoDimensions.acceptable(probe.outWidth,probe.outHeight)){
-                    output.delete();throw new java.io.IOException("Photo resolution too low");
+                try(InputStream in=app.getAssets().open(photo.file)){
+                    BitmapFactory.decodeStream(in,null,probe);
                 }
+                if(!PhotoDimensions.acceptable(probe.outWidth,probe.outHeight))
+                    throw new java.io.IOException("Bundled photo resolution too low");
                 int sample=1;
-                while(Math.max(probe.outWidth,probe.outHeight)/sample>Math.max(maxPixels,800))sample*=2;
+                int maximum=Math.max(800,maxPixels);
+                while(Math.max(probe.outWidth,probe.outHeight)/sample>maximum)sample*=2;
                 BitmapFactory.Options opts=new BitmapFactory.Options();
-                opts.inSampleSize=sample;opts.inPreferredConfig=Bitmap.Config.ARGB_8888;
-                result=BitmapFactory.decodeFile(output.getAbsolutePath(),opts);
-                if(result==null){
-                    output.delete();
-                    throw new java.io.IOException("Cached photo could not be decoded");
+                opts.inSampleSize=sample;
+                opts.inPreferredConfig=Bitmap.Config.ARGB_8888;
+                try(InputStream in=app.getAssets().open(photo.file)){
+                    result=BitmapFactory.decodeStream(in,null,opts);
                 }
-                output.setLastModified(System.currentTimeMillis());
             }catch(Exception e){
-                android.util.Log.d("BPLA-INFO","Photo not available: "+photo.file+" "+e.getMessage());
+                android.util.Log.w("BPLA-INFO","Cannot decode bundled photo: "+photo.file,e);
             }catch(OutOfMemoryError e){
-                // A full-screen decode may exhaust the bitmap heap even after
-                // sampling. Preserve the disk cache and notify the gallery.
-                android.util.Log.e("BPLA-INFO","Photo decode ran out of memory: "+photo.file,e);
-                result=null;
+                android.util.Log.e("BPLA-INFO","Bundled photo exceeds memory: "+photo.file,e);
             }
-            Bitmap finalResult=result;
-            UI.post(()->callback.ready(finalResult));
-        }));
+            Bitmap bitmap=result;
+            UI.post(()->callback.ready(bitmap));
+        });
     }
-    private static void trim(File dir){
-        File[] files=dir.listFiles(f->f.getName().endsWith(".img"));
-        if(files==null)return;
-        long total=0;
-        for(File f:files)total+=f.length();
-        if(total<=90_000_000L)return;
-        Arrays.sort(files,Comparator.comparingLong(File::lastModified));
-        for(File f:files){
-            if(total<=70_000_000L)break;
-            long size=f.length();
-            if(f.delete())total-=size;
-        }
-    }
-    /**
-     * Explain a server-enforced cooldown without making another network request.
-     * Previously cached images can still be viewed during this interval.
-     */
     public static String unavailableMessage(Context context){
-        if(!hasNetwork(context.getApplicationContext()))return "НЕТ ИНТЕРНЕТА · СОХРАНЁННЫЕ ФОТО ДОСТУПНЫ";
-        long persisted=context.getApplicationContext()
-                .getSharedPreferences("photo_net",Context.MODE_PRIVATE)
-                .getLong("cooldown_until",0L);
-        long until=Math.max(nextAllowedNetworkAtMs,persisted);
-        long remaining=Math.max(0L,(until-System.currentTimeMillis()+999L)/1000L);
-        if(remaining>0L)
-            return "WIKIMEDIA: ПАУЗА "+((remaining+59L)/60L)+" МИН · КЭШ ДОСТУПЕН";
-        return "ФОТО НЕДОСТУПНО • НАЖМИТЕ ДЛЯ ПОВТОРА";
+        return "ФОТО НЕДОСТУПНО В ПРИЛОЖЕНИИ";
     }
-    public interface ResultCallback {void complete(boolean success);}
     public static void into(Context c,Photo photo,ImageView image,int px){
         into(c,photo,image,px,null);
     }
@@ -319,9 +184,7 @@ public final class PhotoLibrary {
                     image.clearColorFilter();
                     image.setImageBitmap(bitmap);
                     image.setContentDescription("Фотография БПЛА");
-                }else{
-                    image.setContentDescription(unavailableMessage(c));
-                }
+                }else image.setContentDescription(unavailableMessage(c));
                 if(status!=null)status.complete(bitmap!=null);
             }
         });
