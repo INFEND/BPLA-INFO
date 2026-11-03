@@ -10,7 +10,7 @@ CATALOG = json.loads((ROOT / "app/src/main/assets/catalog_lostarmour_2024_verifi
 class PhotoDeliveryRegressionTests(unittest.TestCase):
     def test_primary_uses_public_thumbnail_cdn_with_original_fallback(self):
         helper = (ROOT / "app/src/main/java/dev/infend/bplainfo/CommonsImageUrls.java").read_text("utf-8")
-        self.assertIn("https://thumb.wikimedia.org/wikipedia/commons/thumb/", helper)
+        self.assertIn("https://upload.wikimedia.org/wikipedia/commons/thumb/", helper)
         self.assertIn("https://upload.wikimedia.org/wikipedia/commons/", helper)
         self.assertIn("1280px-", helper)
         self.assertIn("CommonsImageUrls.thumbnail(file)", JAVA)
