@@ -134,7 +134,22 @@ public final class PhotoLibrary {
         BitmapFactory.Options bounds=new BitmapFactory.Options();
         bounds.inJustDecodeBounds=true;
         BitmapFactory.decodeFile(file.getAbsolutePath(),bounds);
-        return PhotoDimensions.acceptable(bounds.outWidth,bounds.outHeight);
+        if(!PhotoDimensions.acceptable(bounds.outWidth,bounds.outHeight))return false;
+        // Header-only decoding accepts some truncated JPEG/PNG downloads.
+        // Decode a sampled bitmap before committing the .part file to cache.
+        BitmapFactory.Options check=new BitmapFactory.Options();
+        check.inSampleSize=1;
+        while(Math.max(bounds.outWidth,bounds.outHeight)/check.inSampleSize>1024)
+            check.inSampleSize*=2;
+        try{
+            Bitmap decoded=BitmapFactory.decodeFile(file.getAbsolutePath(),check);
+            if(decoded==null)return false;
+            decoded.recycle();
+            return true;
+        }catch(RuntimeException | OutOfMemoryError e){
+            android.util.Log.w("BPLA-INFO","Invalid or oversized photo decode",e);
+            return false;
+        }
     }
     public static void load(Context c,Photo photo,int maxPixels,Callback callback){
         if(photo==null){callback.ready(null);return;}
