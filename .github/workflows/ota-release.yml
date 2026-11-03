@@ -56,6 +56,10 @@ jobs:
       - name: Compile Android debug and release
         id: compilation
         run: gradle --no-daemon :app:assembleDebug :app:assembleRelease
+      - name: Audit actual APK photo assets (debug and release)
+        run: |
+          python3 scripts/audit_apk_photos.py app/build/outputs/apk/debug/app-debug.apk
+          python3 scripts/audit_apk_photos.py app/build/outputs/apk/release/app-release-unsigned.apk
       - name: Upload test APK before signing
         if: steps.compilation.outcome == 'success'
         uses: actions/upload-artifact@v4
