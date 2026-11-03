@@ -131,22 +131,24 @@ public final class PhotoLibrary {
     // decode must not poison subsequent offline gallery views.
     private static boolean validImage(File file){
         if(!file.isFile()||file.length()<512)return false;
-        BitmapFactory.Options bounds=new BitmapFactory.Options();
-        bounds.inJustDecodeBounds=true;
-        BitmapFactory.decodeFile(file.getAbsolutePath(),bounds);
-        if(!PhotoDimensions.acceptable(bounds.outWidth,bounds.outHeight))return false;
-        // Header-only decoding accepts some truncated JPEG/PNG downloads.
-        // Decode a sampled bitmap before committing the .part file to cache.
-        BitmapFactory.Options check=new BitmapFactory.Options();
-        check.inSampleSize=1;
-        while(Math.max(bounds.outWidth,bounds.outHeight)/check.inSampleSize>1024)
-            check.inSampleSize*=2;
         try{
+            BitmapFactory.Options bounds=new BitmapFactory.Options();
+            bounds.inJustDecodeBounds=true;
+            BitmapFactory.decodeFile(file.getAbsolutePath(),bounds);
+            if(!PhotoDimensions.acceptable(bounds.outWidth,bounds.outHeight))return false;
+            // Header-only decoding accepts some truncated JPEG/PNG downloads.
+            // Decode a sampled bitmap before committing the .part file to cache.
+            BitmapFactory.Options check=new BitmapFactory.Options();
+            check.inSampleSize=1;
+            while(Math.max(bounds.outWidth,bounds.outHeight)/check.inSampleSize>1024)
+                check.inSampleSize*=2;
             Bitmap decoded=BitmapFactory.decodeFile(file.getAbsolutePath(),check);
             if(decoded==null)return false;
             decoded.recycle();
             return true;
         }catch(RuntimeException | OutOfMemoryError e){
+            // Even the bounds probe can fail on corrupt files or memory pressure.
+            // Reject the entry so it cannot poison subsequent offline opens.
             android.util.Log.w("BPLA-INFO","Invalid or oversized photo decode",e);
             return false;
         }
