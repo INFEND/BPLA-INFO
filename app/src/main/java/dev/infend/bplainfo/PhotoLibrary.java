@@ -257,6 +257,11 @@ public final class PhotoLibrary {
                 output.setLastModified(System.currentTimeMillis());
             }catch(Exception e){
                 android.util.Log.d("BPLA-INFO","Photo not available: "+photo.file+" "+e.getMessage());
+            }catch(OutOfMemoryError e){
+                // A full-screen decode may exhaust the bitmap heap even after
+                // sampling. Preserve the disk cache and notify the gallery.
+                android.util.Log.e("BPLA-INFO","Photo decode ran out of memory: "+photo.file,e);
+                result=null;
             }
             Bitmap finalResult=result;
             UI.post(()->callback.ready(finalResult));
