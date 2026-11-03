@@ -17,7 +17,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,12 +41,9 @@ public final class PhotoLibrary {
             this.file=file;
             this.author=author;
             this.license=license;
-            this.url=commonsUrl(file);
-            this.fallbackUrl=directCommonsUrl(file);
-            String encoded;
-            try{encoded=URLEncoder.encode(file.replace(' ','_'),"UTF-8").replace("+","%20");}
-            catch(Exception e){encoded="";}
-            this.attributionUrl="https://commons.wikimedia.org/wiki/File:"+encoded;
+            this.url=CommonsImageUrls.thumbnail(file);
+            this.fallbackUrl=CommonsImageUrls.original(file);
+            this.attributionUrl=CommonsImageUrls.attribution(file);
         }
     }
     public interface Callback {void ready(Bitmap bitmap);}
@@ -128,25 +124,9 @@ public final class PhotoLibrary {
         for(byte x:bytes)b.append(String.format(java.util.Locale.ROOT,"%02x",x&255));
         return b.toString();
     }
-    // MediaWiki's documented redirect endpoint serves an appropriately sized
-    // image and avoids downloading very large Commons originals on Android.
-    private static String commonsUrl(String name){
-        try{
-            String canonical=name.replace(' ','_');
-            String encoded=URLEncoder.encode(canonical,"UTF-8").replace("+","%20");
-            return "https://commons.wikimedia.org/wiki/Special:Redirect/file/"+encoded+"?width=1600";
-        }catch(Exception e){return "";}
-    }
-    // Retained only as a fallback for installations where MediaWiki redirect
-    // is unavailable. This URL may point to a large original image.
-    private static String directCommonsUrl(String name){
-        try{
-            String canonical=name.replace(' ','_');
-            String md5=hex(MessageDigest.getInstance("MD5").digest(canonical.getBytes("UTF-8")));
-            String encoded=URLEncoder.encode(canonical,"UTF-8").replace("+","%20");
-            return "https://upload.wikimedia.org/wikipedia/commons/"+md5.substring(0,1)+"/"+md5.substring(0,2)+"/"+encoded;
-        }catch(Exception e){return "";}
-    }
+    // Primary URL: public thumbnail CDN (no Commons page redirect).
+    // Original-file fallback is used when a thumbnail was never generated,
+    // including images smaller than the requested 1280-pixel width.
     // Validate cached/downloaded bytes before accepting them. A failed or partial
     // decode must not poison subsequent offline gallery views.
     private static boolean validImage(File file){
@@ -175,8 +155,8 @@ public final class PhotoLibrary {
                     if(System.currentTimeMillis()<nextAllowedNetworkAtMs)
                         throw new java.io.IOException("Commons cooldown active; cached photos remain available");
                     boolean complete=false;
-                    // Try Commons' supported width-limited redirect first.
-                    // If it fails, fall back to the traditional original URL.
+                    // Prefer the public thumbnail CDN, then the original file.
+                    // Both use deterministic Commons file paths without API keys.
                     for(String address:new String[]{photo.url,photo.fallbackUrl}){
                         if(System.currentTimeMillis()<nextAllowedNetworkAtMs)break;
                         if(address.isEmpty())continue;
