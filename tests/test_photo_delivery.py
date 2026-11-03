@@ -28,7 +28,8 @@ class PhotoDeliveryRegressionTests(unittest.TestCase):
 
     def test_cache_rejects_corrupt_images_before_and_after_download(self):
         self.assertIn("private static boolean validImage(File file)", JAVA)
-        self.assertIn("if(output.isFile()&&!validImage(output))output.delete();", JAVA)
+        self.assertIn("if(output.isFile()&&!validImage(output)){", JAVA)
+        self.assertIn('if(!output.delete())throw new java.io.IOException("Cannot remove corrupt photo cache entry")', JAVA)
         self.assertIn("!validImage(temp)||!temp.renameTo(output)", JAVA)
         self.assertIn('throw new java.io.IOException("Cached photo could not be decoded")', JAVA)
 
