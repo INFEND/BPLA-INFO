@@ -2,5 +2,25 @@
   "schema": 2,
   "storage": "apk-assets-only",
   "description": "Only files physically embedded in the APK. No Wikimedia or remote photo URLs.",
-  "items": {}
+  "items": {
+    "lostarmour-pdf-2024-041": {
+      "name": "PUMA AE RQ-20",
+      "files": [
+        {
+          "file": "photos/rq20_puma_inflight_fortdix.webp",
+          "sha256": "662a4e575bfbfd4a6e2eef6491b3c444acbc722158b6cbf91cd0c10390370564",
+          "author": "Daniel Amburg, U.S. Army",
+          "license": "Public domain (U.S. Government)",
+          "source": "DVIDS photo 8347955; 15.04.2024; RQ-20A Puma in flight"
+        },
+        {
+          "file": "photos/rq20_puma_inflight_honduras.webp",
+          "sha256": "f1a5f4e5dc762b49ce0c3f8a09d13371e3721c3a786a1241eeb5e5e73fa74744",
+          "author": "LCpl Jose Gonzalez, U.S. Marine Corps",
+          "license": "Public domain (U.S. Government)",
+          "source": "DVIDS photo 6381574; 14.09.2020; RQ-20 Puma in flight"
+        }
+      ]
+    }
+  }
 }
