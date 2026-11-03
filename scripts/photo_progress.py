@@ -28,6 +28,7 @@ def audit(root):
         if not isinstance(records, list):
             raise ValueError("Invalid gallery: " + model_id)
         accepted = 0
+        reviewed_angles = set()
         for record in records:
             rel = record["file"]
             path = (assets / rel).resolve()
@@ -44,6 +45,13 @@ def audit(root):
             hashes_seen.add(digest)
             total_embedded += 1
             if record.get("processing_status") in APPROVED and record.get("visual_review_approved") is True and record.get("angle_review_approved") is True:
+                angle = record.get('angle_id')
+                if not isinstance(angle, str) or not angle.strip():
+                    continue  # Flags alone do not establish a distinct camera angle.
+                angle = angle.strip().lower()
+                if angle in reviewed_angles:
+                    continue  # Repeated camera angle cannot count twice.
+                reviewed_angles.add(angle)
                 accepted += 1
                 approved_count += 1
         if accepted >= REQUIRED:

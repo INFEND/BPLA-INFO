@@ -27,13 +27,14 @@ class ProgressTests(unittest.TestCase):
     def save(self):
         (self.assets / "bundled_photos.json").write_text(json.dumps(self.manifest))
 
-    def add(self, name, state="background_removed_verified", reviewed=True, angle=True):
+    def add(self, name, state="background_removed_verified", reviewed=True, angle=True, angle_id=None):
         data = ("unique-" + name).encode()
         (self.assets / "photos" / name).write_bytes(data)
         self.manifest["items"]["model-one"]["files"].append({
             "file": "photos/" + name, "sha256": hashlib.sha256(data).hexdigest(),
             "processing_status": state, "visual_review_approved": reviewed,
-            "angle_review_approved": angle
+            "angle_review_approved": angle,
+            "angle_id": angle_id if angle_id is not None else name
         })
         self.save()
 
@@ -57,6 +58,22 @@ class ProgressTests(unittest.TestCase):
         self.assertEqual(r["photos_embedded"], 3)
         self.assertEqual(r["photos_verified_processed_distinct"], 0)
         self.assertEqual(r["minimum_additional_verified_photos"], 6)
+
+    def test_repeated_view_does_not_complete_gallery(self):
+        self.add("a.webp", angle_id="front")
+        self.add("b.webp", angle_id="front")
+        self.add("c.webp", angle_id="side")
+        report = module.audit(self.root)
+        self.assertEqual(report["models_complete"], 0)
+        self.assertEqual(report["photos_verified_processed_distinct"], 2)
+        self.assertEqual(report["minimum_additional_verified_photos"], 4)
+
+    def test_missing_angle_id_not_counted(self):
+        self.add("a.webp")
+        self.manifest["items"]["model-one"]["files"][0].pop("angle_id")
+        self.save()
+        report = module.audit(self.root)
+        self.assertEqual(report["photos_verified_processed_distinct"], 0)
 
     def test_changed_bytes_fail(self):
         self.add("a.webp")
