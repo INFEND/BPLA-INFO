@@ -1,0 +1,175 @@
+#!/usr/bin/env python3
+"""Offline reviewed batch import. No network requests. Originals stay outside APK."""
+import argparse
+import copy
+import hashlib
+import io
+import json
+import re
+import sys
+from pathlib import Path
+from PIL import Image, UnidentifiedImageError
+
+MAX_PREPARED_BYTES = 12_000_000
+MAX_ORIGINAL_BYTES = 35_000_000
+FORMATS = {".webp":"WEBP", ".png":"PNG", ".jpg":"JPEG", ".jpeg":"JPEG"}
+MODEL_RE = re.compile(r"[a-z0-9][a-z0-9_-]{2,100}\Z")
+PHOTO_RE = re.compile(r"[a-z0-9][a-z0-9_-]{2,100}\.(?:webp|png|jpg|jpeg)\Z")
+SHA_RE = re.compile(r"[a-f0-9]{64}\Z")
+LICENSES = {"CC0 1.0", "CC BY 4.0", "CC BY-SA 4.0", "Public domain (U.S. Government)"}
+STATES = {"verified_clean_original", "background_removed_verified"}
+
+def sha256(data):
+    return hashlib.sha256(data).hexdigest()
+
+def clean_text(value, field, length=3):
+    if not isinstance(value,str) or len(value.strip()) < length:
+        raise ValueError("Missing "+field)
+    if any(x in value.lower() for x in ("http://","https://","wikipedia","wikimedia")):
+        raise ValueError("Prohibited URL/source in APK metadata: "+field)
+    return value.strip()
+
+def staging_file(root, value):
+    if not isinstance(value,str) or "\\" in value or value.startswith("/"):
+        raise ValueError("Unsafe staging file")
+    if ".." in Path(value).parts or not value:
+        raise ValueError("Unsafe staging path")
+    path=(root/value).resolve()
+    if not path.is_relative_to(root.resolve()) or not path.is_file():
+        raise ValueError("Missing/unsafe staging file: "+value)
+    return path
+
+def image_data(path,limit,alpha_required=False):
+    if path.suffix.lower() not in FORMATS:
+        raise ValueError("Unsupported image suffix: "+path.name)
+    size=path.stat().st_size
+    if not 512 <= size <= limit:
+        raise ValueError("Photo size invalid: "+path.name)
+    data=path.read_bytes()
+    Image.MAX_IMAGE_PIXELS=30_000_000
+    try:
+        with Image.open(io.BytesIO(data)) as im:
+            if im.format != FORMATS[path.suffix.lower()]:
+                raise ValueError("Image header/extension mismatch: "+path.name)
+            if min(im.size) < 300 or max(im.size) < 500:
+                raise ValueError("Image resolution too low: "+path.name)
+            im.load()
+            if alpha_required:
+                if "A" not in im.getbands():
+                    raise ValueError("Background removal has no alpha: "+path.name)
+                low,high=im.getchannel("A").getextrema()
+                if low != 0 or high != 255:
+                    raise ValueError("Invalid transparency: "+path.name)
+    except (OSError,UnidentifiedImageError,Image.DecompressionBombError) as err:
+        raise ValueError("Image decode failed: "+path.name) from err
+    return data
+
+def prepare(staging, repo):
+    staging=Path(staging).resolve()
+    repo=Path(repo).resolve()
+    assets=repo/"app/src/main/assets"
+    catalog=json.loads((assets/"catalog_lostarmour_2024_verified.json").read_text("utf-8"))
+    models={x["id"]:x["name"] for x in catalog["entries"]}
+    manifest_file=assets/"bundled_photos.json"
+    manifest=json.loads(manifest_file.read_text("utf-8"))
+    if manifest.get("schema")!=2 or manifest.get("storage")!="apk-assets-only":
+        raise ValueError("Wrong offline photo manifest")
+    batch=json.loads((staging/"batch.json").read_text("utf-8"))
+    if not isinstance(batch.get("photos"),list) or not batch["photos"]:
+        raise ValueError("Empty photo batch")
+    new=copy.deepcopy(manifest)
+    used={x["sha256"] for g in new["items"].values() for x in g["files"]}
+    paths={x["file"] for g in new["items"].values() for x in g["files"]}
+    pending=[]
+    for entry in batch["photos"]:
+        model=entry.get("model_id","")
+        if not isinstance(model,str) or not MODEL_RE.fullmatch(model) or model not in models:
+            raise ValueError("Unknown model: "+str(model))
+        if entry.get("model_name")!=models[model]:
+            raise ValueError("Model mismatch: "+model)
+        name=entry.get("file_name","")
+        if not isinstance(name,str) or not PHOTO_RE.fullmatch(name):
+            raise ValueError("Invalid photo name")
+        target="photos/"+name
+        if target in paths:
+            raise ValueError("Duplicate photo path: "+target)
+        paths.add(target)
+        status=entry.get("processing_status")
+        if status not in STATES:
+            raise ValueError("Only verified processing states are accepted")
+        if entry.get("visual_review_approved") is not True:
+            raise ValueError("Visual review not approved: "+target)
+        note=clean_text(entry.get("visual_review_notes"),"visual_review_notes",15)
+        author=clean_text(entry.get("author"),"author")
+        license_name=clean_text(entry.get("license"),"license")
+        if license_name not in LICENSES:
+            raise ValueError("License does not explicitly permit redistribution and edits")
+        source=clean_text(entry.get("source"),"source",12)
+        rights=clean_text(entry.get("rights_evidence"),"rights_evidence",30)
+        if not any(x in rights.lower() for x in ("modify","modification","derivative","редакт")):
+            raise ValueError("Rights for modifications not documented: "+target)
+        original_path=staging_file(staging,entry.get("original"))
+        prepared_path=staging_file(staging,entry.get("prepared"))
+        if prepared_path.suffix.lower()!=Path(name).suffix.lower():
+            raise ValueError("Prepared file extension mismatch")
+        original=image_data(original_path,MAX_ORIGINAL_BYTES)
+        prepared=image_data(prepared_path,MAX_PREPARED_BYTES,status=="background_removed_verified")
+        original_sha=sha256(original)
+        if not SHA_RE.fullmatch(entry.get("original_sha256","")) or entry["original_sha256"]!=original_sha:
+            raise ValueError("Original SHA-256 mismatch: "+target)
+        digest=sha256(prepared)
+        if digest in used:
+            raise ValueError("Duplicate photo bytes: "+target)
+        used.add(digest)
+        original_rel="photo_originals/"+model+"/"+original_sha+original_path.suffix.lower()
+        gallery=new["items"].setdefault(model,{"name":models[model],"files":[]})["files"]
+        if len(gallery)>=5:
+            raise ValueError("Gallery photo limit exceeded: "+model)
+        gallery.append({
+            "file":target,"sha256":digest,"original_sha256":original_sha,
+            "original_archive":original_rel,"author":author,"license":license_name,
+            "source":source,"rights_evidence":rights,"processing_status":status,
+            "visual_review_notes":note
+        })
+        pending.append((assets/target,prepared,repo/original_rel,original))
+    return manifest_file,new,pending
+
+def apply_batch(manifest_path,manifest,pending,write=False):
+    result={"mode":"apply" if write else "dry-run","photos":len(pending),
+            "models":sorted({old.parent.name for _,_,old,_ in pending})}
+    if not write:
+        return result
+    original_manifest=manifest_path.read_bytes()
+    made=[]
+    try:
+        for photo_path,photo_data,original_path,original_data in pending:
+            for path,data in ((photo_path,photo_data),(original_path,original_data)):
+                if path.exists():
+                    if path.read_bytes()!=data:
+                        raise ValueError("Existing file differs: "+str(path))
+                    continue
+                path.parent.mkdir(parents=True,exist_ok=True)
+                path.write_bytes(data)
+                made.append(path)
+        manifest_path.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+"\n","utf-8")
+    except Exception:
+        manifest_path.write_bytes(original_manifest)
+        for p in made:
+            p.unlink(missing_ok=True)
+        raise
+    return result
+
+def main():
+    p=argparse.ArgumentParser(description="Offline batch photo import; defaults to dry-run")
+    p.add_argument("--staging",required=True)
+    p.add_argument("--repo",default=str(Path(__file__).resolve().parents[1]))
+    p.add_argument("--apply",action="store_true")
+    a=p.parse_args()
+    try:
+        manifest,photos,pending=prepare(a.staging,a.repo)
+        print(json.dumps(apply_batch(manifest,photos,pending,a.apply),ensure_ascii=False,indent=2))
+    except (ValueError,OSError,KeyError,json.JSONDecodeError) as err:
+        raise SystemExit("FAIL: "+str(err))
+
+if __name__=="__main__":
+    main()
