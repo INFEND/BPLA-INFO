@@ -17,7 +17,7 @@
 ## Android и сборка
 
 - Application ID: dev.infend.bplainfo
-- Версия: 1.0.12 (versionCode 13)
+- Версия: 1.0.13 (versionCode 14)
 - minSdk 26 / targetSdk 35
 - Java 17, Android Gradle Plugin 9.3.1, Gradle 9.6.1
 - Папка исходников: app/src/main/java/dev/infend/bplainfo/
@@ -72,3 +72,7 @@ JSON объект с schema=1 и массивом items. При импорте �
 - Изображения загружаются из AssetManager без интернета. Сетевое разрешение оставлено только для OTA приложения.
 
 Обновление бинарных изображений распространяется через штатную подписанную OTA приложения. Старые сетевые фотоисточники больше не используются.
+
+## Первый подтверждённый автономный фотонабор
+
+В `app/src/main/assets/photos/` физически включены два оптимизированных WebP для **PUMA AE RQ-20**. Сведения об авторах и SHA-256 находятся в `bundled_photos.json`. Исходные кадры Министерства обороны США отмечены как Public Domain (DVIDS 8347955, Daniel Amburg; DVIDS 6381574, LCpl Jose Gonzalez). Разные ракурсы; остаётся дополнить до 3–5 при наличии проверенных материалов. Фото загружаются через Android AssetManager без сети.
