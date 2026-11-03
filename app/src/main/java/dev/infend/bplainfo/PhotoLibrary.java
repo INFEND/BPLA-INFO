@@ -160,7 +160,8 @@ public final class PhotoLibrary {
                     for(String address:new String[]{photo.url,photo.fallbackUrl}){
                         if(System.currentTimeMillis()<nextAllowedNetworkAtMs)break;
                         if(address.isEmpty())continue;
-                        for(int attempt=0;attempt<2&&!complete;attempt++){
+                        for(int attempt=0;attempt<2&&!complete &&
+                                System.currentTimeMillis()>=nextAllowedNetworkAtMs;attempt++){
                             HttpURLConnection connection=null;
                             File temp=new File(folder,md5+".part");
                             try{
@@ -187,7 +188,13 @@ public final class PhotoLibrary {
                                             "; retry after cooldown (header="+header+")");
                                     break;
                                 }
-                                if(status!=200)break;
+                                if(status!=200){
+                                    // A permanent HTTP error cannot be fixed by retrying
+                                    // the identical URL; try the original endpoint instead.
+                                    android.util.Log.w("BPLA-INFO","Commons HTTP "+status+
+                                            " for "+photo.file);
+                                    break;
+                                }
                                 String type=connection.getContentType();
                                 if(type==null||!type.toLowerCase(java.util.Locale.ROOT).startsWith("image/"))
                                     throw new java.io.IOException("Response is not an image");
