@@ -32,3 +32,15 @@ not a power-loss transaction.
 Six unmodified downloaded source renditions and the next photo candidates are
 documented in `research/photos/source_index.json` and `research/photos/README.md`.
 They are research inputs, not new APK gallery photos.
+
+## Mandatory reviewed angle identity
+
+Every new photo must carry `angle_id` (3–61 lowercase ASCII letters, digits,
+underscores or hyphens, starting with a letter/digit) and
+`angle_review_approved: true`, in addition to `visual_review_approved: true`.
+An angle ID represents a genuinely distinct verified camera viewpoint, **not** a
+filename, crop, rotation, or duplicate original. Reusing the same angle ID for
+the same model is rejected, including across existing and newly staged photos.
+The importer preserves both review flags and the angle ID in the offline APK
+manifest, allowing `scripts/photo_progress.py` to count qualifying cutouts.
+This metadata does not replace human inspection and must never be fabricated.

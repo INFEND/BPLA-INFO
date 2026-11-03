@@ -39,7 +39,8 @@ class BatchPhotoImporterTests(unittest.TestCase):
             "source":"Local test fixture with documented origin",
             "rights_evidence":"CC0 1.0 allows redistribution and modification of this fixture",
             "processing_status":"verified_clean_original","visual_review_approved":True,
-            "visual_review_notes":"Verified unique object, real model and clean original"
+            "visual_review_notes":"Verified unique object, real model and clean original",
+            "angle_id":name,"angle_review_approved":True
         }
 
     def batch(self,items):
@@ -87,6 +88,43 @@ class BatchPhotoImporterTests(unittest.TestCase):
         self.batch([item])
         with self.assertRaisesRegex(ValueError,"Original SHA-256"):
             importer.prepare(self.stage,self.repo)
+
+    def test_requires_explicit_reviewed_angle(self):
+        item=self.candidate()
+        item.pop("angle_id")
+        self.batch([item])
+        with self.assertRaisesRegex(ValueError,"angle_id"):
+            importer.prepare(self.stage,self.repo)
+        item["angle_id"]="front"
+        item["angle_review_approved"]=False
+        self.batch([item])
+        with self.assertRaisesRegex(ValueError,"angle visual review"):
+            importer.prepare(self.stage,self.repo)
+
+    def test_duplicate_angles_in_same_batch_rejected(self):
+        first=self.candidate("one")
+        second=self.candidate("two",(200,100,20))
+        second["angle_id"]=first["angle_id"]
+        self.batch([first,second])
+        with self.assertRaisesRegex(ValueError,"Duplicate reviewed angle"):
+            importer.prepare(self.stage,self.repo)
+
+    def test_imported_angles_count_in_completion_audit(self):
+        first=self.candidate("one")
+        first["processing_status"]="background_removed_verified"
+        # Synthetic alpha cutout only: this is not a real aircraft photo.
+        prepared=self.stage/first["prepared"]
+        im=Image.new("RGBA",(640,480),(0,0,0,0))
+        from PIL import ImageDraw
+        ImageDraw.Draw(im).rectangle((70,60,570,420),fill=(100,100,100,255))
+        im.save(prepared,format="WEBP",lossless=True)
+        self.batch([first])
+        path,manifest,pending=importer.prepare(self.stage,self.repo)
+        importer.apply_batch(path,manifest,pending,True)
+        record=json.loads(path.read_text())["items"]["test-model"]["files"][0]
+        self.assertEqual(record["angle_id"],"one")
+        self.assertTrue(record["angle_review_approved"])
+        self.assertTrue(record["visual_review_approved"])
 
     def test_background_removal_needs_real_alpha(self):
         item=self.candidate()

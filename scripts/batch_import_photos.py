@@ -16,6 +16,7 @@ MAX_PREPARED_BYTES = 12_000_000
 MAX_ORIGINAL_BYTES = 35_000_000
 FORMATS = {".webp":"WEBP", ".png":"PNG", ".jpg":"JPEG", ".jpeg":"JPEG"}
 MODEL_RE = re.compile(r"[a-z0-9][a-z0-9_-]{2,100}\Z")
+ANGLE_RE = re.compile(r"[a-z0-9][a-z0-9_-]{2,60}\Z")
 PHOTO_RE = re.compile(r"[a-z0-9][a-z0-9_-]{2,100}\.(?:webp|png|jpg|jpeg)\Z")
 SHA_RE = re.compile(r"[a-f0-9]{64}\Z")
 LICENSES = {"CC0 1.0", "CC BY 4.0", "CC BY-SA 4.0", "Public domain (U.S. Government)"}
@@ -87,6 +88,7 @@ def prepare(staging, repo):
     originals={x["original_sha256"] for g in new["items"].values() for x in g["files"] if x.get("original_sha256")}
     paths={x["file"] for g in new["items"].values() for x in g["files"]}
     pending=[]
+    angles_by_model={model:{str(x.get("angle_id","")).strip().lower() for x in group["files"] if x.get("angle_id")} for model,group in new["items"].items()}
     for entry in batch["photos"]:
         model=entry.get("model_id","")
         if not isinstance(model,str) or not MODEL_RE.fullmatch(model) or model not in models:
@@ -107,6 +109,15 @@ def prepare(staging, repo):
             raise ValueError("Only verified processing states are accepted")
         if entry.get("visual_review_approved") is not True:
             raise ValueError("Visual review not approved: "+target)
+        angle=entry.get("angle_id")
+        if not isinstance(angle,str) or not ANGLE_RE.fullmatch(angle):
+            raise ValueError("Explicit valid angle_id required: "+target)
+        if entry.get("angle_review_approved") is not True:
+            raise ValueError("Distinct angle visual review not approved: "+target)
+        model_angles=angles_by_model.setdefault(model,set())
+        if angle.lower() in model_angles:
+            raise ValueError("Duplicate reviewed angle_id for model: "+model+" "+angle)
+        model_angles.add(angle.lower())
         note=clean_text(entry.get("visual_review_notes"),"visual_review_notes",15)
         author=clean_text(entry.get("author"),"author")
         license_name=clean_text(entry.get("license"),"license")
@@ -146,7 +157,8 @@ def prepare(staging, repo):
             "file":target,"sha256":digest,"original_sha256":original_sha,
             "original_archive":original_rel,"author":author,"license":license_name,
             "source":source,"rights_evidence":rights,"processing_status":status,
-            "visual_review_notes":note
+            "visual_review_notes":note,"visual_review_approved":True,
+            "angle_review_approved":True,"angle_id":angle
         })
         pending.append((assets/target,prepared,repo/original_rel,original))
     return manifest_file,new,pending
