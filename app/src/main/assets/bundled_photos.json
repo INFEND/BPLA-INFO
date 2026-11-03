@@ -1,0 +1,6 @@
+{
+  "schema": 2,
+  "storage": "apk-assets-only",
+  "description": "Only files physically embedded in the APK. No Wikimedia or remote photo URLs.",
+  "items": {}
+}

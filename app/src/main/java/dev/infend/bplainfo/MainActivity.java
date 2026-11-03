@@ -38,6 +38,7 @@ public final class MainActivity extends Activity {
     @Override public void onCreate(Bundle state){
         super.onCreate(state);
         t=new ThemePrefs(this);
+        PhotoLibrary.purgeLegacyCache(this);
         records.addAll(DroneStore.load(this));
         home();
         long last=getPreferences(0).getLong("ota_checked",0);
@@ -233,15 +234,14 @@ public final class MainActivity extends Activity {
         int available=documentary.size()+images.size();
 
         if(available==0){
-            photos.addView(text("Для этой модификации пока нет пяти достоверных снимков. Можно добавить свои фотографии.",12,t.muted,false),margins(-1,-2,0,8));
+            photos.addView(text("Фото пока не добавлены. Используйте «+ ФОТО», чтобы выбрать свои снимки с устройства.",12,t.muted,false),margins(-1,-2,0,8));
         }else{
             HorizontalScrollView strip=new HorizontalScrollView(this);
             strip.setHorizontalScrollBarEnabled(false);
             photos.addView(strip,margins(-1,214,0,5));
             LinearLayout gallery=horizontal();strip.addView(gallery);
-            // Only fetch thumbnails that are on screen (or about to enter it).
-            // Eagerly downloading all five on every card opening quickly triggers
-            // Commons rate limits and makes the first visible photo wait.
+            // Decode only locally bundled photos that are visible in the strip.
+            // No image download or remote photo URLs are used in this application.
             java.util.ArrayList<View> lazyFrames=new java.util.ArrayList<>();
             java.util.ArrayList<Runnable> lazyLoads=new java.util.ArrayList<>();
             int photoNumber=0;
@@ -254,14 +254,14 @@ public final class MainActivity extends Activity {
                 photo.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 photo.setImageResource(R.drawable.ic_airplane);photo.setColorFilter(t.muted);
                 frame.addView(photo,new LinearLayout.LayoutParams(-1,0,1));
-                TextView photoStatus=text("ОЖИДАНИЕ ПРОСМОТРА…",10,t.muted,false);
+                TextView photoStatus=text("ФОТО В ПРИЛОЖЕНИИ",10,t.muted,false);
                 frame.addView(photoStatus,margins(-1,-2,0,2));
                 final boolean[] requested={false};
                 lazyFrames.add(frame);
                 lazyLoads.add(()->{
                     if(requested[0])return;
                     requested[0]=true;
-                    photoStatus.setText("ЗАГРУЗКА ФОТО…");
+                    photoStatus.setText("ОТКРЫТИЕ ФОТО…");
                     PhotoLibrary.into(this,p,photo,1350,ok->
                         photoStatus.setText(ok?"СНИМОК "+number:PhotoLibrary.unavailableMessage(this)));
                 });
@@ -594,22 +594,19 @@ public final class MainActivity extends Activity {
         int screenHeight=getResources().getDisplayMetrics().heightPixels;
         int photoHeight=Math.max(dp(240),Math.min((int)(screenHeight*0.68f),dp(760)));
         content.addView(photo,new LinearLayout.LayoutParams(-1,photoHeight));
-        String credit="Источник: Wikimedia Commons";
+        String credit="ФОТО ВСТРОЕНО В ПРИЛОЖЕНИЕ";
         if(!item.author.isEmpty())credit+=" | "+item.author;
         if(!item.license.isEmpty())credit+=" | "+item.license;
-        TextView attribution=text(credit+"  ↗",12,t.muted,false);
+        if(!item.source.isEmpty())credit+=" | "+item.source;
+        TextView attribution=text(credit,12,t.muted,false);
         attribution.setPadding(dp(4),dp(8),dp(4),dp(8));
-        attribution.setOnClickListener(v->{
-            try{startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(item.attributionUrl)));}
-            catch(Exception e){toast("Не удалось открыть источник фотографии");}
-        });
         content.addView(attribution,margins(-1,-2,0,0));
-        TextView loadStatus=text("ЗАГРУЗКА ФОТО…",11,t.muted,false);
+        TextView loadStatus=text("ОТКРЫТИЕ ФОТО…",11,t.muted,false);
         loadStatus.setGravity(Gravity.CENTER);
         content.addView(loadStatus,margins(-1,30,0,4));
-        // Retry without closing the viewer; an offline/cached image remains usable.
+        // Retry local decoding without closing the viewer; no network is involved.
         Runnable retry=()->{
-            loadStatus.setText("ЗАГРУЗКА ФОТО…");
+            loadStatus.setText("ОТКРЫТИЕ ФОТО…");
             PhotoLibrary.into(this,item,photo,2800,ok->
                 loadStatus.setText(ok?"СНИМОК ЗАГРУЖЕН":PhotoLibrary.unavailableMessage(this)));
         };
