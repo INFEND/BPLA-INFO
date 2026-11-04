@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import java.util.*;
 public final class DroneStore {
  private static final String PREFS="bpla_store",KEY="catalog_v1";
- public static ArrayList<Drone> load(Context c){String raw=c.getSharedPreferences(PREFS,0).getString(KEY,null);ArrayList<Drone> out=new ArrayList<>();if(raw==null){out.add(Drone.mara());mergeSeed(c,out);mergeEnrichment(c,out);mergeBulletin30(c,out);save(c,out);return out;}try{JSONArray a=new JSONArray(raw);for(int i=0;i<a.length()&&i<5000;i++){JSONObject j=a.optJSONObject(i);if(j!=null)out.add(Drone.fromJson(j));}}catch(Exception e){out.add(Drone.mara());}mergeSeed(c,out);mergeEnrichment(c,out);mergeBulletin30(c,out);return out;}
+ public static ArrayList<Drone> load(Context c){String raw=c.getSharedPreferences(PREFS,0).getString(KEY,null);ArrayList<Drone> out=new ArrayList<>();if(raw==null){out.add(Drone.mara());mergeSeed(c,out);mergeEnrichment(c,out);mergeBulletin30(c,out);mergeVsuPdf(c,out);save(c,out);return out;}try{JSONArray a=new JSONArray(raw);for(int i=0;i<a.length()&&i<5000;i++){JSONObject j=a.optJSONObject(i);if(j!=null)out.add(Drone.fromJson(j));}}catch(Exception e){out.add(Drone.mara());}mergeSeed(c,out);mergeEnrichment(c,out);mergeBulletin30(c,out);mergeVsuPdf(c,out);return out;}
  private static final int SEED_REVISION=2;
  private static void mergeSeed(Context c,ArrayList<Drone> drones){
    android.content.SharedPreferences prefs=c.getSharedPreferences(PREFS,0);
@@ -229,6 +229,79 @@ public final class DroneStore {
      android.util.Log.w("BPLA-INFO","2025 bulletin import skipped: "+e.getClass().getSimpleName());
    }
  }
+
+ private static final int VSU_PDF_REVISION=1;
+
+ /**
+  * Merge the 60-page user-supplied profile source without changing names,
+  * favorites, photos, user edits, or any existing specification values.
+  * Explicit source IDs resolve model aliases; a different "Vector" remains
+  * a distinct aircraft instead of being silently conflated by name.
+  */
+ private static void mergeVsuPdf(Context c,ArrayList<Drone> drones){
+   android.content.SharedPreferences prefs=c.getSharedPreferences(PREFS,0);
+   if(prefs.getInt("vsu_pdf_revision",0)>=VSU_PDF_REVISION)return;
+   try(java.io.InputStream in=c.getAssets().open("catalog_bpla_vsu_pdf.json")){
+     java.io.ByteArrayOutputStream bytes=new java.io.ByteArrayOutputStream();
+     byte[] buf=new byte[8192];int n;
+     while((n=in.read(buf))!=-1){
+       bytes.write(buf,0,n);
+       if(bytes.size()>450_000)throw new java.io.IOException("VSU PDF asset oversized");
+     }
+     JSONObject catalog=new JSONObject(bytes.toString("UTF-8"));
+     if(catalog.optInt("schema")!=1||
+        !"2913a58a55163c912160539b44509a772fa518d4fbd7ff9b4cd03dbeaf044b65".equals(
+          catalog.optString("sourcePdfSha256","")))
+       throw new org.json.JSONException("Unexpected VSU PDF identity");
+     JSONArray entries=catalog.getJSONArray("entries");
+     if(entries.length()!=34)throw new org.json.JSONException("Incomplete VSU PDF");
+     HashSet<String> processed=new HashSet<>();
+     for(int i=0;i<entries.length();i++){
+       JSONObject item=entries.getJSONObject(i);
+       String id=item.optString("id",""),name=item.optString("name","").trim();
+       String targetId=item.optString("targetId",""),type=item.optString("type","").trim();
+       int page=item.optInt("page",0);
+       JSONArray rows=item.optJSONArray("specRows");
+       if(id.isEmpty()||name.isEmpty()||page<1||page>60||rows==null||
+          !processed.add(id))throw new org.json.JSONException("Invalid VSU PDF entry: "+i);
+       Drone matched=null;
+       if(!targetId.isEmpty()){
+         for(Drone d:drones)if(targetId.equals(d.id)){matched=d;break;}
+       }
+       if(matched==null){
+         for(Drone d:drones)if(id.equals(d.id)){matched=d;break;}
+       }
+       boolean newRecord=matched==null;
+       if(newRecord){
+         matched=new Drone();
+         matched.id=id;
+         matched.set(0,name);
+         matched.set(1,type);
+         matched.set(14,"БПЛА ВСУ ПДФ.pdf, стр. "+page);
+         matched.set(15,"Данные пользовательского PDF не проверены независимо; возможны противоречия.");
+         matched.catalogSource="БПЛА ВСУ ПДФ.pdf, стр. "+page;
+         matched.sourceGroup=type;
+         drones.add(matched);
+       }
+       for(int j=0;j<rows.length();j++){
+         JSONArray row=rows.optJSONArray(j);
+         if(row==null||row.length()!=2)continue;
+         String key=row.optString(0,"").trim(),value=row.optString(1,"").trim();
+         if(key.isEmpty()||value.isEmpty())continue;
+         String attributed=newRecord?key:"БПЛА ВСУ (стр. "+page+") · "+key;
+         if(!hasSpecLabel(matched,attributed)&&matched.specRows.size()<80){
+           matched.specRows.add(new String[]{attributed,value});
+           if(newRecord)applyBasicSpec(matched,key,value);
+         }
+       }
+     }
+     save(c,drones);
+     prefs.edit().putInt("vsu_pdf_revision",VSU_PDF_REVISION).apply();
+   }catch(Exception e){
+     android.util.Log.w("BPLA-INFO","VSU PDF import unavailable: "+e.getClass().getSimpleName());
+   }
+ }
+
  public static void save(Context c,List<Drone> list){JSONArray a=new JSONArray();for(Drone d:list)try{a.put(d.json());}catch(Exception ignored){}c.getSharedPreferences(PREFS,0).edit().putString(KEY,a.toString()).apply();}
  public static String exportJson(List<Drone> list)throws Exception{JSONObject o=new JSONObject();o.put("schema",1);o.put("app","БПЛА ИНФО");JSONArray a=new JSONArray();for(Drone d:list)a.put(d.json());o.put("items",a);return o.toString(2);}
  public static int importJson(Context c,List<Drone> list,String input)throws Exception{JSONObject o=new JSONObject(input);if(o.optInt("schema")!=1)throw new IllegalArgumentException("Неподдерживаемый формат");JSONArray a=o.getJSONArray("items");if(a.length()>5000)throw new IllegalArgumentException("Слишком много карточек");int n=0;for(int i=0;i<a.length();i++){Drone d=Drone.fromJson(a.getJSONObject(i));if(d.name().isEmpty())continue;int index=-1;for(int j=0;j<list.size();j++)if(list.get(j).id.equals(d.id)){index=j;break;}if(index<0)list.add(d);else list.set(index,d);n++;}save(c,list);return n;}
