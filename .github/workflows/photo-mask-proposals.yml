@@ -5,6 +5,8 @@ on:
     paths:
       - 'scripts/propose_unapproved_masks.py'
       - 'scripts/triage_mask_proposals.py'
+      - 'scripts/verify_mask_rgb.py'
+      - 'tests/test_verify_mask_rgb.py'
       - 'tests/test_triage_mask_proposals.py'
       - '.github/workflows/photo-mask-proposals.yml'
       - 'research/photos/originals/**'
@@ -24,6 +26,10 @@ jobs:
         run: python scripts/propose_unapproved_masks.py --limit 26
       - name: Test conservative proposal triage
         run: python -m unittest discover -s tests -p 'test_triage_mask_proposals.py' -v
+      - name: Test original RGB integrity verifier
+        run: python -m unittest discover -s tests -p 'test_verify_mask_rgb.py' -v
+      - name: Verify every proposed cutout retains original RGB pixels
+        run: python scripts/verify_mask_rgb.py
       - name: Reject broken masks and write review-only QA report
         run: python scripts/triage_mask_proposals.py
       - name: Upload review previews, never APK assets
