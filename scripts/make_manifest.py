@@ -2,18 +2,21 @@
 """Create OTA manifest from the actual signed APK and version notes."""
 import argparse,datetime,hashlib,json,pathlib,re,subprocess
 from urllib.parse import quote
+from ota_history import build_history, clean_notes
 def parse_badging(s):
     m=re.search(r"^package: name='([^']+)' versionCode='([0-9]+)' versionName='([^']+)'",s,re.M)
     if not m:raise ValueError("APK badging unavailable")
     return m.group(1),int(m.group(2)),m.group(3)
-def make(apk,info,cert,notes):
+def make(apk,info,cert,notes,history=None):
     package,code,version=info
     if package!="dev.infend.bplainfo" or code<1 or not re.fullmatch(r"[0-9]+(?:\.[0-9]+){2}",version):raise ValueError("Wrong APK identity/version")
     if not re.fullmatch(r"[a-fA-F0-9]{64}",cert):raise ValueError("Wrong certificate fingerprint")
-    return {"schema":1,"packageName":package,"versionCode":code,"versionName":version,
+    output = {"schema":1,"packageName":package,"versionCode":code,"versionName":version,
       "apkUrl":"https://github.com/INFEND/BPLA-INFO/releases/download/"+quote("v"+version)+"/BPLA-INFO.apk",
       "sha256":hashlib.sha256(apk.read_bytes()).hexdigest(),"certificateSha256":cert,
       "sizeBytes":apk.stat().st_size,"publishedAt":datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),"notes":notes}
+    if history is not None: output["history"]=history
+    return output
 def main():
     p=argparse.ArgumentParser()
     for name in ("apk","aapt","output","github-output"):p.add_argument("--"+name,required=True)
@@ -24,7 +27,8 @@ def main():
     notes=notes_path.read_text("utf-8").strip()
     if not notes:raise SystemExit("Empty release notes")
     cert=pathlib.Path("dist/certificate_sha256.txt").read_text("utf-8").strip()
-    manifest=make(apk,info,cert,notes)
+    history=build_history(info[2],info[1],notes)
+    manifest=make(apk,info,cert,clean_notes(notes),history)
     output=pathlib.Path(a.output);output.parent.mkdir(parents=True,exist_ok=True)
     output.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+"\n","utf-8")
     with open(a.github_output,"a",encoding="utf-8") as out:

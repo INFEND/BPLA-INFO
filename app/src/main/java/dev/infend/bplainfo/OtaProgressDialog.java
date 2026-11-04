@@ -277,12 +277,7 @@ public final class OtaProgressDialog {
                 begin,begin+3,android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             styled.setSpan(new android.text.style.StyleSpan(Typeface.BOLD),
                 begin,begin+3,android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            // Highlight the leading action word, plus explicitly marked key phrases.
-            int actionStart=4,actionEnd=actionStart;
-            while(actionEnd<display.length()&&!Character.isWhitespace(display.charAt(actionEnd))
-                  &&actionEnd-actionStart<40)actionEnd++;
-            if(actionEnd>actionStart)styled.setSpan(new android.text.style.StyleSpan(Typeface.BOLD),
-                begin+actionStart,begin+actionEnd,android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            // QR LINK format: never auto-bold opening prepositions such as «Для».
             for(int[] span:strong)if(span[1]<=display.length())
                 styled.setSpan(new android.text.style.StyleSpan(Typeface.BOLD),
                     begin+span[0],begin+span[1],android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -291,8 +286,9 @@ public final class OtaProgressDialog {
         notesScroll.scrollTo(0,0);
         notesScroll.setVisibility(View.VISIBLE);
     }
-    public void current(String version){
-        notesScroll.setVisibility(View.GONE);
+    public void current(String version){current(version,"");}
+    public void current(String version,String changes){
+        showNotes(changes);
         if(numberAnim!=null)numberAnim.cancel();rotating(false);
         heading.setText("БПЛА ИНФО обновлён");
         label.setText("Установлена актуальная версия");

@@ -16,6 +16,8 @@ import java.net.*;
 import java.security.MessageDigest;
 import java.util.Locale;
 import org.json.JSONObject;
+import org.json.JSONArray;
+import java.util.ArrayList;
 
 public final class OtaUpdater {
     public static final String MANIFEST_URL="https://github.com/INFEND/BPLA-INFO/releases/latest/download/update.json";
@@ -54,6 +56,20 @@ public final class OtaUpdater {
     }
     private void ui(Runnable run){activity.runOnUiThread(()->{if(!activity.isFinishing())run.run();});}
     private void error(String message){ui(()->UiDialogs.message(activity,new ThemePrefs(activity),"Ошибка обновления",message));}
+    /** Recover every missed version from the trusted release manifest. */
+    private static String notesFor(JSONObject manifest,long installed) {
+        String fallback=manifest.optString("notes","");
+        JSONArray history=manifest.optJSONArray("history");
+        if(history==null||history.length()>1000)return ReleaseNotes.visible(fallback);
+        ArrayList<OtaHistory.Entry> entries=new ArrayList<>();
+        for(int i=0;i<history.length();i++){
+            JSONObject item=history.optJSONObject(i);
+            if(item==null)return ReleaseNotes.visible(fallback);
+            entries.add(new OtaHistory.Entry(item.optLong("versionCode",0),
+                item.optString("versionName",""),item.optString("notes","")));
+        }
+        return OtaHistory.merge(entries,installed,manifest.optLong("versionCode",0),fallback);
+    }
     private OtaProgressDialog progress;
     private void ensureProgress(){
         if(progress==null)progress=new OtaProgressDialog(activity);
@@ -69,13 +85,17 @@ public final class OtaUpdater {
                 PackageInfo installed=activity.getPackageManager().getPackageInfo(activity.getPackageName(),0);
                 long local=Build.VERSION.SDK_INT>=28?installed.getLongVersionCode():installed.versionCode;
                 if(remote<=local){
-                    if(!silent)ui(()->{ensureProgress();progress.current(installed.versionName);});
+                    if(!silent){
+                        String complete=notesFor(j,0);
+                        ui(()->{ensureProgress();progress.current(installed.versionName,complete);});
+                    }
                     return;
                 }
+                String changes=notesFor(j,local);
                 version=j;
                 ui(()->{
                     ensureProgress();
-                    progress.offer(j.optString("versionName"),j.optString("notes",""),this::download);
+                    progress.offer(j.optString("versionName"),changes,this::download);
                 });
             }catch(Exception e){
                 if(!silent)ui(()->{ensureProgress();progress.fail("Не удалось проверить обновления: "+e.getMessage(),()->check(false));});
