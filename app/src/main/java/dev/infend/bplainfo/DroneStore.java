@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import java.util.*;
 public final class DroneStore {
  private static final String PREFS="bpla_store",KEY="catalog_v1";
- public static ArrayList<Drone> load(Context c){String raw=c.getSharedPreferences(PREFS,0).getString(KEY,null);ArrayList<Drone> out=new ArrayList<>();if(raw==null){out.add(Drone.mara());mergeSeed(c,out);mergeEnrichment(c,out);save(c,out);return out;}try{JSONArray a=new JSONArray(raw);for(int i=0;i<a.length()&&i<5000;i++){JSONObject j=a.optJSONObject(i);if(j!=null)out.add(Drone.fromJson(j));}}catch(Exception e){out.add(Drone.mara());}mergeSeed(c,out);mergeEnrichment(c,out);return out;}
+ public static ArrayList<Drone> load(Context c){String raw=c.getSharedPreferences(PREFS,0).getString(KEY,null);ArrayList<Drone> out=new ArrayList<>();if(raw==null){out.add(Drone.mara());mergeSeed(c,out);mergeEnrichment(c,out);mergeBulletin30(c,out);save(c,out);return out;}try{JSONArray a=new JSONArray(raw);for(int i=0;i<a.length()&&i<5000;i++){JSONObject j=a.optJSONObject(i);if(j!=null)out.add(Drone.fromJson(j));}}catch(Exception e){out.add(Drone.mara());}mergeSeed(c,out);mergeEnrichment(c,out);mergeBulletin30(c,out);return out;}
  private static final int SEED_REVISION=2;
  private static void mergeSeed(Context c,ArrayList<Drone> drones){
    android.content.SharedPreferences prefs=c.getSharedPreferences(PREFS,0);
@@ -115,6 +115,118 @@ public final class DroneStore {
      prefs.edit().putInt("enrichment_revision",revision).apply();
    }catch(Exception e){
      android.util.Log.w("BPLA-INFO","Verified catalogue additions unavailable: "+e.getClass().getSimpleName());
+   }
+ }
+  private static final int BULLETIN30_REVISION=1;
+
+ /** Exact canonical model names only, no speculative fuzzy crossmatching. */
+ private static String normalizeModelName(String s){
+   if(s==null)return "";
+   return java.text.Normalizer.normalize(s,java.text.Normalizer.Form.NFKC)
+       .toUpperCase(java.util.Locale.ROOT).replace('Ё','Е').replaceAll("[^\\p{L}\\p{N}]","");
+ }
+ private static boolean sameCategory(String existing,String incoming){
+   String t=existing==null?"":existing.toLowerCase(java.util.Locale.ROOT);
+   String v=incoming==null?"":incoming.toLowerCase(java.util.Locale.ROOT);
+   if(t.contains("коптер")||t.contains("мульти"))return v.contains("коптер");
+   if(t.contains("барраж"))return v.contains("барраж");
+   if(t.contains("аэростат"))return v.contains("аэростат");
+   if(t.contains("самол")||t.contains("крыл"))return v.contains("самол");
+   return false;
+ }
+ private static boolean hasSpecLabel(Drone d,String label){
+   for(String[] row:d.specRows){
+     if(row.length>=2&&row[0].equalsIgnoreCase(label))return true;
+   }
+   return false;
+ }
+ private static void applyBasicSpec(Drone d,String label,String value){
+   String u=label.toUpperCase(java.util.Locale.ROOT).replace('Ё','Е');
+   if(u.startsWith("ПРОИЗВОДИТЕЛЬ"))d.set(2,value);
+   else if(u.startsWith("РАЗМАХ КРЫЛ"))d.set(3,value);
+   else if(u.startsWith("МАКСИМАЛЬНАЯ СКОРОСТЬ"))d.set(5,value);
+   else if(u.startsWith("ДАЛЬНОСТЬ ДЕЙСТВИЯ"))d.set(6,value);
+   else if(u.startsWith("РАБОЧАЯ ВЫСОТА"))d.set(7,value);
+   else if(u.startsWith("ПРАКТИЧЕСКИЙ ПОТОЛОК"))d.set(8,value);
+   else if(u.startsWith("МАССА ПОЛЕЗНОЙ НАГРУЗКИ"))d.set(9,value);
+   else if(u.startsWith("ВЗЛЕТНЫЙ ВЕС")||u.startsWith("ВЗЛЕТНАЯ МАССА"))d.set(10,value);
+   else if(u.startsWith("ВРЕМЯ ПОЛЕТА")||u.startsWith("ПРОДОЛЖИТЕЛЬНОСТЬ ПОЛЕТА"))d.set(11,value);
+   else if(u.startsWith("СПОСОБ СТАРТА"))d.set(12,value);
+   else if(u.startsWith("ТИП ДВИГАТЕЛЯ"))d.set(13,value);
+ }
+ /**
+  * Source-attributed technical catalogue entries from a user's PDF.
+  * No photographs are imported; user-local media, favorites and preexisting
+  * specifications are never deleted or overwritten.
+  */
+ private static void mergeBulletin30(Context c,ArrayList<Drone> drones){
+   android.content.SharedPreferences prefs=c.getSharedPreferences(PREFS,0);
+   if(prefs.getInt("bulletin30_revision",0)>=BULLETIN30_REVISION)return;
+   try(java.io.InputStream in=c.getAssets().open("bulletin30_2025.json")){
+     java.io.ByteArrayOutputStream out=new java.io.ByteArrayOutputStream();
+     byte[] buffer=new byte[8192];int count;
+     while((count=in.read(buffer))!=-1){
+       out.write(buffer,0,count);
+       if(out.size()>900_000)throw new java.io.IOException("Supplemental catalog too large");
+     }
+     JSONObject root=new JSONObject(out.toString("UTF-8"));
+     if(root.optInt("schema")!=1)throw new org.json.JSONException("Unexpected bulletin schema");
+     JSONArray entries=root.getJSONArray("entries");
+     if(entries.length()<370)throw new org.json.JSONException("Incomplete 2025 catalog");
+     HashSet<String> imported=new HashSet<>();
+     for(int i=0;i<entries.length();i++){
+       JSONObject entry=entries.getJSONObject(i);
+       String id=entry.optString("id",""), name=entry.optString("name","").trim();
+       String type=entry.optString("type","").trim();
+       int page=entry.optInt("page",0);
+       JSONArray rows=entry.optJSONArray("specRows");
+       if(id.isEmpty()||name.isEmpty()||type.isEmpty()||page<1||page>213||rows==null||rows.length()==0)
+         throw new org.json.JSONException("Invalid bulletin entry at "+i);
+       if(!imported.add(id))throw new org.json.JSONException("Duplicate bulletin ID "+id);
+       Drone matched=null;
+       for(Drone existing:drones){
+         if(existing.id.equals(id)){matched=existing;break;}
+         if(normalizeModelName(existing.name()).equals(normalizeModelName(name))&&sameCategory(existing.type(),type)){
+           matched=existing;break;
+         }
+       }
+       String citation="Справочник по БПЛА · Информационно-технический бюллетень №30 (2025), стр. "+page;
+       if(matched==null){
+         Drone d=new Drone();
+         d.id=id;
+         d.set(0,name);d.set(1,type);d.set(14,citation);
+         d.set(15,"Данные из бюллетеня 2025 года; независимая проверка не выполнялась, возможны опечатки.");
+         d.catalogSource=citation;
+         d.sourceGroup=type;
+         matched=d;
+         drones.add(d);
+       }
+       for(int j=0;j<rows.length();j++){
+         JSONArray pair=rows.optJSONArray(j);
+         if(pair==null||pair.length()!=2)continue;
+         String key=pair.optString(0,"").trim(),value=pair.optString(1,"").trim();
+         if(key.isEmpty()||value.isEmpty())continue;
+         if(matched.id.equals(id)){
+           if(!hasSpecLabel(matched,key)&&matched.specRows.size()<80){
+             matched.specRows.add(new String[]{key,value});
+             applyBasicSpec(matched,key,value);
+           }
+         }else{
+           String attributed="БЮЛЛЕТЕНЬ №30 (стр. "+page+") · "+key;
+           if(!hasSpecLabel(matched,attributed)&&matched.specRows.size()<80)
+             matched.specRows.add(new String[]{attributed,value});
+         }
+       }
+       if(entry.optBoolean("variantReviewNeeded")&&matched.specRows.size()<80){
+         String warning="БЮЛЛЕТЕНЬ №30 · ПРОВЕРКА МОДИФИКАЦИИ";
+         if(!hasSpecLabel(matched,warning))matched.specRows.add(new String[]{warning,
+           "Одинаковое название встречается на нескольких страницах; принадлежность к одной модификации не подтверждена."});
+       }
+     }
+     save(c,drones);
+     prefs.edit().putInt("bulletin30_revision",BULLETIN30_REVISION).apply();
+   }catch(Exception e){
+     android.util.Log.w("BPLA-INFO","2025 bulletin import skipped: "+e.getClass().getSimpleName());
    }
  }
  public static void save(Context c,List<Drone> list){JSONArray a=new JSONArray();for(Drone d:list)try{a.put(d.json());}catch(Exception ignored){}c.getSharedPreferences(PREFS,0).edit().putString(KEY,a.toString()).apply();}
