@@ -22,6 +22,15 @@ def eligible_source(entry):
     return True
 
 
+def review_priority(entry):
+    """Process likely unobstructed candidates first; never grant approval."""
+    notes = str(entry.get("visual_review_notes", "")).lower()
+    obstructed = ("hands overlap", "hand overlaps", "wing tip leaves", "cropped",
+                  "overlap body", "overlap wing", "partially obscured")
+    return (sum(term in notes for term in obstructed),
+            str(entry.get("model_id", "")), str(entry.get("view", "")))
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--index", default="research/photos/armyinform_review.json")
@@ -33,7 +42,6 @@ def main():
     import numpy as np
     from PIL import Image
     data = json.loads(Path(args.index).read_text(encoding="utf-8"))
-    print("Index top-level:", list(data) if isinstance(data,dict) else "list")
     # Only indexed, SHA-verified originals may become mask proposals.
     indexes = [data]
     supplemental = Path("research/photos/source_index.json")
@@ -51,7 +59,7 @@ def main():
                 if existing and (existing[1] != sha or existing[2].get("model_id") != entry.get("model_id")):
                     raise ValueError(f"Conflicting source provenance for {source.name}")
                 candidates[source.name] = (source, sha, entry)
-    files = [candidates[k] for k in sorted(candidates)][:args.limit]
+    files = sorted(candidates.values(), key=lambda item: (review_priority(item[2]), item[0].name))[:args.limit]
     out = Path(args.output)
     out.mkdir(parents=True,exist_ok=True)
     manifest = []
