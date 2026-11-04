@@ -8,6 +8,7 @@ on:
       - 'scripts/verify_mask_rgb.py'
       - 'tests/test_verify_mask_rgb.py'
       - 'tests/test_triage_mask_proposals.py'
+      - 'tests/test_photo_proposal_provenance.py'
       - '.github/workflows/photo-mask-proposals.yml'
       - 'research/photos/originals/**'
 permissions:
@@ -26,6 +27,8 @@ jobs:
         run: python scripts/propose_unapproved_masks.py --limit 26
       - name: Test conservative proposal triage
         run: python -m unittest discover -s tests -p 'test_triage_mask_proposals.py' -v
+      - name: Test source attribution gate
+        run: python -m unittest discover -s tests -p 'test_photo_proposal_provenance.py' -v
       - name: Test original RGB integrity verifier
         run: python -m unittest discover -s tests -p 'test_verify_mask_rgb.py' -v
       - name: Verify every proposed cutout retains original RGB pixels
