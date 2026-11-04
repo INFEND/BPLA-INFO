@@ -91,6 +91,7 @@ public final class MainActivity extends Activity {
         b.setOnClickListener(v->click.run());return b;
     }
     private void setup(){
+        cardRenderEpoch++; // Cancel any pending batch from the previous screen.
         getWindow().setStatusBarColor(t.bg);getWindow().setNavigationBarColor(t.bg);
         int flags=t.mode==2?View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR|View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR:0;
         getWindow().getDecorView().setSystemUiVisibility(flags);

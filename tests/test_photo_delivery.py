@@ -26,7 +26,7 @@ class LocalPhotoRegressionTests(unittest.TestCase):
                       'purgeLegacyCache(Context context)', 'new File(app.getCacheDir(),"uav-photos")',
                       '"bundled_photos.json"', '"apk-assets-only"'):
             self.assertIn(token, JAVA)
-        self.assertIn("PhotoLibrary.purgeLegacyCache(this)", UI)
+        self.assertIn("PhotoLibrary.purgeLegacyCache(app)", UI)
         self.assertIn("Фото пока не добавлены.", UI)
         self.assertIn("savePickedPhoto(", UI)
 
