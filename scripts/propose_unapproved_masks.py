@@ -103,8 +103,8 @@ def main():
         name=src.stem
         Image.fromarray(alpha,"L").save(out/(name+"_mask.png"))
         Image.fromarray(rgba,"RGBA").save(out/(name+"_preview.png"))
-        manifest.append({"original":str(src),"sha256":actual_sha,"model_name":entry.get("model_name", ""),"model_id":entry.get("model_id", ""),
-                         "author":entry["author"],"license":entry["license"],"source_page":entry["source_page"],
+        manifest.append({"original":str(src),"sha256":actual_sha,"model_name":entry.get("model_name", ""),"model_id":entry.get("model_id", ""),"view":entry.get("view", ""),
+                         "author":entry["author"],"license":entry["license"],"license_url":entry.get("license_url", ""),"source_page":entry["source_page"],
                          "rights_evidence":entry.get("rights_evidence", ""),
                          "mask":name+"_mask.png","preview":name+"_preview.png","status":"UNAPPROVED_AUTOMATIC_PROPOSAL","manual_visual_review":False,"rgb_modified":False})
         print("PROPOSAL",src.name,w,h)
