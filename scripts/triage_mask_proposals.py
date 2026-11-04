@@ -4,6 +4,8 @@ import argparse
 import json
 from pathlib import Path
 from PIL import Image
+import cv2
+import numpy as np
 
 def inspect_entry(root, entry):
     mask_path = root / entry["mask"]
@@ -31,6 +33,14 @@ def inspect_entry(root, entry):
             reasons.append("foreground_too_small")
         if fg > total * 0.85:
             reasons.append("foreground_too_large")
+        # Reject masks dominated by disconnected islands or stray foreground pixels.
+        binary = np.asarray(a, dtype=np.uint8) > 127
+        count, labels, stats, _ = cv2.connectedComponentsWithStats(binary.astype(np.uint8), 8)
+        areas = sorted((int(stats[i, cv2.CC_STAT_AREA]) for i in range(1, count)), reverse=True)
+        if areas and sum(areas[1:]) > sum(areas) * 0.08:
+            reasons.append("fragmented_foreground")
+        if len([area for area in areas if area >= max(20, total * 0.002)]) > 3:
+            reasons.append("multiple_large_components")
         return {"status": "REJECT" if reasons else "NEEDS_MANUAL_VISUAL_REVIEW",
                 "reasons": reasons, "foreground_fraction": round(fg / total, 5),
                 "size": [w, h], "visual_review_approved": False}
