@@ -1,0 +1,28 @@
+name: Photo mask proposals (review only)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/propose_unapproved_masks.py'
+      - '.github/workflows/photo-mask-proposals.yml'
+      - 'research/photos/originals/**'
+permissions:
+  contents: read
+jobs:
+  proposals:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install image tools
+        run: python -m pip install --disable-pip-version-check pillow numpy opencv-python-headless
+      - name: Create unapproved candidate masks from original pixels
+        run: python scripts/propose_unapproved_masks.py --limit 26
+      - name: Upload review previews, never APK assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: BPLA-unapproved-mask-proposals
+          path: staging/mask_candidates/
+          retention-days: 7
