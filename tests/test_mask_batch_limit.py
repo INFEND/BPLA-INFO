@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageDraw
 
 
 class ProposalBatchLimitTests(unittest.TestCase):
@@ -19,7 +19,9 @@ class ProposalBatchLimitTests(unittest.TestCase):
             entries = []
             for index in range(2):
                 path = originals / f"{index}.png"
-                Image.new("RGB", (128, 128), (70 + index * 30, 90, 110)).save(path)
+                image = Image.new("RGB", (128, 128), (70 + index * 30, 90, 110))
+                ImageDraw.Draw(image).ellipse((30, 30, 98, 98), fill=(220, 35, 25))
+                image.save(path)
                 digest = hashlib.sha256(path.read_bytes()).hexdigest()
                 entries.append({
                     "archived_original": str(path),
