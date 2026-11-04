@@ -19,6 +19,10 @@ permissions:
 jobs:
   proposals:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        offset: [0, 26, 52, 78]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -27,7 +31,7 @@ jobs:
       - name: Install image tools
         run: python -m pip install --disable-pip-version-check pillow numpy opencv-python-headless
       - name: Create unapproved candidate masks from original pixels
-        run: python scripts/propose_unapproved_masks.py --limit 26
+        run: python scripts/propose_unapproved_masks.py --limit 26 --offset ${{ matrix.offset }}
       - name: Test conservative proposal triage
         run: python -m unittest discover -s tests -p 'test_triage_mask_proposals.py' -v
       - name: Test source attribution gate
@@ -47,6 +51,6 @@ jobs:
       - name: Upload review previews, never APK assets
         uses: actions/upload-artifact@v4
         with:
-          name: BPLA-unapproved-mask-proposals
+          name: BPLA-unapproved-mask-proposals-${{ matrix.offset }}
           path: staging/mask_candidates/
           retention-days: 7
