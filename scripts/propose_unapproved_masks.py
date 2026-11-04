@@ -77,7 +77,14 @@ def main():
         if actual_sha != expected_sha:
             print("SKIP SHA256 MISMATCH", src.name)
             continue
-        rgb=np.array(Image.open(src).convert("RGB"))
+        # Corrupt archives must not abort the rest of the photo batch.
+        try:
+            with Image.open(src) as image:
+                image.load()
+                rgb = np.array(image.convert("RGB"))
+        except (OSError, ValueError, Image.DecompressionBombError) as exc:
+            print("SKIP IMAGE DECODE", src.name, str(exc)[:100])
+            continue
         h,w=rgb.shape[:2]
         if min(h,w)<64:
             continue
