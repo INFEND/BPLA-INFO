@@ -59,11 +59,13 @@ def main():
                 if existing and (existing[1] != sha or existing[2].get("model_id") != entry.get("model_id")):
                     raise ValueError(f"Conflicting source provenance for {source.name}")
                 candidates[source.name] = (source, sha, entry)
-    files = sorted(candidates.values(), key=lambda item: (review_priority(item[2]), item[0].name))[:args.limit]
+    files = sorted(candidates.values(), key=lambda item: (review_priority(item[2]), item[0].name))
     out = Path(args.output)
     out.mkdir(parents=True,exist_ok=True)
     manifest = []
     for src, expected_sha, entry in files:
+        if len(manifest) >= args.limit:
+            break
         if not src.is_file() or src.suffix.lower() not in (".jpg",".jpeg",".webp",".png"):
             continue
         raw=src.read_bytes()
