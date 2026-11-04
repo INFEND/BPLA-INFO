@@ -6,7 +6,7 @@ import pathlib
 import unittest
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
-ASSET=ROOT/"app/src/main/assets/catalog_album_2026.json.gz"
+ASSET=ROOT/"app/src/main/assets/catalog_album_2026.dat"
 STORE=ROOT/"app/src/main/java/dev/infend/bplainfo/DroneStore.java"
 UI=ROOT/"app/src/main/java/dev/infend/bplainfo/MainActivity.java"
 

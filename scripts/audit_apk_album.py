@@ -10,8 +10,8 @@ import zipfile
 if len(sys.argv)!=2:
     raise SystemExit("Usage: audit_apk_album.py FILE.apk")
 apk=pathlib.Path(sys.argv[1])
-asset="assets/catalog_album_2026.json.gz"
-source=pathlib.Path("app/src/main/assets/catalog_album_2026.json.gz").read_bytes()
+asset="assets/catalog_album_2026.dat"
+source=pathlib.Path("app/src/main/assets/catalog_album_2026.dat").read_bytes()
 with zipfile.ZipFile(apk) as z:
     raw=z.read(asset)
     if raw!=source:

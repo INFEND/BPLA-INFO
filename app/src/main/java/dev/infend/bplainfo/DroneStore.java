@@ -346,7 +346,7 @@ public final class DroneStore {
  private static void mergeAlbum(Context c,ArrayList<Drone> drones){
    android.content.SharedPreferences prefs=c.getSharedPreferences(PREFS,0);
    if(prefs.getInt("album_revision",0)>=ALBUM_REVISION)return;
-   try(java.io.InputStream raw=c.getAssets().open("catalog_album_2026.json.gz");
+   try(java.io.InputStream raw=c.getAssets().open("catalog_album_2026.dat");
        java.io.InputStream in=new java.util.zip.GZIPInputStream(raw)){
      java.io.ByteArrayOutputStream output=new java.io.ByteArrayOutputStream();
      byte[] buf=new byte[8192];int len;
