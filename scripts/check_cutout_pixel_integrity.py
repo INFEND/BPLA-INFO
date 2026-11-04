@@ -26,6 +26,7 @@ def inspect(original_path, cutout_path, tolerance=3):
         transparent = 0
         partial = 0
         changed = 0
+        changed_partial = 0
         bounds = [out.width, out.height, -1, -1]
         for i, (a, b) in enumerate(zip(original, pixels)):
             alpha = b[3]
@@ -41,14 +42,18 @@ def inspect(original_path, cutout_path, tolerance=3):
                     changed += 1
             else:
                 partial += 1
+                if any(abs(a[c] - b[c]) > tolerance for c in range(3)):
+                    changed_partial += 1
         if opaque == 0 or transparent == 0:
             raise ValueError("Missing opaque subject or transparent background")
         border_contact = (bounds[0] == 0 or bounds[1] == 0 or
                           bounds[2] == out.width - 1 or bounds[3] == out.height - 1)
         return {"size": list(out.size), "opaque_pixels": opaque,
                 "transparent_pixels": transparent, "partial_alpha_pixels": partial,
-                "changed_opaque_pixels": changed, "touches_border": border_contact,
-                "pixel_preservation_pass": changed == 0 and not border_contact,
+                "changed_opaque_pixels": changed,
+                "changed_partial_alpha_pixels": changed_partial,
+                "touches_border": border_contact,
+                "pixel_preservation_pass": changed == 0 and changed_partial == 0 and not border_contact,
                 "visual_review_approved": False}
 
 
