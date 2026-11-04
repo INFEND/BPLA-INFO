@@ -41,7 +41,10 @@ def main():
     parser.add_argument("--originals", default="research/photos/originals")
     parser.add_argument("--output", default="staging/mask_candidates")
     parser.add_argument("--limit", type=int, default=26)
+    parser.add_argument("--offset", type=int, default=0, help="Skip this many eligible SHA-verified originals before proposing masks")
     args = parser.parse_args()
+    if args.limit < 1 or args.offset < 0:
+        parser.error("--limit must be positive and --offset must be nonnegative")
     import cv2
     import numpy as np
     from PIL import Image
@@ -67,6 +70,7 @@ def main():
     out = Path(args.output)
     out.mkdir(parents=True,exist_ok=True)
     manifest = []
+    eligible_seen = 0
     for src, expected_sha, entry in files:
         if len(manifest) >= args.limit:
             break
@@ -77,6 +81,10 @@ def main():
         if actual_sha != expected_sha:
             print("SKIP SHA256 MISMATCH", src.name)
             continue
+        if eligible_seen < args.offset:
+            eligible_seen += 1
+            continue
+        eligible_seen += 1
         # Corrupt archives must not abort the rest of the photo batch.
         try:
             with Image.open(src) as image:
