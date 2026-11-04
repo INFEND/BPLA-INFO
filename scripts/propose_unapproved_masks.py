@@ -20,14 +20,32 @@ def main():
     from PIL import Image
     data = json.loads(Path(args.index).read_text(encoding="utf-8"))
     print("Index top-level:", list(data) if isinstance(data,dict) else "list")
-    files = sorted(Path(args.originals).glob("*"))
+    # Only indexed, SHA-verified originals may become mask proposals.
+    indexes = [data]
+    supplemental = Path("research/photos/source_index.json")
+    if supplemental.exists() and Path(args.index).resolve() != supplemental.resolve():
+        indexes.append(json.loads(supplemental.read_text(encoding="utf-8")))
+    candidates = {}
+    for index in indexes:
+        for entry in index.get("entries", []):
+            archived, sha = entry.get("archived_original"), entry.get("sha256")
+            if not archived or not sha:
+                continue
+            source = Path(archived)
+            if source.parent.resolve() == Path(args.originals).resolve():
+                candidates[source.name] = (source, sha, entry.get("model_name", ""))
+    files = [candidates[k] for k in sorted(candidates)][:args.limit]
     out = Path(args.output)
     out.mkdir(parents=True,exist_ok=True)
     manifest = []
-    for src in files[:args.limit]:
+    for src, expected_sha, model_name in files:
         if not src.is_file() or src.suffix.lower() not in (".jpg",".jpeg",".webp",".png"):
             continue
         raw=src.read_bytes()
+        actual_sha = hashlib.sha256(raw).hexdigest()
+        if actual_sha != expected_sha:
+            print("SKIP SHA256 MISMATCH", src.name)
+            continue
         rgb=np.array(Image.open(src).convert("RGB"))
         h,w=rgb.shape[:2]
         if min(h,w)<64:
@@ -47,7 +65,7 @@ def main():
         name=src.stem
         Image.fromarray(alpha,"L").save(out/(name+"_mask.png"))
         Image.fromarray(rgba,"RGBA").save(out/(name+"_preview.png"))
-        manifest.append({"original":str(src),"sha256":hashlib.sha256(raw).hexdigest(),"mask":name+"_mask.png","preview":name+"_preview.png","status":"UNAPPROVED_AUTOMATIC_PROPOSAL","manual_visual_review":False,"rgb_modified":False})
+        manifest.append({"original":str(src),"sha256":actual_sha,"model_name":model_name,"mask":name+"_mask.png","preview":name+"_preview.png","status":"UNAPPROVED_AUTOMATIC_PROPOSAL","manual_visual_review":False,"rgb_modified":False})
         print("PROPOSAL",src.name,w,h)
     (out/"manifest.json").write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     print("Unapproved proposals:",len(manifest))
