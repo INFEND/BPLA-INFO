@@ -11,8 +11,15 @@ from pathlib import Path
 
 def eligible_source(entry):
     """Only source-index records with redistribution provenance can enter QA."""
-    required = ("archived_original", "sha256", "license", "author", "source_page")
-    return all(isinstance(entry.get(key), str) and entry[key].strip() for key in required)
+    required = ("archived_original", "sha256", "license", "author", "source_page", "model_id", "model_name", "rights_evidence")
+    if not all(isinstance(entry.get(key), str) and entry[key].strip() for key in required):
+        return False
+    license_text = entry["license"].strip().lower()
+    if any(bad in license_text for bad in ("unknown", "unverified", "all rights reserved", "no derivatives", "no-derivatives", "nd 4.0")):
+        return False
+    if entry.get("publication_status") == "rejected":
+        return False
+    return True
 
 
 def main():
@@ -40,6 +47,9 @@ def main():
                 continue
             source = Path(archived)
             if source.parent.resolve() == Path(args.originals).resolve():
+                existing = candidates.get(source.name)
+                if existing and (existing[1] != sha or existing[2].get("model_id") != entry.get("model_id")):
+                    raise ValueError(f"Conflicting source provenance for {source.name}")
                 candidates[source.name] = (source, sha, entry)
     files = [candidates[k] for k in sorted(candidates)][:args.limit]
     out = Path(args.output)
