@@ -145,12 +145,12 @@ public final class DroneStore {
    if(u.startsWith("ПРОИЗВОДИТЕЛЬ"))d.set(2,value);
    else if(u.startsWith("РАЗМАХ КРЫЛ"))d.set(3,value);
    else if(u.startsWith("МАКСИМАЛЬНАЯ СКОРОСТЬ"))d.set(5,value);
-   else if(u.startsWith("ДАЛЬНОСТЬ ДЕЙСТВИЯ"))d.set(6,value);
+   else if(u.startsWith("ДАЛЬНОСТЬ ДЕЙСТВИЯ")||u.equals("ДАЛЬНОСТЬ")||u.equals("ДАЛЬНОСТЬ ХОДА"))d.set(6,value);
    else if(u.startsWith("РАБОЧАЯ ВЫСОТА"))d.set(7,value);
    else if(u.startsWith("ПРАКТИЧЕСКИЙ ПОТОЛОК"))d.set(8,value);
    else if(u.startsWith("МАССА ПОЛЕЗНОЙ НАГРУЗКИ"))d.set(9,value);
-   else if(u.startsWith("ВЗЛЕТНЫЙ ВЕС")||u.startsWith("ВЗЛЕТНАЯ МАССА"))d.set(10,value);
-   else if(u.startsWith("ВРЕМЯ ПОЛЕТА")||u.startsWith("ПРОДОЛЖИТЕЛЬНОСТЬ ПОЛЕТА"))d.set(11,value);
+   else if(u.startsWith("ВЗЛЕТНЫЙ ВЕС")||u.startsWith("ВЗЛЕТНАЯ МАССА")||u.equals("МАССА"))d.set(10,value);
+   else if(u.startsWith("ВРЕМЯ ПОЛЕТА")||u.startsWith("ПРОДОЛЖИТЕЛЬНОСТЬ ПОЛЕТА")||u.equals("ВРЕМЯ РАБОТЫ"))d.set(11,value);
    else if(u.startsWith("СПОСОБ СТАРТА"))d.set(12,value);
    else if(u.startsWith("ТИП ДВИГАТЕЛЯ"))d.set(13,value);
  }
@@ -400,7 +400,7 @@ public final class DroneStore {
          found.sourceGroup=type;
          drones.add(found);
        }
-       if(added&&!country.isEmpty())found.set(2,country+" (по альбому)");
+       if(added&&!country.isEmpty())found.specRows.add(new String[]{"СТРАНА (ПО АЛЬБОМУ)",country});
        for(int j=0;j<rows.length();j++){
          JSONArray pair=rows.optJSONArray(j);
          if(pair==null||pair.length()!=2)continue;

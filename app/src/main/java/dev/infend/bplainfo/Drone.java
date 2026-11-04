@@ -70,11 +70,11 @@ public final class Drone {
    return "";
  }
  public String previewSpan(){String a=firstSpecification("РАЗМАХ КРЫЛЬЕВ");return a.isEmpty()?get(3):a;}
- public String previewEndurance(){String a=firstSpecification("АВТОНОМНОСТЬ","ВРЕМЯ ПОЛЕТА","ПРОДОЛЖИТЕЛЬНОСТЬ ПОЛЕТА");return a.isEmpty()?get(11):a;}
+ public String previewEndurance(){String a=firstSpecification("АВТОНОМНОСТЬ","ВРЕМЯ ПОЛЕТА","ПРОДОЛЖИТЕЛЬНОСТЬ ПОЛЕТА","ВРЕМЯ РАБОТЫ");return a.isEmpty()?get(11):a;}
  public String previewSpeed(){
    String a=firstSpecification("МАКСИМАЛЬНАЯ СКОРОСТЬ","МАКС. ГОРИЗОНТ. СКОРОСТЬ","КРЕЙСЕРСКАЯ СКОРОСТЬ","СКОРОСТЬ АТАКИ");
    return a.isEmpty()?get(5):a;
  }
- public String previewRange(){String a=firstSpecification("ДАЛЬНОСТЬ ПОЛЕТА","РАДИУС ДЕЙСТВИЯ","ДАЛЬНОСТЬ СВЯЗИ");return a.isEmpty()?get(6):a;}
+ public String previewRange(){String a=firstSpecification("ДАЛЬНОСТЬ ПОЛЕТА","РАДИУС ДЕЙСТВИЯ","ДАЛЬНОСТЬ СВЯЗИ","ДАЛЬНОСТЬ","ДАЛЬНОСТЬ ХОДА");return a.isEmpty()?get(6):a;}
  public static double numeric(String s){if(s==null)return -1;java.util.regex.Matcher m=java.util.regex.Pattern.compile("-?\\d+(?:[.,]\\d+)?").matcher(s);try{return m.find()?Double.parseDouble(m.group().replace(',','.')):-1;}catch(Exception e){return -1;}}
 }
