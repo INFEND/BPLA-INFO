@@ -128,7 +128,7 @@ public final class MainActivity extends Activity {
     private void home(){
         showingDetail=false;showingSettings=false;activeSettingsSection="";
         setup();
-        titleBar("БПЛА  ИНФО","Каталог БПЛА",null);
+        titleBar("БПЛА  ИНФО","Каталог беспилотных систем",null);
         LinearLayout inner=vertical();inner.setPadding(dp(14),0,dp(14),dp(30));
         ScrollView sc=scroll(root);sc.addView(inner);
         LinearLayout controls=horizontal();inner.addView(controls,margins(-1,-2,0,9));
@@ -147,7 +147,7 @@ public final class MainActivity extends Activity {
         });
         HorizontalScrollView strip=new HorizontalScrollView(this);strip.setHorizontalScrollBarEnabled(false);
         LinearLayout chips=horizontal();strip.addView(chips);inner.addView(strip,margins(-1,47,0,6));
-        for(String group:new String[]{"Все","Самолётный","Мультикоптер","Многомоторный","Барражирующие боеприпасы"}){
+        for(String group:new String[]{"Все","Самолётный","Мультикоптер","Многомоторный","Барражирующие боеприпасы","Морской","Наземный"}){
             TextView chip=button(group,category.equals(group),()->{category=group;home();});
             chips.addView(chip,margins(-2,39,0,0));
         }
@@ -168,6 +168,8 @@ public final class MainActivity extends Activity {
             if(category.equals("Мультикоптер")&&!kind.equals("мультикоптер"))continue;
             if(category.equals("Многомоторный")&&!kind.equals("многомоторный"))continue;
             if(category.equals("Барражирующие боеприпасы")&&!kind.contains("барраж"))continue;
+            if(category.equals("Морской")&&!kind.equals("морской"))continue;
+            if(category.equals("Наземный")&&!kind.equals("наземный"))continue;
             if(!q.isEmpty()){
                 boolean match=false;
                 for(String field:d.values){if(field!=null&&field.toLowerCase(Locale.ROOT).contains(q)){match=true;break;}}

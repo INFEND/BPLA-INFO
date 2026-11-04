@@ -72,6 +72,10 @@ jobs:
         run: |
           python3 scripts/audit_apk_vsu_pdf.py app/build/outputs/apk/debug/app-debug.apk
           python3 scripts/audit_apk_vsu_pdf.py app/build/outputs/apk/release/app-release-unsigned.apk
+      - name: Audit 156-page album physically embedded in APKs
+        run: |
+          python3 scripts/audit_apk_album.py app/build/outputs/apk/debug/app-debug.apk
+          python3 scripts/audit_apk_album.py app/build/outputs/apk/release/app-release-unsigned.apk
       - name: Upload test APK before signing
         if: steps.compilation.outcome == 'success'
         uses: actions/upload-artifact@v4
@@ -106,6 +110,9 @@ jobs:
       - name: Audit user PDF catalog embedded in signed APK
         if: github.event_name != 'pull_request'
         run: python3 scripts/audit_apk_vsu_pdf.py dist/BPLA-INFO.apk
+      - name: Audit album inside signed APK
+        if: github.event_name != 'pull_request'
+        run: python3 scripts/audit_apk_album.py dist/BPLA-INFO.apk
       - name: Generate and verify update.json
         if: github.event_name != 'pull_request'
         id: info

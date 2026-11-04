@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import java.util.*;
 public final class DroneStore {
  private static final String PREFS="bpla_store",KEY="catalog_v1";
- public static ArrayList<Drone> load(Context c){String raw=c.getSharedPreferences(PREFS,0).getString(KEY,null);ArrayList<Drone> out=new ArrayList<>();if(raw==null){out.add(Drone.mara());mergeSeed(c,out);mergeEnrichment(c,out);mergeBulletin30(c,out);mergeVsuPdf(c,out);save(c,out);return out;}try{JSONArray a=new JSONArray(raw);for(int i=0;i<a.length()&&i<5000;i++){JSONObject j=a.optJSONObject(i);if(j!=null)out.add(Drone.fromJson(j));}}catch(Exception e){out.add(Drone.mara());}mergeSeed(c,out);mergeEnrichment(c,out);mergeBulletin30(c,out);mergeVsuPdf(c,out);return out;}
+ public static ArrayList<Drone> load(Context c){String raw=c.getSharedPreferences(PREFS,0).getString(KEY,null);ArrayList<Drone> out=new ArrayList<>();if(raw==null){out.add(Drone.mara());mergeSeed(c,out);mergeEnrichment(c,out);mergeBulletin30(c,out);mergeVsuPdf(c,out);mergeAlbum(c,out);save(c,out);return out;}try{JSONArray a=new JSONArray(raw);for(int i=0;i<a.length()&&i<5000;i++){JSONObject j=a.optJSONObject(i);if(j!=null)out.add(Drone.fromJson(j));}}catch(Exception e){out.add(Drone.mara());}mergeSeed(c,out);mergeEnrichment(c,out);mergeBulletin30(c,out);mergeVsuPdf(c,out);mergeAlbum(c,out);return out;}
  private static final int SEED_REVISION=2;
  private static void mergeSeed(Context c,ArrayList<Drone> drones){
    android.content.SharedPreferences prefs=c.getSharedPreferences(PREFS,0);
@@ -299,6 +299,124 @@ public final class DroneStore {
      prefs.edit().putInt("vsu_pdf_revision",VSU_PDF_REVISION).apply();
    }catch(Exception e){
      android.util.Log.w("BPLA-INFO","VSU PDF import unavailable: "+e.getClass().getSimpleName());
+   }
+ }
+
+
+ private static final int ALBUM_REVISION=1;
+
+ /** Strictly reviewed name equivalents. Do not merge unrelated variants by fuzzy matching. */
+ private static String albumAliasTarget(int physicalPage){
+   switch(physicalPage){
+     case 11:return "lostarmour-pdf-2024-054"; // UJ-22 Airborne
+     case 13:return "bulletin30-2025-p034l"; // D-80 Discovery
+     case 16:return "bulletin30-2025-p194r"; // UJ-26 / Бобер
+     case 31:return "lostarmour-pdf-2024-063"; // Bayraktar TB2
+     case 32:return "lostarmour-pdf-2024-066"; // Mugin-5 Pro
+     case 33:return "bulletin30-2025-p035r"; // АН-БК-1
+     case 34:return "lostarmour-pdf-2024-068"; // PD-1
+     case 37:return "bulletin30-2025-p031l"; // Primoco UAV One 150
+     case 48:return "lostarmour-pdf-2024-071"; // Raybird-3
+     case 49:return "lostarmour-pdf-2024-064"; // Luna NG
+     case 51:return "lostarmour-pdf-2024-055"; // Bayraktar Mini
+     case 52:return "bulletin30-2025-p020l"; // Лелека-100
+     case 53:return "lostarmour-pdf-2024-057"; // Чаклун
+     case 54:return "lostarmour-pdf-2024-081"; // German Quantum Systems Vector, not Pakistani
+     case 55:return "bulletin30-2025-p021l"; // Shark
+     case 56:return "lostarmour-pdf-2024-037"; // MINI SHARK
+     case 58:return "lostarmour-pdf-2024-019"; // Quantix Recon
+     case 59:return "lostarmour-pdf-2024-051"; // Spectator M1
+     case 60:return "lostarmour-pdf-2024-042"; // PUMA LE
+     case 61:return "lostarmour-pdf-2024-041"; // PUMA AE
+     case 63:return "bulletin30-2025-p008l"; // ScanEagle
+     case 64:return "lostarmour-pdf-2024-032"; // FlyEye
+     case 86:return "lostarmour-pdf-2024-002"; // DeltaQuad Pro
+     case 88:return "lostarmour-pdf-2024-005"; // А1-СМ Фурия
+     case 89:return "lostarmour-pdf-2024-001"; // Бумеранг
+     case 90:return "lostarmour-pdf-2024-014"; // Sparrow (not Sparrow LE)
+     case 91:return "lostarmour-pdf-2024-003"; // Домаха
+     case 100:return "lostarmour-pdf-2024-015"; // Валькирия
+     default:return "";
+   }
+ }
+ /**
+  * Offline, text-only 156-physical-page album. Never replace user data or
+  * transfer unknown-rights images, operational notes, or arms information.
+  */
+ private static void mergeAlbum(Context c,ArrayList<Drone> drones){
+   android.content.SharedPreferences prefs=c.getSharedPreferences(PREFS,0);
+   if(prefs.getInt("album_revision",0)>=ALBUM_REVISION)return;
+   try(java.io.InputStream raw=c.getAssets().open("catalog_album_2026.json.gz");
+       java.io.InputStream in=new java.util.zip.GZIPInputStream(raw)){
+     java.io.ByteArrayOutputStream output=new java.io.ByteArrayOutputStream();
+     byte[] buf=new byte[8192];int len;
+     while((len=in.read(buf))!=-1){
+       output.write(buf,0,len);
+       if(output.size()>300_000)throw new java.io.IOException("Album asset oversized");
+     }
+     JSONObject book=new JSONObject(output.toString("UTF-8"));
+     if(book.optInt("schema")!=1||
+        !"fb7b03cf3a0693fc2233c82ab3de0eaf1b3e9cb9b61585c7a9fb62ab2eaa94fe".equals(
+          book.optString("sourcePdfSha256","")))
+       throw new org.json.JSONException("Wrong user album identity");
+     JSONArray entries=book.getJSONArray("entries");
+     if(entries.length()!=146||book.optInt("photosImported",-1)!=0||
+        book.optInt("operationsImported",-1)!=0)
+       throw new org.json.JSONException("Incomplete album");
+     HashSet<String> ids=new HashSet<>();
+     for(int i=0;i<entries.length();i++){
+       JSONObject item=entries.getJSONObject(i);
+       String id=item.optString("id",""),name=item.optString("name","").trim();
+       String type=item.optString("type","").trim(),country=item.optString("country","").trim();
+       int page=item.optInt("page",0);
+       JSONArray rows=item.optJSONArray("specRows");
+       if(!id.equals(String.format(java.util.Locale.ROOT,"album-2026-p%03d",page))||
+          name.isEmpty()||page<5||page>155||rows==null||rows.length()<1||
+          !ids.add(id)||!(
+           type.equals("Самолётный")||type.equals("Коптерный")||
+           type.equals("Барражирующий")||type.equals("Морской")||type.equals("Наземный")))
+         throw new org.json.JSONException("Invalid album entry "+i);
+       Drone found=null;
+       String matchId=albumAliasTarget(page);
+       if(!matchId.isEmpty()){
+         for(Drone candidate:drones)if(candidate.id.equals(matchId)){found=candidate;break;}
+       }
+       if(found==null){
+         for(Drone candidate:drones){
+           if(candidate.id.equals(id)){found=candidate;break;}
+           if(matchId.isEmpty()&&normalizeModelName(candidate.name()).equals(normalizeModelName(name))
+              &&sameCategory(candidate.type(),type)){found=candidate;break;}
+         }
+       }
+       boolean added=found==null;
+       if(added){
+         found=new Drone();
+         found.id=id;
+         found.set(0,name);
+         found.set(1,type);
+         found.set(14,"Альбом беспилотных систем, PDF стр. "+page);
+         found.set(15,"Показания загруженного пользователем альбома; независимо не проверены.");
+         found.catalogSource="Альбом беспилотных систем, PDF стр. "+page;
+         found.sourceGroup=type;
+         drones.add(found);
+       }
+       if(added&&!country.isEmpty())found.set(2,country+" (по альбому)");
+       for(int j=0;j<rows.length();j++){
+         JSONArray pair=rows.optJSONArray(j);
+         if(pair==null||pair.length()!=2)continue;
+         String key=pair.optString(0,"").trim(),value=pair.optString(1,"").trim();
+         if(key.isEmpty()||value.isEmpty())continue;
+         String label=added?key:"АЛЬБОМ (PDF стр. "+page+") · "+key;
+         if(!hasSpecLabel(found,label)&&found.specRows.size()<80){
+           found.specRows.add(new String[]{label,value});
+           if(added)applyBasicSpec(found,key,value);
+         }
+       }
+     }
+     save(c,drones);
+     prefs.edit().putInt("album_revision",ALBUM_REVISION).apply();
+   }catch(Exception e){
+     android.util.Log.w("BPLA-INFO","Album import skipped: "+e.getClass().getSimpleName());
    }
  }
 
