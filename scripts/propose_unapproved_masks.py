@@ -29,16 +29,16 @@ def main():
     for index in indexes:
         for entry in index.get("entries", []):
             archived, sha = entry.get("archived_original"), entry.get("sha256")
-            if not archived or not sha:
+            if not archived or not sha or not entry.get("license") or not entry.get("author") or not entry.get("source_page"):
                 continue
             source = Path(archived)
             if source.parent.resolve() == Path(args.originals).resolve():
-                candidates[source.name] = (source, sha, entry.get("model_name", ""))
+                candidates[source.name] = (source, sha, entry)
     files = [candidates[k] for k in sorted(candidates)][:args.limit]
     out = Path(args.output)
     out.mkdir(parents=True,exist_ok=True)
     manifest = []
-    for src, expected_sha, model_name in files:
+    for src, expected_sha, entry in files:
         if not src.is_file() or src.suffix.lower() not in (".jpg",".jpeg",".webp",".png"):
             continue
         raw=src.read_bytes()
@@ -65,7 +65,10 @@ def main():
         name=src.stem
         Image.fromarray(alpha,"L").save(out/(name+"_mask.png"))
         Image.fromarray(rgba,"RGBA").save(out/(name+"_preview.png"))
-        manifest.append({"original":str(src),"sha256":actual_sha,"model_name":model_name,"mask":name+"_mask.png","preview":name+"_preview.png","status":"UNAPPROVED_AUTOMATIC_PROPOSAL","manual_visual_review":False,"rgb_modified":False})
+        manifest.append({"original":str(src),"sha256":actual_sha,"model_name":entry.get("model_name", ""),"model_id":entry.get("model_id", ""),
+                         "author":entry["author"],"license":entry["license"],"source_page":entry["source_page"],
+                         "rights_evidence":entry.get("rights_evidence", ""),
+                         "mask":name+"_mask.png","preview":name+"_preview.png","status":"UNAPPROVED_AUTOMATIC_PROPOSAL","manual_visual_review":False,"rgb_modified":False})
         print("PROPOSAL",src.name,w,h)
     (out/"manifest.json").write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     print("Unapproved proposals:",len(manifest))
