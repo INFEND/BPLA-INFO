@@ -62,6 +62,10 @@ jobs:
         run: |
           python3 scripts/audit_apk_photos.py app/build/outputs/apk/debug/app-debug.apk
           python3 scripts/audit_apk_photos.py app/build/outputs/apk/release/app-release-unsigned.apk
+      - name: Audit embedded 2025 bulletin catalog in APKs
+        run: |
+          python3 scripts/audit_apk_bulletin.py app/build/outputs/apk/debug/app-debug.apk
+          python3 scripts/audit_apk_bulletin.py app/build/outputs/apk/release/app-release-unsigned.apk
       - name: Upload test APK before signing
         if: steps.compilation.outcome == 'success'
         uses: actions/upload-artifact@v4
@@ -90,6 +94,9 @@ jobs:
       - name: Audit signed APK photo bytes
         if: github.event_name != 'pull_request'
         run: python3 scripts/audit_apk_photos.py dist/BPLA-INFO.apk
+      - name: Audit embedded 2025 bulletin in signed APK
+        if: github.event_name != 'pull_request'
+        run: python3 scripts/audit_apk_bulletin.py dist/BPLA-INFO.apk
       - name: Generate and verify update.json
         if: github.event_name != 'pull_request'
         id: info

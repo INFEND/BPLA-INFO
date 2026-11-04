@@ -38,6 +38,25 @@ class ProgressTests(unittest.TestCase):
         })
         self.save()
 
+    def test_bulletin_expands_catalog_without_fusing_existing_name(self):
+        bulletin={"schema":1,"entries":[
+            {"id":"bulletin-one","name":"Model Three","type":"Коптерный"},
+            {"id":"bulletin-two","name":"model one","type":"Самолётный"}
+        ]}
+        (self.assets/"bulletin30_2025.json").write_text(json.dumps(bulletin))
+        r=module.audit(self.root)
+        self.assertEqual(r["models_total"],3)
+        self.assertEqual(r["minimum_verified_photos_required"],9)
+        self.assertEqual(r["models_complete"],0)
+
+    def test_bulletin_different_category_does_not_auto_merge(self):
+        base=json.loads((self.assets/"catalog_lostarmour_2024_verified.json").read_text())
+        base["entries"][0]["type"]="Самолётный"
+        (self.assets/"catalog_lostarmour_2024_verified.json").write_text(json.dumps(base))
+        bulletin={"schema":1,"entries":[{"id":"bulletin-same-name","name":"model one","type":"Коптерный"}]}
+        (self.assets/"bulletin30_2025.json").write_text(json.dumps(bulletin))
+        self.assertEqual(module.audit(self.root)["models_total"],3)
+
     def test_empty_requires_six(self):
         r = module.audit(self.root)
         self.assertEqual((r["models_total"], r["minimum_verified_photos_required"],

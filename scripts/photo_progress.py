@@ -9,14 +9,41 @@ REQUIRED = 3
 APPROVED = {"background_removed_verified"}
 REVIEWED = {"needs_background_review"}
 
+
+def _bulletin_union_models(assets, catalog):
+    """Combine independent model catalogs without claiming ambiguous variants match."""
+    import re
+    def norm(s):
+        return re.sub(r'[^\w]+', '', (s or '').upper().replace('Ё','Е'), flags=re.UNICODE)
+    models = {row["id"]:row["name"] for row in catalog["entries"]}
+    if len(models)!=len(catalog["entries"]):
+        raise ValueError("Duplicate catalog model IDs")
+    model_types={row["id"]:row.get("type","") for row in catalog["entries"]}
+    extra_file=assets/"bulletin30_2025.json"
+    if extra_file.is_file():
+        bulletin=json.loads(extra_file.read_text("utf-8"))
+        if bulletin.get("schema")!=1:
+            raise ValueError("Unsupported bulletin schema")
+        for row in bulletin["entries"]:
+            new_type=row["type"]
+            new_name=norm(row["name"])
+            duplicate=any(norm(name)==new_name and (
+                not model_types.get(mid) or model_types[mid].casefold()==new_type.casefold()
+            ) for mid,name in models.items())
+            if duplicate:
+                continue
+            if row["id"] in models:
+                raise ValueError("Duplicate cross-catalog ID: "+row["id"])
+            models[row["id"]]=row["name"]
+            model_types[row["id"]]=new_type
+    return models
+
 def audit(root):
     root = Path(root)
     assets = root / "app/src/main/assets"
     catalog = json.loads((assets / "catalog_lostarmour_2024_verified.json").read_text("utf-8"))
     manifest = json.loads((assets / "bundled_photos.json").read_text("utf-8"))
-    models = {row["id"]: row["name"] for row in catalog["entries"]}
-    if len(models) != len(catalog["entries"]):
-        raise ValueError("Duplicate catalog model IDs")
+    models = _bulletin_union_models(assets, catalog)
     files_seen = set()
     hashes_seen = set()
     complete = []
