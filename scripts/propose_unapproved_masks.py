@@ -6,6 +6,7 @@ No AI synthesis, no RGB modification, no APK import. Manual review required.
 import argparse
 import hashlib
 import json
+import re
 from pathlib import Path
 
 
@@ -15,7 +16,10 @@ def eligible_source(entry):
     if not all(isinstance(entry.get(key), str) and entry[key].strip() for key in required):
         return False
     license_text = entry["license"].strip().lower()
-    if any(bad in license_text for bad in ("unknown", "unverified", "all rights reserved", "no derivatives", "no-derivatives", "nd 4.0")):
+    # ND licences prohibit derivative cutouts; reject all common CC BY-ND forms.
+    if (re.search(r"(?<![a-z])(?:cc[ -])?by(?:-nc)?-nd(?:[ -]|$)", license_text)
+            or re.search(r"creativecommons\.org/licenses/by(?:-nc)?-nd/", license_text)
+            or any(bad in license_text for bad in ("unknown", "unverified", "all rights reserved", "no derivatives", "no-derivatives", "no derivatives allowed", "nd 4.0"))):
         return False
     if entry.get("publication_status") == "rejected":
         return False
@@ -56,7 +60,7 @@ def main():
             source = Path(archived)
             if source.parent.resolve() == Path(args.originals).resolve():
                 existing = candidates.get(source.name)
-                if existing and (existing[1] != sha or existing[2].get("model_id") != entry.get("model_id")):
+                if existing and (existing[1] != sha or any(existing[2].get(field) != entry.get(field) for field in ("model_id", "author", "license", "source_page", "rights_evidence"))):
                     raise ValueError(f"Conflicting source provenance for {source.name}")
                 candidates[source.name] = (source, sha, entry)
     files = sorted(candidates.values(), key=lambda item: (review_priority(item[2]), item[0].name))
