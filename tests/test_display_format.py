@@ -23,7 +23,7 @@ SAMPLES={
 
 class DisplayRegression(unittest.TestCase):
     def test_code_and_icons(self):
-        self.assertIn('titleBar("БПЛА  ИНФО","Каталог БПЛА",null)',ACTIVITY)
+        self.assertIn('titleBar("БПЛА  ИНФО","Каталог беспилотных систем",null)',ACTIVITY)
         self.assertNotIn("АВИАЦИОННЫЙ АРХИВ",ACTIVITY)
         self.assertIn('private String activeSettingsSection=""',ACTIVITY)
         self.assertIn("settingsBodies.put(id,body)",ACTIVITY)
