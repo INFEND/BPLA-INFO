@@ -8,6 +8,13 @@ import hashlib
 import json
 from pathlib import Path
 
+
+def eligible_source(entry):
+    """Only source-index records with redistribution provenance can enter QA."""
+    required = ("archived_original", "sha256", "license", "author", "source_page")
+    return all(isinstance(entry.get(key), str) and entry[key].strip() for key in required)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--index", default="research/photos/armyinform_review.json")
@@ -29,7 +36,7 @@ def main():
     for index in indexes:
         for entry in index.get("entries", []):
             archived, sha = entry.get("archived_original"), entry.get("sha256")
-            if not archived or not sha or not entry.get("license") or not entry.get("author") or not entry.get("source_page"):
+            if not eligible_source(entry):
                 continue
             source = Path(archived)
             if source.parent.resolve() == Path(args.originals).resolve():
