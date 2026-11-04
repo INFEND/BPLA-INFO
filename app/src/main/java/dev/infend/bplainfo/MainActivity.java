@@ -29,6 +29,8 @@ public final class MainActivity extends Activity {
     private final ArrayList<Drone> records=new ArrayList<>();
     private ThemePrefs t;
     private LinearLayout root,listHost;
+    private int cardRenderEpoch=0;
+    private static final int CARD_BATCH_SIZE=24;
     private String searchTerm="",category="Все";
     private boolean onlyFavorites=false,descending=false,showingDetail=false;
     private int sortBy=0;
@@ -38,14 +40,36 @@ public final class MainActivity extends Activity {
     @Override public void onCreate(Bundle state){
         super.onCreate(state);
         t=new ThemePrefs(this);
-        PhotoLibrary.purgeLegacyCache(this);
-        records.addAll(DroneStore.load(this));
-        home();
-        long last=getPreferences(0).getLong("ota_checked",0);
-        if(System.currentTimeMillis()-last>24*60*60*1000L){
-            getPreferences(0).edit().putLong("ota_checked",System.currentTimeMillis()).apply();
-            new OtaUpdater(this).check(true);
-        }
+        // Show a live screen before reading/migrating the large bundled catalog.
+        setup();
+        LinearLayout loading=vertical();
+        loading.setPadding(dp(22),dp(32),dp(22),dp(24));
+        loading.addView(text("ЗАГРУЗКА КАТАЛОГА",18,t.fg,true));
+        loading.addView(text("Подготовка карточек БПЛА…",13,t.muted,false));
+        root.addView(loading);
+        new Thread(()->{
+            try{
+                Context app=getApplicationContext();
+                PhotoLibrary.purgeLegacyCache(app);
+                ArrayList<Drone> loaded=DroneStore.load(app);
+                runOnUiThread(()->{
+                    if(isFinishing()||isDestroyed())return;
+                    records.addAll(loaded);
+                    home();
+                    long last=getPreferences(0).getLong("ota_checked",0);
+                    if(System.currentTimeMillis()-last>24*60*60*1000L){
+                        getPreferences(0).edit().putLong("ota_checked",System.currentTimeMillis()).apply();
+                        new OtaUpdater(this).check(true);
+                    }
+                });
+            }catch(Exception error){
+                runOnUiThread(()->{
+                    if(isFinishing()||isDestroyed())return;
+                    loading.addView(text("Не удалось открыть каталог: "+error.getClass().getSimpleName(),13,t.muted,false));
+                    loading.addView(button("ПОВТОРИТЬ",true,()->recreate()));
+                });
+            }
+        },"bpla-catalog-load").start();
     }
     private int dp(float v){return (int)(getResources().getDisplayMetrics().density*v+0.5f);}
     private LinearLayout vertical(){LinearLayout l=new LinearLayout(this);l.setOrientation(LinearLayout.VERTICAL);return l;}
@@ -169,7 +193,9 @@ public final class MainActivity extends Activity {
     }
     private void cards(){
         if(listHost==null)return;
-        listHost.removeAllViews();
+        final LinearLayout target=listHost;
+        final int epoch=++cardRenderEpoch;
+        target.removeAllViews();
         List<Drone> found=filtered();
         View parent=(View)listHost.getParent();
         if(parent!=null){View count=((View)parent).getRootView().findViewById(1234001);if(count instanceof TextView)((TextView)count).setText("НАЙДЕНО: "+found.size()+"   |   ВСЕГО: "+records.size());}
@@ -180,8 +206,13 @@ public final class MainActivity extends Activity {
             empty.addView(text("Измени фильтр или создай новую запись",13,t.muted,false));
             listHost.addView(empty,margins(-1,-2,0,8));return;
         }
-        int index=0;
-        for(Drone d:found){
+        renderCardBatch(target,found,0,epoch);
+    }
+    private void renderCardBatch(LinearLayout target,List<Drone> found,int offset,int epoch){
+        if(epoch!=cardRenderEpoch||target!=listHost||isFinishing()||isDestroyed())return;
+        int end=Math.min(found.size(),offset+CARD_BATCH_SIZE);
+        for(int index=offset;index<end;index++){
+            Drone d=found.get(index);
             LinearLayout card=vertical();card.setPadding(dp(13),dp(12),dp(13),dp(12));card.setBackground(panel(t.panel,20));
             listHost.addView(card,margins(-1,-2,0,5));
             LinearLayout head=horizontal();card.addView(head);
@@ -205,7 +236,9 @@ public final class MainActivity extends Activity {
             stat(stats,"ДАЛЬНОСТЬ",d.previewRange());
             card.setOnClickListener(v->detail(d));
             if(t.animations){card.setAlpha(0f);card.setTranslationY(dp(13));card.animate().alpha(1).translationY(0).setDuration(180).setStartDelay(Math.min(index,8)*25L).start();}
-            index++;
+        }
+        if(end<found.size()){
+            target.postDelayed(()->renderCardBatch(target,found,end,epoch),12L);
         }
     }
     private void stat(LinearLayout row,String label,String value){
