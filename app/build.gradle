@@ -29,5 +29,6 @@ def prepareAirAlbum = tasks.register('prepareAirAlbum', Exec) {
       '--output', file("${generatedAirAssets}/catalog_album_2026.dat"))
 }
 tasks.configureEach {
-  if (name.startsWith('merge') && name.endsWith('Assets')) dependsOn(prepareAirAlbum)
+  if ((name.startsWith('merge') && name.endsWith('Assets')) ||
+      name.toLowerCase().contains('lint')) dependsOn(prepareAirAlbum)
 }
