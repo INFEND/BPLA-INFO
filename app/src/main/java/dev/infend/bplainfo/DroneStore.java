@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import java.util.*;
 public final class DroneStore {
  private static final String PREFS="bpla_store",KEY="catalog_v1";
- public static ArrayList<Drone> load(Context c){String raw=c.getSharedPreferences(PREFS,0).getString(KEY,null);ArrayList<Drone> out=new ArrayList<>();if(raw==null){out.add(Drone.mara());mergeSeed(c,out);mergeEnrichment(c,out);mergeBulletin30(c,out);mergeVsuPdf(c,out);mergeAlbum(c,out);save(c,out);return out;}try{JSONArray a=new JSONArray(raw);for(int i=0;i<a.length()&&i<5000;i++){JSONObject j=a.optJSONObject(i);if(j!=null)out.add(Drone.fromJson(j));}}catch(Exception e){out.add(Drone.mara());}mergeSeed(c,out);mergeEnrichment(c,out);mergeBulletin30(c,out);mergeVsuPdf(c,out);mergeAlbum(c,out);return out;}
+ public static ArrayList<Drone> load(Context c){String raw=c.getSharedPreferences(PREFS,0).getString(KEY,null);ArrayList<Drone> out=new ArrayList<>();if(raw==null){out.add(Drone.mara());mergeSeed(c,out);mergeEnrichment(c,out);mergeBulletin30(c,out);mergeVsuPdf(c,out);mergeAlbum(c,out);mergeVerifiedSources(c,out);save(c,out);return out;}try{JSONArray a=new JSONArray(raw);for(int i=0;i<a.length()&&i<5000;i++){JSONObject j=a.optJSONObject(i);if(j!=null)out.add(Drone.fromJson(j));}}catch(Exception e){out.add(Drone.mara());}mergeSeed(c,out);mergeEnrichment(c,out);mergeBulletin30(c,out);mergeVsuPdf(c,out);mergeAlbum(c,out);mergeVerifiedSources(c,out);return out;}
  private static final int SEED_REVISION=2;
  private static void mergeSeed(Context c,ArrayList<Drone> drones){
    android.content.SharedPreferences prefs=c.getSharedPreferences(PREFS,0);
@@ -419,6 +419,54 @@ public final class DroneStore {
      prefs.edit().putInt("album_revision",ALBUM_REVISION).apply();
    }catch(Exception e){
      android.util.Log.w("BPLA-INFO","Album import skipped: "+e.getClass().getSimpleName());
+   }
+ }
+
+
+ private static final int VERIFIED_SOURCES_REVISION=1;
+ /** Two user-visible facts verified against primary/official reference sources.
+  * Data is read from APK assets only; the application does not fetch the web. */
+ private static void mergeVerifiedSources(Context c,ArrayList<Drone> drones){
+   android.content.SharedPreferences prefs=c.getSharedPreferences(PREFS,0);
+   if(prefs.getInt("verified_sources_revision",0)>=VERIFIED_SOURCES_REVISION)return;
+   try(java.io.InputStream input=c.getAssets().open("official_specs_2026.json")){
+     java.io.ByteArrayOutputStream out=new java.io.ByteArrayOutputStream();
+     byte[] buffer=new byte[4096];int n;
+     while((n=input.read(buffer))!=-1){
+       out.write(buffer,0,n);
+       if(out.size()>25000)throw new java.io.IOException("Source catalogue too large");
+     }
+     JSONObject book=new JSONObject(out.toString("UTF-8"));
+     if(book.optInt("schema")!=1)throw new org.json.JSONException("Wrong source catalogue schema");
+     JSONArray entries=book.getJSONArray("entries");
+     if(entries.length()!=2)throw new org.json.JSONException("Source catalogue incomplete");
+     for(int i=0;i<entries.length();i++){
+       JSONObject source=entries.getJSONObject(i);
+       String id=source.getString("modelId");
+       String fact=source.getString("factName");
+       String value=source.getString("factValue");
+       String credit=source.getString("sourceLabel");
+       if(!("lostarmour-pdf-2024-006".equals(id)||
+            "bulletin30-2025-p036l".equals(id)))throw new org.json.JSONException("Unknown source target");
+       if(!("ТЕМПЕРАТУРА ЭКСПЛУАТАЦИИ".equals(fact)||
+            "ПРОИЗВОДИТЕЛЬ".equals(fact)))throw new org.json.JSONException("Unknown fact type");
+       for(Drone drone:drones)if(drone.id.equals(id)){
+         boolean found=false;
+         for(String[] row:drone.specRows)if(row.length>=2&&
+              row[0].equalsIgnoreCase(fact)&&row[1].equalsIgnoreCase(value)){
+            found=true;break;
+         }
+         if(!found&&drone.specRows.size()<79){
+           drone.specRows.add(new String[]{fact,value});
+           drone.specRows.add(new String[]{"ИСТОЧНИК ДОПОЛНЕННЫХ ДАННЫХ",credit});
+         }
+         break;
+       }
+     }
+     save(c,drones);
+     prefs.edit().putInt("verified_sources_revision",VERIFIED_SOURCES_REVISION).apply();
+   }catch(Exception e){
+     android.util.Log.w("BPLA-INFO","Verified source import skipped: "+e.getClass().getSimpleName());
    }
  }
 

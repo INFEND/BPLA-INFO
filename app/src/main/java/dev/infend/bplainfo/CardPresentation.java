@@ -41,6 +41,9 @@ public final class CardPresentation {
     public static String manufacturer(String source) {
         if(source==null||source.trim().isEmpty())return "";
         String s=source.trim();
+        // A country is an origin, not the name of a manufacturer.
+        if(s.equalsIgnoreCase("Украина")||s.equalsIgnoreCase("Ukraine")||
+           s.equalsIgnoreCase("Россия")||s.equalsIgnoreCase("Russia"))return "";
         return s.startsWith("«")&&s.endsWith("»")?s:"«"+s.replace("«","").replace("»","")+"»";
     }
     public static String engine(String source) {

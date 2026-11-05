@@ -76,6 +76,10 @@ jobs:
         run: |
           python3 scripts/audit_apk_album.py app/build/outputs/apk/debug/app-debug.apk
           python3 scripts/audit_apk_album.py app/build/outputs/apk/release/app-release-unsigned.apk
+      - name: Audit official source facts embedded in debug and release APK
+        run: |
+          python3 scripts/audit_apk_official_specs.py app/build/outputs/apk/debug/app-debug.apk
+          python3 scripts/audit_apk_official_specs.py app/build/outputs/apk/release/app-release-unsigned.apk
       - name: Upload test APK before signing
         if: steps.compilation.outcome == 'success'
         uses: actions/upload-artifact@v4
@@ -113,6 +117,9 @@ jobs:
       - name: Audit album inside signed APK
         if: github.event_name != 'pull_request'
         run: python3 scripts/audit_apk_album.py dist/BPLA-INFO.apk
+      - name: Audit official source facts in signed APK
+        if: github.event_name != 'pull_request'
+        run: python3 scripts/audit_apk_official_specs.py dist/BPLA-INFO.apk
       - name: Generate and verify update.json
         if: github.event_name != 'pull_request'
         id: info

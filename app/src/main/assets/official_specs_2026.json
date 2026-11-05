@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "asOf": "2026-11-05",
+  "policy": "Offline text-only, source-verified general specifications; no photo URLs, remote runtime requests or operational instructions.",
+  "entries": [
+    {
+      "modelId": "lostarmour-pdf-2024-006",
+      "modelName": "FURY",
+      "factName": "ТЕМПЕРАТУРА ЭКСПЛУАТАЦИИ",
+      "factValue": "от −20 до +50 °C",
+      "sourceLabel": "UAVTEK, официальная страница FURY, проверено 05.11.2026",
+      "sourceUrl": "https://www.uavtek.com/fury",
+      "status": "manufacturer-reported, not independently measured"
+    },
+    {
+      "modelId": "bulletin30-2025-p036l",
+      "modelName": "AQ-400 Коса",
+      "factName": "ПРОИЗВОДИТЕЛЬ",
+      "factValue": "Terminal Autonomy",
+      "sourceLabel": "US Army ODIN, AQ-400 SCYTHE, проверено 05.11.2026",
+      "sourceUrl": "https://odin.t2com.army.mil/WEG/Asset/aa029b5c7c5a0499829e5d1112f4dc96",
+      "status": "documented manufacturer, not independently audited"
+    }
+  ]
+}
