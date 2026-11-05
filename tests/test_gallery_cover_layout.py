@@ -33,12 +33,20 @@ class PhotoGalleryLayoutTests(unittest.TestCase):
         self.assertIn('frame.setOnClickListener(v->showDocumentaryPhoto(p))',GALLERY)
         self.assertIn('frame.setOnClickListener(v->showFullPhoto(path))',GALLERY)
 
-    def test_fullscreen_attribution_remains(self):
-        fullscreen=SOURCE[SOURCE.index('private void showDocumentaryPhoto('):]
-        self.assertIn('item.needsReview()',fullscreen)
-        self.assertIn('item.author',fullscreen)
-        self.assertIn('item.license',fullscreen)
+    def test_fullscreen_has_no_metadata_controls(self):
+        begin=SOURCE.index('private void showDocumentaryPhoto(')
+        end=SOURCE.index('private void showFullPhoto(',begin)
+        fullscreen=SOURCE[begin:end]
+        self.assertIn('PhotoLibrary.into(',fullscreen)
         self.assertIn('ImageView.ScaleType.FIT_CENTER',fullscreen)
+        for label in ('ИСТОЧНИК','ЛИЦЕНЗИЯ','СНИМОК ЗАГРУЖЕН',
+                      'ОРИГИНАЛЬНАЯ ФОТОГРАФИЯ','item.author','item.license'):
+            self.assertNotIn(label,fullscreen)
+        # Provenance remains in APK metadata even though the viewer hides it.
+        library=(ROOT/"app/src/main/java/dev/infend/bplainfo/PhotoLibrary.java").read_text("utf-8")
+        self.assertIn('this.author=author',library)
+        self.assertIn('this.license=license',library)
+        self.assertIn('this.sha256=sha256',library)
 
 if __name__=='__main__':
     unittest.main()
