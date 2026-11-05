@@ -374,6 +374,27 @@ public final class MainActivity extends Activity {
         group.addView(amount,new LinearLayout.LayoutParams(-1,-2));
     }
     private void save(){DroneStore.save(this,records);}
+
+    /** Edge-to-edge rounded thumbnail with a 6dp gutter. The bitmap itself is not stretched. */
+    private FrameLayout addPhotoThumbnail(LinearLayout gallery){
+        FrameLayout frame=new FrameLayout(this);
+        frame.setBackground(outlined(t.soft,t.stroke,14));
+        frame.setClipToOutline(true);
+        // Draw the hairline border on top of the photo rather than behind it.
+        frame.setForeground(outlined(Color.TRANSPARENT,t.stroke,14));
+        LinearLayout.LayoutParams position=new LinearLayout.LayoutParams(dp(250),dp(190));
+        position.rightMargin=dp(6);
+        gallery.addView(frame,position);
+        return frame;
+    }
+    private ImageView addThumbnailImage(FrameLayout frame){
+        ImageView photo=new ImageView(this);
+        photo.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        photo.setAdjustViewBounds(false);
+        frame.addView(photo,new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
+        return photo;
+    }
     private void detail(Drone d){
         hideKeyboard();showingDetail=true;setup();
         titleBar(CardPresentation.name(d.name()),"ТЕХНИЧЕСКАЯ КАРТОЧКА",this::home);
@@ -395,45 +416,32 @@ public final class MainActivity extends Activity {
         }else{
             HorizontalScrollView strip=new HorizontalScrollView(this);
             strip.setHorizontalScrollBarEnabled(false);
-            photos.addView(strip,margins(-1,214,0,5));
+            photos.addView(strip,margins(-1,196,0,5));
             LinearLayout gallery=horizontal();strip.addView(gallery);
             // Decode only locally bundled photos that are visible in the strip.
             // No image download or remote photo URLs are used in this application.
             java.util.ArrayList<View> lazyFrames=new java.util.ArrayList<>();
             java.util.ArrayList<Runnable> lazyLoads=new java.util.ArrayList<>();
-            int photoNumber=0;
+            int photoNumber=documentary.size();
             for(PhotoLibrary.Photo p:documentary){
-                final int number=++photoNumber;
-                LinearLayout frame=vertical();frame.setPadding(dp(6),dp(6),dp(6),dp(4));
-                frame.setBackground(outlined(t.soft,t.stroke,14));
-                gallery.addView(frame,margins(250,202,0,5));
-                ImageView photo=new ImageView(this);
-                photo.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                photo.setImageResource(R.drawable.ic_airplane);photo.setColorFilter(t.muted);
-                frame.addView(photo,new LinearLayout.LayoutParams(-1,0,1));
-                TextView photoStatus=text(p.needsReview()?"ПРЕДВАРИТЕЛЬНОЕ ФОТО":"ФОТО В ПРИЛОЖЕНИИ",10,p.needsReview()?t.accent:t.muted,true);
-                frame.addView(photoStatus,margins(-1,-2,0,2));
+                FrameLayout frame=addPhotoThumbnail(gallery);
+                ImageView photo=addThumbnailImage(frame);
+                photo.setImageResource(R.drawable.ic_airplane);
+                photo.setColorFilter(t.muted);
                 final boolean[] requested={false};
                 lazyFrames.add(frame);
                 lazyLoads.add(()->{
                     if(requested[0])return;
                     requested[0]=true;
-                    photoStatus.setText("ОТКРЫТИЕ ФОТО…");
-                    PhotoLibrary.into(this,p,photo,1350,ok->
-                        photoStatus.setText(ok?(p.needsReview()?"ИСХОДНИК · ФОН НЕ УДАЛЁН":"СНИМОК "+number):PhotoLibrary.unavailableMessage(this)));
+                    PhotoLibrary.into(this,p,photo,1350);
                 });
-
                 frame.setOnClickListener(v->showDocumentaryPhoto(p));
             }
             for(String path:images){
                 if(photoNumber++>=15)break;
-                LinearLayout frame=vertical();frame.setPadding(dp(6),dp(6),dp(6),dp(4));
-                frame.setBackground(outlined(t.soft,t.stroke,14));
-                gallery.addView(frame,margins(250,202,0,5));
-                ImageView photo=new ImageView(this);photo.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                frame.addView(photo,new LinearLayout.LayoutParams(-1,0,1));
+                FrameLayout frame=addPhotoThumbnail(gallery);
+                ImageView photo=addThumbnailImage(frame);
                 try{photo.setImageURI(Uri.parse(path));}catch(Exception ignored){}
-
                 frame.setOnClickListener(v->showFullPhoto(path));
             }
             strip.setOnScrollChangeListener((v,x,y,oldX,oldY)->
