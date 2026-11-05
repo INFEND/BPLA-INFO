@@ -32,7 +32,7 @@ public final class MainActivity extends Activity {
     private int cardRenderEpoch=0;
     private static final int CARD_BATCH_SIZE=18;
     private String searchTerm="",category="Все";
-    private boolean onlyFavorites=false,descending=false,showingDetail=false;
+    private boolean onlyFavorites=false,onlyWithPhotos=false,descending=false,showingDetail=false;
     private int sortBy=0;
     private Drone pendingImage;
     private final String[] sortNames={"По названию","По производителю","По скорости","По дальности","По массе","По размаху крыла"};
@@ -246,11 +246,25 @@ public final class MainActivity extends Activity {
         listHost=vertical();inner.addView(listHost);
         cards();
     }
+    /** Include only real bundled APK photos and locally attached photos, never remote URLs. */
+    private boolean hasAttachedPhoto(Drone d){
+        for(String image:d.galleryUris){
+            if(isLocalPhotoUri(image))return true;
+        }
+        if(isLocalPhotoUri(d.imageUri))return true;
+        return !PhotoLibrary.forDrone(this,d).isEmpty();
+    }
+    private static boolean isLocalPhotoUri(String uri){
+        if(uri==null)return false;
+        String value=uri.trim().toLowerCase(Locale.ROOT);
+        return value.startsWith("content://")||value.startsWith("file://");
+    }
     private List<Drone> filtered(){
         ArrayList<Drone> a=new ArrayList<>();
         String q=searchTerm.toLowerCase(Locale.ROOT).trim();
         for(Drone d:records){
             if(onlyFavorites&&!d.favorite)continue;
+            if(onlyWithPhotos&&!hasAttachedPhoto(d))continue;
             String kind=d.displayType().toLowerCase(Locale.ROOT);
             if(category.equals("Самолётный")&&!kind.equals("самолётный"))continue;
             if(category.equals("Мультикоптер")&&!kind.equals("мультикоптер"))continue;
@@ -294,7 +308,7 @@ public final class MainActivity extends Activity {
             LinearLayout empty=vertical();empty.setPadding(dp(20),dp(36),dp(20),dp(36));empty.setGravity(Gravity.CENTER);
             empty.setBackground(panel(t.panel,22));
             empty.addView(text("⌕  Карточки не найдены",18,t.fg,true));
-            empty.addView(text("Измени фильтр или создай новую запись",13,t.muted,false));
+            empty.addView(text(onlyWithPhotos?"Для выбранных моделей пока нет фотографий":"Измени фильтр или создай новую запись",13,t.muted,false));
             listHost.addView(empty,margins(-1,-2,0,8));StartupGuard.completed(this);return;
         }
         // Render after the first UI frame; never construct hundreds of cards in one run.
@@ -324,12 +338,10 @@ public final class MainActivity extends Activity {
             String modelType=d.displayType();
             String subtitle=engine.isEmpty()?modelType:modelType+" | "+engine;
             labels.addView(text(subtitle,13,t.fg,true));
-            TextView star=button(d.favorite?"★":"☆",false,()->{d.favorite=!d.favorite;save();cards();});
-            star.setTextColor(t.accent);head.addView(star,margins(42,42,3,0));
             LinearLayout stats=horizontal();card.addView(stats);
-            stat(stats,"АВТОНОМНОСТЬ",d.previewEndurance());
-            stat(stats,"СКОРОСТЬ",d.previewSpeed());
-            stat(stats,"ДАЛЬНОСТЬ",d.previewRange());
+            stat(stats,"АВТОНОМНОСТЬ",d.previewEndurance(),Gravity.START);
+            stat(stats,"СКОРОСТЬ",d.previewSpeed(),Gravity.CENTER_HORIZONTAL);
+            stat(stats,"ДАЛЬНОСТЬ",d.previewRange(),Gravity.END);
             card.setOnClickListener(v->detail(d));
             if(t.animations){card.setAlpha(0f);card.setTranslationY(dp(13));card.animate().alpha(1).translationY(0).setDuration(180).setStartDelay(Math.min(index,8)*25L).start();}
         }
@@ -345,13 +357,21 @@ public final class MainActivity extends Activity {
             }),margins(-1,44,0,4));
         }
     }
-    private void stat(LinearLayout row,String label,String value){
+    private void stat(LinearLayout row,String label,String value,int alignment){
         String formatted=SpecFormatter.display(value);
         if(formatted.isEmpty())formatted="—";
-        LinearLayout group=vertical();group.setPadding(dp(4),dp(3),dp(3),dp(2));
+        LinearLayout group=vertical();
+        group.setPadding(0,dp(3),0,dp(2));
         row.addView(group,new LinearLayout.LayoutParams(0,-2,1));
-        group.addView(text(label,9,t.muted,true));
-        group.addView(text(formatted,13,t.accent,true));
+        TextView caption=text(label,9,t.muted,true);
+        caption.setGravity(alignment|Gravity.CENTER_VERTICAL);
+        caption.setMinHeight(dp(18));
+        caption.setSingleLine(true);
+        group.addView(caption,new LinearLayout.LayoutParams(-1,-2));
+        TextView amount=text(formatted,13,t.accent,true);
+        amount.setGravity(alignment|Gravity.TOP);
+        amount.setMaxLines(2);
+        group.addView(amount,new LinearLayout.LayoutParams(-1,-2));
     }
     private void save(){DroneStore.save(this,records);}
     private void detail(Drone d){
@@ -508,11 +528,13 @@ public final class MainActivity extends Activity {
         });
     }
     private void sortDialog(){
-        String[] names=new String[sortNames.length+1];
+        String[] names=new String[sortNames.length+2];
         System.arraycopy(sortNames,0,names,0,sortNames.length);
         names[sortNames.length]=descending?"Направление: ↓ убывание":"Направление: ↑ возрастание";
-        UiDialogs.options(this,t,"Сортировка",names,sortBy,choice->{
-            if(choice==sortNames.length)descending=!descending;
+        names[sortNames.length+1]=onlyWithPhotos?"[С ФОТО]  ✓ ВКЛ":"[С ФОТО]  ВЫКЛ";
+        UiDialogs.options(this,t,"Сортировка",names,onlyWithPhotos?sortNames.length+1:sortBy,choice->{
+            if(choice==sortNames.length+1)onlyWithPhotos=!onlyWithPhotos;
+            else if(choice==sortNames.length)descending=!descending;
             else sortBy=choice;
             home();
         });
