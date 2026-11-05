@@ -21,6 +21,12 @@ public class PresentationSmoke {
     eq(CardPresentation.manufacturer("«UAVTEK»"),"«UAVTEK»");
     eq(CardPresentation.engine("ЭЛЕКТРИЧЕСКИЙ"),"Электрический");
     eq(CardPresentation.engine("ДВС"),"ДВС");
+    eq(CardPresentation.engine("ЭЛЕКТРИЧЕСКИЙ"),"Электрический");
+    eq(CardPresentation.engine("ГТД"),"ГТД");
+    eq(CardPresentation.engine("ЭЛЕКТРОДВИГАТЕЛЬ"),"Электродвигатель");
+    eq(CardPresentation.engine("Электрический"),"Электрический");
+    eq(CardPresentation.engine(""),"");
+    eq(CardPresentation.engine(null),"");
     yes(CardPresentation.isAir("Самолётный",""));
     yes(!CardPresentation.isAir("Морской",""));
     yes(!CardPresentation.isAir("","Наземный"));
@@ -55,6 +61,11 @@ class CardPresentationTests(unittest.TestCase):
                 check=True,capture_output=True,text=True)
             subprocess.run(["java","-cp",folder,"dev.infend.bplainfo.PresentationSmoke"],
                 check=True,capture_output=True,text=True)
+    def test_no_android_icu_unsupported_regex(self):
+        formatter=(JAVA/"CardPresentation.java").read_text("utf-8")
+        self.assertNotIn("(?U)", formatter.split("public static String engine(")[1].split("public static String label(")[0].replace("// ICU regex on some Android builds rejects (?U); use portable code points.", ""))
+        self.assertIn("Character.isLetter",formatter)
+        self.assertNotIn('.matches("(?U)',formatter)
     def test_marine_ground_hidden_without_deleting_user_data(self):
         ui=(JAVA/"MainActivity.java").read_text("utf-8")
         store=(JAVA/"DroneStore.java").read_text("utf-8")

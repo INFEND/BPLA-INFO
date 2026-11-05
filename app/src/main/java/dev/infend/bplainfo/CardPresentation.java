@@ -50,7 +50,12 @@ public final class CardPresentation {
         if(source==null)return "";
         String s=source.trim().replaceAll("\\s+"," ");
         if(s.equalsIgnoreCase("ДВС")||s.equalsIgnoreCase("ГТД"))return s.toUpperCase(Locale.ROOT);
-        if(s.length()>1&&s.equals(s.toUpperCase(Locale.ROOT))&&s.matches("(?U).*\\p{L}.*")) {
+        boolean hasLetter=false;
+        for(int i=0;i<s.length();i++){
+            if(Character.isLetter(s.charAt(i))){hasLetter=true;break;}
+        }
+        // ICU regex on some Android builds rejects (?U); use portable code points.
+        if(s.length()>1&&s.equals(s.toUpperCase(Locale.ROOT))&&hasLetter) {
             String lower=s.toLowerCase(Locale.forLanguageTag("ru"));
             return lower.substring(0,1).toUpperCase(Locale.forLanguageTag("ru"))+lower.substring(1);
         }
