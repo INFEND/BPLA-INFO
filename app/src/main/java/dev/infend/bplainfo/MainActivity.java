@@ -737,71 +737,35 @@ public final class MainActivity extends Activity {
         }
         viewer.setOnClickListener(v->dialog.dismiss());
     }
-    private void appendPhotoReferences(LinearLayout bar,String file){
-        // These are optional attribution pages opened only on a user's tap.
-        // Image decoding always uses the physical APK asset in PhotoLibrary.
-        try(java.io.InputStream in=getAssets().open("photo_credits.json")){
-            java.io.ByteArrayOutputStream bytes=new java.io.ByteArrayOutputStream();
-            byte[] buffer=new byte[8192];int n;
-            while((n=in.read(buffer))!=-1){
-                if(bytes.size()+n>2_000_000)throw new java.io.IOException("Photo credits too large");
-                bytes.write(buffer,0,n);
-            }
-            org.json.JSONObject entry=new org.json.JSONObject(bytes.toString("UTF-8")).getJSONObject("items").optJSONObject(file);
-            if(entry==null)return;
-            String[] fields={"source_page","license_page"};
-            String[] labels={"ИСТОЧНИК","ЛИЦЕНЗИЯ"};
-            for(int i=0;i<fields.length;i++){
-                Uri address=Uri.parse(entry.optString(fields[i],""));
-                if(!"https".equals(address.getScheme())||address.getHost()==null)continue;
-                bar.addView(button(labels[i],false,()->{
-                    try{startActivity(new Intent(Intent.ACTION_VIEW,address));}
-                    catch(Exception unavailable){android.widget.Toast.makeText(this,"Не удалось открыть ссылку",android.widget.Toast.LENGTH_SHORT).show();}
-                }),margins(-2,36,0,0));
-            }
-        }catch(Exception ignored){}
-    }
+    /** Photo provenance stays in bundled metadata, not overlaid on the image viewer. */
     private void showDocumentaryPhoto(PhotoLibrary.Photo item){
         android.app.Dialog overlay=new android.app.Dialog(this);
-        LinearLayout content=vertical();
-        content.setPadding(dp(13),dp(13),dp(13),dp(22));
+        FrameLayout content=new FrameLayout(this);
         content.setBackgroundColor(t.bg);
-        LinearLayout bar=horizontal();content.addView(bar,margins(-1,47,0,0));
-        appendPhotoReferences(bar,item.file);
-        View blank=new View(this);
-        bar.addView(blank,new LinearLayout.LayoutParams(0,-1,1));
-        bar.addView(button("✕",false,overlay::dismiss),margins(45,40,0,0));
-        ImageView photo=new ImageView(this);photo.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        photo.setImageResource(R.drawable.ic_airplane);photo.setColorFilter(t.muted);
-        // A weighted zero-height child inside a wrap-content dialog can render
-        // as an invisible image on some Android window implementations.
-        int screenHeight=getResources().getDisplayMetrics().heightPixels;
-        int photoHeight=Math.max(dp(240),Math.min((int)(screenHeight*0.68f),dp(760)));
-        content.addView(photo,new LinearLayout.LayoutParams(-1,photoHeight));
-        String credit=item.needsReview()?"ИСТОЧНИК ТРЕБУЕТ ПРОВЕРКИ":("verified_unmodified_original".equals(item.processingStatus)?"ОРИГИНАЛЬНАЯ ФОТОГРАФИЯ · БЕЗ ИЗМЕНЕНИЙ":"ФОТО ВСТРОЕНО В ПРИЛОЖЕНИЕ");
-        if(!item.author.isEmpty())credit+=" | "+item.author;
-        if(!item.license.isEmpty())credit+=" | "+item.license;
-        if(!item.source.isEmpty())credit+=" | "+item.source;
-        TextView attribution=text(credit,12,t.muted,false);
-        attribution.setPadding(dp(4),dp(8),dp(4),dp(8));
-        content.addView(attribution,margins(-1,-2,0,0));
-        TextView loadStatus=text("ОТКРЫТИЕ ФОТО…",11,t.muted,false);
-        loadStatus.setGravity(Gravity.CENTER);
-        content.addView(loadStatus,margins(-1,30,0,4));
-        // Retry local decoding without closing the viewer; no network is involved.
-        Runnable retry=()->{
-            loadStatus.setText("ОТКРЫТИЕ ФОТО…");
-            PhotoLibrary.into(this,item,photo,2800,ok->
-                loadStatus.setText(ok?"СНИМОК ЗАГРУЖЕН":PhotoLibrary.unavailableMessage(this)));
-        };
-        photo.setOnClickListener(v->retry.run());
-        loadStatus.setOnClickListener(v->retry.run());
+        ImageView photo=new ImageView(this);
+        photo.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        photo.setImageResource(R.drawable.ic_airplane);
+        photo.setColorFilter(t.muted);
+        content.addView(photo,new FrameLayout.LayoutParams(-1,-1));
+        // Keep only a close control. No credits, source/license buttons or load banners.
+        android.widget.TextView close=text("✕",24,t.text,true);
+        close.setGravity(Gravity.CENTER);
+        close.setBackground(panel(t.panel,16));
+        FrameLayout.LayoutParams closeParams=new FrameLayout.LayoutParams(dp(48),dp(48),Gravity.TOP|Gravity.RIGHT);
+        closeParams.setMargins(0,dp(12),dp(12),0);
+        content.addView(close,closeParams);
+        close.setOnClickListener(v->overlay.dismiss());
         overlay.setContentView(content);
         overlay.show();
         if(overlay.getWindow()!=null){
             overlay.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
             overlay.getWindow().setLayout(-1,-1);
         }
+        // Original bytes are loaded locally; tap the image to retry if decoding failed.
+        Runnable retry=()->PhotoLibrary.into(this,item,photo,2800,ok->{
+            if(!ok)android.widget.Toast.makeText(this,PhotoLibrary.unavailableMessage(this),android.widget.Toast.LENGTH_SHORT).show();
+        });
+        photo.setOnClickListener(v->retry.run());
         retry.run();
     }
     private void showFullPhoto(String uri){
