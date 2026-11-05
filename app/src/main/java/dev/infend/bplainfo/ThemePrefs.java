@@ -16,12 +16,22 @@ public final class ThemePrefs {
  };
  public int mode,accentIndex,bg,panel,fg,muted,stroke,accent,buttonBg,soft,subtle;
  public boolean animations,haptics;
+ private static int safeInt(android.content.SharedPreferences p,String key,int fallback){
+  try{return p.getInt(key,fallback);}catch(ClassCastException bad){
+   android.util.Log.w("BPLA-INFO","Invalid theme integer: "+key);return fallback;
+  }
+ }
+ private static boolean safeBoolean(android.content.SharedPreferences p,String key,boolean fallback){
+  try{return p.getBoolean(key,fallback);}catch(ClassCastException bad){
+   android.util.Log.w("BPLA-INFO","Invalid theme setting: "+key);return fallback;
+  }
+ }
  public ThemePrefs(Context c){
   android.content.SharedPreferences p=c.getSharedPreferences("bpla_ui",0);
-  mode=Math.max(0,Math.min(2,p.getInt("mode",0)));
-  accentIndex=Math.max(0,Math.min(PALETTE.length-1,p.getInt("accent",0)));
-  animations=p.getBoolean("animations",true);
-  haptics=p.getBoolean("haptics",true);
+  mode=Math.max(0,Math.min(2,safeInt(p,"mode",0)));
+  accentIndex=Math.max(0,Math.min(PALETTE.length-1,safeInt(p,"accent",0)));
+  animations=safeBoolean(p,"animations",true);
+  haptics=safeBoolean(p,"haptics",true);
   accent=PALETTE[accentIndex];
   if(mode==0){
    bg=0xff000000;panel=0xff0b0b0d;fg=0xfff5f7f9;

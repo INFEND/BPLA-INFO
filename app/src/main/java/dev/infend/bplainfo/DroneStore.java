@@ -5,7 +5,49 @@ import org.json.JSONObject;
 import java.util.*;
 public final class DroneStore {
  private static final String PREFS="bpla_store",KEY="catalog_v1",NON_AIR_ARCHIVE="archived_non_air_v1";
- public static ArrayList<Drone> load(Context c){String raw=c.getSharedPreferences(PREFS,0).getString(KEY,null);ArrayList<Drone> out=new ArrayList<>();if(raw==null){out.add(Drone.mara());mergeSeed(c,out);mergeEnrichment(c,out);mergeBulletin30(c,out);mergeVsuPdf(c,out);mergeAlbum(c,out);mergeVerifiedSources(c,out);save(c,out);return pruneNonAir(c,out);}try{JSONArray a=new JSONArray(raw);for(int i=0;i<a.length()&&i<5000;i++){JSONObject j=a.optJSONObject(i);if(j!=null)out.add(Drone.fromJson(j));}}catch(Exception e){out.add(Drone.mara());}mergeSeed(c,out);mergeEnrichment(c,out);mergeBulletin30(c,out);mergeVsuPdf(c,out);mergeAlbum(c,out);mergeVerifiedSources(c,out);return pruneNonAir(c,out);}
+ public static ArrayList<Drone> load(Context c){String raw=c.getSharedPreferences(PREFS,0).getString(KEY,null);checkpointBeforeMigration(c,raw);ArrayList<Drone> out=new ArrayList<>();if(raw==null){out.add(Drone.mara());mergeSeed(c,out);mergeEnrichment(c,out);mergeBulletin30(c,out);mergeVsuPdf(c,out);mergeAlbum(c,out);mergeVerifiedSources(c,out);save(c,out);return pruneNonAir(c,out);}try{JSONArray a=new JSONArray(raw);for(int i=0;i<a.length()&&i<5000;i++){JSONObject j=a.optJSONObject(i);if(j!=null)out.add(Drone.fromJson(j));}}catch(Exception e){out.add(Drone.mara());}mergeSeed(c,out);mergeEnrichment(c,out);mergeBulletin30(c,out);mergeVsuPdf(c,out);mergeAlbum(c,out);mergeVerifiedSources(c,out);return pruneNonAir(c,out);}
+
+ /**
+  * Before any automatic upgrade touches a saved catalogue, keep a one-time
+  * exact copy outside SharedPreferences and outside app assets. Never overwrite
+  * an existing backup. If storage is insufficient, stop rather than risk data.
+  */
+ private static void checkpointBeforeMigration(Context context,String raw){
+   if(raw==null)return;
+   java.io.File destination=new java.io.File(context.getNoBackupFilesDir(),
+       "catalog_before_1_0_21.json");
+   if(destination.isFile())return;
+   if(raw.length()>8_000_000)throw new IllegalStateException(
+       "Сохранённая база слишком большая для безопасной миграции");
+   android.util.AtomicFile atomic=new android.util.AtomicFile(destination);
+   java.io.FileOutputStream stream=null;
+   try{
+     byte[] bytes=raw.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+     stream=atomic.startWrite();
+     stream.write(bytes);
+     atomic.finishWrite(stream);
+   }catch(Exception error){
+     if(stream!=null)atomic.failWrite(stream);
+     throw new IllegalStateException("Не удалось сохранить резервную копию перед обновлением",error);
+   }
+ }
+
+ /** Read-only recovery view. Does not import, modify or save any catalog rows. */
+ public static ArrayList<String> readOnlyPreview(Context context,int limit) throws Exception {
+   String data=context.getSharedPreferences(PREFS,0).getString(KEY,"[]");
+   JSONArray stored=new JSONArray(data);
+   ArrayList<String> preview=new ArrayList<>();
+   for(int i=0;i<stored.length()&&i<5000&&preview.size()<Math.max(1,limit);i++){
+     JSONObject item=stored.optJSONObject(i);
+     if(item==null)continue;
+     if(!CardPresentation.isAir(item.optString("type"),item.optString("sourceGroup")))
+       continue;
+     String name=item.optString("name","");
+     if(!name.isEmpty())preview.add(CardPresentation.name(name));
+   }
+   return preview;
+ }
+
  private static final int SEED_REVISION=2;
  private static void mergeSeed(Context c,ArrayList<Drone> drones){
    android.content.SharedPreferences prefs=c.getSharedPreferences(PREFS,0);

@@ -39,8 +39,13 @@ public final class MainActivity extends Activity {
 
     @Override public void onCreate(Bundle state){
         super.onCreate(state);
+        StartupGuard.installFatalRecorder(this);
         t=new ThemePrefs(this);
-        // Show a live screen before reading/migrating the large bundled catalog.
+        if(StartupGuard.wasInterrupted(this)){
+            showRecoveryScreen();
+            return;
+        }
+        StartupGuard.begin(this);
         setup();
         LinearLayout loading=vertical();
         loading.setPadding(dp(22),dp(32),dp(22),dp(24));
@@ -50,7 +55,10 @@ public final class MainActivity extends Activity {
         new Thread(()->{
             try{
                 Context app=getApplicationContext();
-                PhotoLibrary.purgeLegacyCache(app);
+                try{PhotoLibrary.purgeLegacyCache(app);}
+                catch(RuntimeException cacheError){
+                    android.util.Log.w("BPLA-INFO","Old cache cleanup skipped",cacheError);
+                }
                 ArrayList<Drone> loaded=DroneStore.load(app);
                 runOnUiThread(()->{
                     if(isFinishing()||isDestroyed())return;
@@ -58,7 +66,7 @@ public final class MainActivity extends Activity {
                         records.clear();
                         records.addAll(loaded);
                         home();
-                    }catch(RuntimeException uiError){
+                    }catch(Throwable uiError){
                         showStartupFailure("Отображение каталога",uiError);
                         return;
                     }
@@ -68,50 +76,88 @@ public final class MainActivity extends Activity {
                             getPreferences(0).edit().putLong("ota_checked",System.currentTimeMillis()).apply();
                             new OtaUpdater(this).check(true);
                         }
-                    }catch(RuntimeException updateError){
+                    }catch(Throwable updateError){
                         android.util.Log.w("BPLA-INFO","Background OTA check skipped",updateError);
                     }
                 });
-            }catch(Exception error){
+            }catch(Throwable failure){
+                StartupGuard.capture(getApplicationContext(),"Чтение/миграция каталога",failure);
                 runOnUiThread(()->{
                     if(isFinishing()||isDestroyed())return;
-                    showStartupFailure("Чтение каталога",error);
+                    showStartupFailure("Чтение/миграция каталога",failure);
                 });
             }
         },"bpla-catalog-load").start();
     }
+
+    /**
+     * Safe screen after a previous crash / Android process kill while loading.
+     * Never auto-repeat an unsafe migration. No database writes or deletions.
+     */
+    private void showRecoveryScreen(){
+        setup();
+        LinearLayout pane=vertical();
+        pane.setPadding(dp(22),dp(25),dp(22),dp(24));
+        scroll(root).addView(pane);
+        pane.addView(text("РЕЖИМ ВОССТАНОВЛЕНИЯ",20,t.fg,true));
+        pane.addView(text("Предыдущая загрузка каталога была прервана. "+
+            "Данные приложения, избранное и локальные фотографии не удалялись.",14,t.muted,false));
+        pane.addView(text("Автоматический повтор отключён, чтобы избежать цикла вылетов.",13,t.muted,false));
+        pane.addView(button("СКОПИРОВАТЬ ОТЧЁТ",true,()->copyStartupReport()));
+        pane.addView(button("ПОСМОТРЕТЬ СОХРАНЁННЫЕ НАЗВАНИЯ",false,this::showRecoveryPreview));
+        pane.addView(button("ПОВТОРИТЬ ЗАГРУЗКУ",false,()->{
+            StartupGuard.completed(this);
+            recreate();
+        }));
+    }
+
+    private void copyStartupReport(){
+        String report=StartupGuard.report(this);
+        android.content.ClipboardManager clipboard=(android.content.ClipboardManager)
+            getSystemService(Context.CLIPBOARD_SERVICE);
+        if(clipboard!=null){
+            clipboard.setPrimaryClip(android.content.ClipData.newPlainText("БПЛА ИНФО, диагностика",report));
+            Toast.makeText(this,"Отчёт скопирован",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showRecoveryPreview(){
+        setup();
+        LinearLayout pane=vertical();
+        pane.setPadding(dp(20),dp(24),dp(20),dp(20));
+        scroll(root).addView(pane);
+        pane.addView(text("СОХРАНЁННЫЕ МОДЕЛИ",19,t.fg,true));
+        pane.addView(text("Только чтение. Миграция и сохранение отключены.",13,t.muted,false));
+        pane.addView(text("Чтение…",13,t.muted,false));
+        new Thread(()->{
+            try{
+                ArrayList<String> names=DroneStore.readOnlyPreview(getApplicationContext(),80);
+                runOnUiThread(()->{
+                    if(isFinishing()||isDestroyed())return;
+                    pane.removeViewAt(pane.getChildCount()-1);
+                    for(String name:names)pane.addView(text(name,14,t.fg,false));
+                    if(names.isEmpty())pane.addView(text("Нет доступных записей",14,t.muted,false));
+                    pane.addView(button("НАЗАД",false,this::showRecoveryScreen));
+                });
+            }catch(Throwable error){
+                StartupGuard.capture(this,"Чтение сохранённых названий",error);
+                runOnUiThread(()->showRecoveryScreen());
+            }
+        },"bpla-recovery-preview").start();
+    }
     /** A recoverable screen replaces a process crash without touching local records. */
     private void showStartupFailure(String stage,Throwable failure){
         android.util.Log.e("BPLA-INFO","Startup failure: "+stage,failure);
-        java.io.StringWriter trace=new java.io.StringWriter();
-        failure.printStackTrace(new java.io.PrintWriter(trace));
-        String report="БПЛА ИНФО · отчёт о запуске\n"+
-            "Этап: "+stage+"\n"+
-            "Ошибка: "+failure.getClass().getName()+"\n"+trace;
-        try{
-            java.io.File file=new java.io.File(getFilesDir(),"last_startup_error.txt");
-            try(java.io.FileOutputStream out=new java.io.FileOutputStream(file)){
-                out.write(report.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-            }
-        }catch(Exception writeError){
-            android.util.Log.w("BPLA-INFO","Could not write local crash report",writeError);
-        }
+        StartupGuard.capture(this,stage,failure);
         setup();
         LinearLayout pane=vertical();
         pane.setPadding(dp(22),dp(34),dp(22),dp(25));
-        root.addView(pane);
+        scroll(root).addView(pane);
         pane.addView(text("ОШИБКА ЗАГРУЗКИ",19,t.fg,true));
-        pane.addView(text("Данные и пользовательские фотографии не удалены.",13,t.muted,false));
+        pane.addView(text("Данные и фотографии не удалены.",13,t.muted,false));
         pane.addView(text("Этап: "+stage+" | "+failure.getClass().getSimpleName(),12,t.muted,false));
-        pane.addView(button("СКОПИРОВАТЬ ОТЧЁТ",true,()->{
-            android.content.ClipboardManager manager=(android.content.ClipboardManager)
-                getSystemService(Context.CLIPBOARD_SERVICE);
-            if(manager!=null){
-                manager.setPrimaryClip(android.content.ClipData.newPlainText("БПЛА ИНФО, ошибка",report));
-                Toast.makeText(this,"Отчёт скопирован",Toast.LENGTH_SHORT).show();
-            }
-        }));
-        pane.addView(button("ПОВТОРИТЬ",false,this::recreate));
+        pane.addView(button("СКОПИРОВАТЬ ОТЧЁТ",true,this::copyStartupReport));
+        pane.addView(button("ОТКРЫТЬ ВОССТАНОВЛЕНИЕ",false,this::showRecoveryScreen));
     }
     private int dp(float v){return (int)(getResources().getDisplayMetrics().density*v+0.5f);}
     private LinearLayout vertical(){LinearLayout l=new LinearLayout(this);l.setOrientation(LinearLayout.VERTICAL);return l;}
@@ -249,7 +295,7 @@ public final class MainActivity extends Activity {
             empty.setBackground(panel(t.panel,22));
             empty.addView(text("⌕  Карточки не найдены",18,t.fg,true));
             empty.addView(text("Измени фильтр или создай новую запись",13,t.muted,false));
-            listHost.addView(empty,margins(-1,-2,0,8));return;
+            listHost.addView(empty,margins(-1,-2,0,8));StartupGuard.completed(this);return;
         }
         // Render after the first UI frame; never construct hundreds of cards in one run.
         target.post(()->{
@@ -287,6 +333,7 @@ public final class MainActivity extends Activity {
             card.setOnClickListener(v->detail(d));
             if(t.animations){card.setAlpha(0f);card.setTranslationY(dp(13));card.animate().alpha(1).translationY(0).setDuration(180).setStartDelay(Math.min(index,8)*25L).start();}
         }
+        if(offset==0)target.post(()->StartupGuard.completed(getApplicationContext()));
         if(end<found.size()){
             final LinearLayout footer=vertical();
             target.addView(footer,margins(-1,-2,0,8));
