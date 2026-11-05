@@ -50,6 +50,12 @@ public final class CardPresentation {
         if(source==null)return "";
         String s=source.trim().replaceAll("\\s+"," ");
         if(s.equalsIgnoreCase("ДВС")||s.equalsIgnoreCase("ГТД"))return s.toUpperCase(Locale.ROOT);
+        // Source shorthand can be "электро", "эл.", "electro", or an engine name.
+        // Present any electric propulsion consistently as "Электрический".
+        String lower=s.toLowerCase(Locale.forLanguageTag("ru"));
+        if(lower.equals("эл")||lower.equals("эл.")||lower.startsWith("электр")||
+           lower.startsWith("электро")||lower.startsWith("electric")||
+           lower.equals("electro"))return "Электрический";
         boolean hasLetter=false;
         for(int i=0;i<s.length();i++){
             if(Character.isLetter(s.charAt(i))){hasLetter=true;break;}
