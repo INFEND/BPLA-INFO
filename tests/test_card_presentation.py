@@ -64,5 +64,9 @@ class CardPresentationTests(unittest.TestCase):
         self.assertIn('if(type.equals("Морской")||type.equals("Наземный"))continue;',store)
         self.assertNotIn("d.galleryUris.clear()",store)
         self.assertNotIn("d.favorite=false",store)
+        self.assertIn("NON_AIR_ARCHIVE",store)
+        self.assertIn("putString(NON_AIR_ARCHIVE",store)
+        self.assertIn("pruneNonAir(c,out)",store)
+        self.assertIn("CardPresentation.isAir(d.type(),d.sourceGroup)",store)
 if __name__=="__main__":
     unittest.main()

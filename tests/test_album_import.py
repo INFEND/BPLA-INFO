@@ -3,10 +3,13 @@ import collections
 import gzip
 import json
 import pathlib
+import sys
 import unittest
+sys.path.insert(0,str(pathlib.Path(__file__).resolve().parents[1]/"scripts"))
+from filter_air_catalog import filter_album,ALLOWED,EXCLUDED
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
-ASSET=ROOT/"app/src/main/assets/catalog_album_2026.dat"
+ASSET=ROOT/"research/source_catalogs/catalog_album_2026_original.dat"
 STORE=ROOT/"app/src/main/java/dev/infend/bplainfo/DroneStore.java"
 UI=ROOT/"app/src/main/java/dev/infend/bplainfo/MainActivity.java"
 
@@ -53,6 +56,9 @@ class AlbumImportTests(unittest.TestCase):
         store=STORE.read_text("utf-8")
         self.assertEqual(store.count("mergeAlbum(c,out)"),2)
         self.assertIn("album_revision",store)
+        self.assertIn("ALBUM_REVISION=2",store)
+        self.assertIn("pruneNonAir(c,out)",store)
+        self.assertIn("NON_AIR_ARCHIVE",store)
         self.assertIn("GZIPInputStream",store)
         self.assertIn("albumAliasTarget(page)",store)
         self.assertIn("if(added)applyBasicSpec(found,key,value)",store)
@@ -71,6 +77,15 @@ class AlbumImportTests(unittest.TestCase):
         self.assertNotIn('category.equals("Наземный")',ui)
         self.assertIn('CardPresentation.isAir(d.type(),d.sourceGroup)',ui)
         self.assertIn('if(type.equals("Морской")||type.equals("Наземный"))continue;',store)
+
+    def test_clean_aircraft_assets_are_generated_not_copied(self):
+        self.assertFalse((ROOT/"app/src/main/assets/catalog_album_2026.dat").exists())
+        cleaned=filter_album(ASSET.read_bytes())
+        book=json.loads(gzip.decompress(cleaned).decode("utf-8"))
+        self.assertEqual(len(book["entries"]),120)
+        self.assertEqual(collections.Counter(item["type"] for item in book["entries"]),ALLOWED)
+        self.assertEqual(book["excludedCategories"],EXCLUDED)
+        self.assertFalse(any(item["type"] in EXCLUDED for item in book["entries"]))
 
 if __name__=="__main__":
     unittest.main()

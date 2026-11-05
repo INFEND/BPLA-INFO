@@ -6,12 +6,28 @@ android {
     applicationId = 'dev.infend.bplainfo'
     minSdk = 26
     targetSdk = 35
-    versionCode = 20
-    versionName = '1.0.19'
+    versionCode = 21
+    versionName = '1.0.20'
   }
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_17
     targetCompatibility JavaVersion.VERSION_17
   }
   buildTypes { release { minifyEnabled = false } }
+}
+
+// Generate a clean 120-entry aviation album; the archived 146-entry source
+// is excluded from app/src/main/assets and never reaches the APK.
+def generatedAirAssets = file("${buildDir}/generated/air-catalog-assets")
+android.sourceSets.main.assets.srcDir(generatedAirAssets)
+def prepareAirAlbum = tasks.register('prepareAirAlbum', Exec) {
+  inputs.file(file("${rootDir}/research/source_catalogs/catalog_album_2026_original.dat"))
+  inputs.file(file("${rootDir}/scripts/filter_air_catalog.py"))
+  outputs.file(file("${generatedAirAssets}/catalog_album_2026.dat"))
+  commandLine('python3', file("${rootDir}/scripts/filter_air_catalog.py"),
+      '--input', file("${rootDir}/research/source_catalogs/catalog_album_2026_original.dat"),
+      '--output', file("${generatedAirAssets}/catalog_album_2026.dat"))
+}
+tasks.configureEach {
+  if (name.startsWith('merge') && name.endsWith('Assets')) dependsOn(prepareAirAlbum)
 }

@@ -396,6 +396,10 @@ public final class MainActivity extends Activity {
                 inputs[0].setError("Название обязательно");return false;
             }
             for(int i=0;i<inputs.length;i++)if(inputs[i]!=null)d.set(i,inputs[i].getText().toString());
+            if(!CardPresentation.isAir(d.type(),d.sourceGroup)){
+                if(inputs[1]!=null)inputs[1].setError("Допускаются только авиационные БПЛА");
+                return false;
+            }
             if(existing==null)records.add(d);
             save();
             detail(d);

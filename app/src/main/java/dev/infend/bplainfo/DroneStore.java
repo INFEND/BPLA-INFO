@@ -4,8 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.*;
 public final class DroneStore {
- private static final String PREFS="bpla_store",KEY="catalog_v1";
- public static ArrayList<Drone> load(Context c){String raw=c.getSharedPreferences(PREFS,0).getString(KEY,null);ArrayList<Drone> out=new ArrayList<>();if(raw==null){out.add(Drone.mara());mergeSeed(c,out);mergeEnrichment(c,out);mergeBulletin30(c,out);mergeVsuPdf(c,out);mergeAlbum(c,out);mergeVerifiedSources(c,out);save(c,out);return out;}try{JSONArray a=new JSONArray(raw);for(int i=0;i<a.length()&&i<5000;i++){JSONObject j=a.optJSONObject(i);if(j!=null)out.add(Drone.fromJson(j));}}catch(Exception e){out.add(Drone.mara());}mergeSeed(c,out);mergeEnrichment(c,out);mergeBulletin30(c,out);mergeVsuPdf(c,out);mergeAlbum(c,out);mergeVerifiedSources(c,out);return out;}
+ private static final String PREFS="bpla_store",KEY="catalog_v1",NON_AIR_ARCHIVE="archived_non_air_v1";
+ public static ArrayList<Drone> load(Context c){String raw=c.getSharedPreferences(PREFS,0).getString(KEY,null);ArrayList<Drone> out=new ArrayList<>();if(raw==null){out.add(Drone.mara());mergeSeed(c,out);mergeEnrichment(c,out);mergeBulletin30(c,out);mergeVsuPdf(c,out);mergeAlbum(c,out);mergeVerifiedSources(c,out);save(c,out);return pruneNonAir(c,out);}try{JSONArray a=new JSONArray(raw);for(int i=0;i<a.length()&&i<5000;i++){JSONObject j=a.optJSONObject(i);if(j!=null)out.add(Drone.fromJson(j));}}catch(Exception e){out.add(Drone.mara());}mergeSeed(c,out);mergeEnrichment(c,out);mergeBulletin30(c,out);mergeVsuPdf(c,out);mergeAlbum(c,out);mergeVerifiedSources(c,out);return pruneNonAir(c,out);}
  private static final int SEED_REVISION=2;
  private static void mergeSeed(Context c,ArrayList<Drone> drones){
    android.content.SharedPreferences prefs=c.getSharedPreferences(PREFS,0);
@@ -303,7 +303,7 @@ public final class DroneStore {
  }
 
 
- private static final int ALBUM_REVISION=1;
+ private static final int ALBUM_REVISION=2;
 
  /** Strictly reviewed name equivalents. Do not merge unrelated variants by fuzzy matching. */
  private static String albumAliasTarget(int physicalPage){
@@ -360,7 +360,7 @@ public final class DroneStore {
           book.optString("sourcePdfSha256","")))
        throw new org.json.JSONException("Wrong user album identity");
      JSONArray entries=book.getJSONArray("entries");
-     if(entries.length()!=146||book.optInt("photosImported",-1)!=0||
+     if(entries.length()!=120||book.optInt("photosImported",-1)!=0||
         book.optInt("operationsImported",-1)!=0)
        throw new org.json.JSONException("Incomplete album");
      HashSet<String> ids=new HashSet<>();
@@ -470,7 +470,40 @@ public final class DroneStore {
    }
  }
 
+
+ /** Archive complete legacy non-aircraft records before removing them from
+  * the active dataset. Local image URIs and favorites stay in the backup. */
+ private static ArrayList<Drone> pruneNonAir(Context c,ArrayList<Drone> data){
+   ArrayList<Drone> aircraft=new ArrayList<>(),excluded=new ArrayList<>();
+   for(Drone drone:data){
+     if(CardPresentation.isAir(drone.type(),drone.sourceGroup))aircraft.add(drone);
+     else excluded.add(drone);
+   }
+   if(excluded.isEmpty())return data;
+   android.content.SharedPreferences prefs=c.getSharedPreferences(PREFS,0);
+   try{
+     java.util.LinkedHashMap<String,JSONObject> backup=new java.util.LinkedHashMap<>();
+     JSONArray old=new JSONArray(prefs.getString(NON_AIR_ARCHIVE,"[]"));
+     for(int i=0;i<old.length();i++){
+       JSONObject item=old.optJSONObject(i);
+       if(item!=null&&!item.optString("id").isEmpty())backup.put(item.optString("id"),item);
+     }
+     for(Drone drone:excluded)backup.put(drone.id,drone.json());
+     JSONArray archive=new JSONArray();
+     for(JSONObject record:backup.values())archive.put(record);
+     if(!prefs.edit().putString(NON_AIR_ARCHIVE,archive.toString()).commit()){
+       android.util.Log.e("BPLA-INFO","Backup failed; old records retained");
+       return data;
+     }
+     save(c,aircraft);
+     return aircraft;
+   }catch(Exception error){
+     android.util.Log.e("BPLA-INFO","Backup error; old records retained",error);
+     return data;
+   }
+ }
+
  public static void save(Context c,List<Drone> list){JSONArray a=new JSONArray();for(Drone d:list)try{a.put(d.json());}catch(Exception ignored){}c.getSharedPreferences(PREFS,0).edit().putString(KEY,a.toString()).apply();}
- public static String exportJson(List<Drone> list)throws Exception{JSONObject o=new JSONObject();o.put("schema",1);o.put("app","БПЛА ИНФО");JSONArray a=new JSONArray();for(Drone d:list)a.put(d.json());o.put("items",a);return o.toString(2);}
- public static int importJson(Context c,List<Drone> list,String input)throws Exception{JSONObject o=new JSONObject(input);if(o.optInt("schema")!=1)throw new IllegalArgumentException("Неподдерживаемый формат");JSONArray a=o.getJSONArray("items");if(a.length()>5000)throw new IllegalArgumentException("Слишком много карточек");int n=0;for(int i=0;i<a.length();i++){Drone d=Drone.fromJson(a.getJSONObject(i));if(d.name().isEmpty())continue;int index=-1;for(int j=0;j<list.size();j++)if(list.get(j).id.equals(d.id)){index=j;break;}if(index<0)list.add(d);else list.set(index,d);n++;}save(c,list);return n;}
+ public static String exportJson(List<Drone> list)throws Exception{JSONObject o=new JSONObject();o.put("schema",1);o.put("app","БПЛА ИНФО");JSONArray a=new JSONArray();for(Drone d:list)if(CardPresentation.isAir(d.type(),d.sourceGroup))a.put(d.json());o.put("items",a);return o.toString(2);}
+ public static int importJson(Context c,List<Drone> list,String input)throws Exception{JSONObject o=new JSONObject(input);if(o.optInt("schema")!=1)throw new IllegalArgumentException("Неподдерживаемый формат");JSONArray a=o.getJSONArray("items");if(a.length()>5000)throw new IllegalArgumentException("Слишком много карточек");int n=0;for(int i=0;i<a.length();i++){Drone d=Drone.fromJson(a.getJSONObject(i));if(d.name().isEmpty()||!CardPresentation.isAir(d.type(),d.sourceGroup))continue;int index=-1;for(int j=0;j<list.size();j++)if(list.get(j).id.equals(d.id)){index=j;break;}if(index<0)list.add(d);else list.set(index,d);n++;}save(c,list);return n;}
 }
