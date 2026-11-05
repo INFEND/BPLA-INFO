@@ -85,9 +85,9 @@ public final class MainActivity extends Activity {
         android.util.Log.e("BPLA-INFO","Startup failure: "+stage,failure);
         java.io.StringWriter trace=new java.io.StringWriter();
         failure.printStackTrace(new java.io.PrintWriter(trace));
-        String report="БПЛА ИНФО · отчёт о запуске\\n"+
-            "Этап: "+stage+"\\n"+
-            "Ошибка: "+failure.getClass().getName()+"\\n"+trace;
+        String report="БПЛА ИНФО · отчёт о запуске\n"+
+            "Этап: "+stage+"\n"+
+            "Ошибка: "+failure.getClass().getName()+"\n"+trace;
         try{
             java.io.File file=new java.io.File(getFilesDir(),"last_startup_error.txt");
             try(java.io.FileOutputStream out=new java.io.FileOutputStream(file)){
