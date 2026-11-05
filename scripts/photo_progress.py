@@ -126,7 +126,7 @@ def audit(root):
         if accepted >= REQUIRED:
             complete.append(model_id)
         rows.append({"id": model_id, "name": model_name, "embedded": len(records),
-                     "verified_distinct_processed": accepted,
+                     "verified_distinct_processed": accepted, "verified_distinct_originals": accepted,
                      "remaining": max(0, REQUIRED - accepted),
                      "complete": accepted >= REQUIRED})
     unknown = set(manifest.get("items", {})) - set(models)
@@ -145,6 +145,7 @@ def audit(root):
         row=by_id[alias]
         row.update(embedded=original['embedded'],
                    verified_distinct_processed=original['verified_distinct_processed'],
+                   verified_distinct_originals=original['verified_distinct_originals'],
                    remaining=original['remaining'],complete=original['complete'],
                    shared_gallery=target)
         if row['complete']:
@@ -154,6 +155,7 @@ def audit(root):
         "models_total": len(models), "minimum_verified_photos_required": total_required,
         "models_complete": len(complete), "models_incomplete": len(models) - len(complete),
         "photos_embedded": total_embedded, "photos_verified_processed_distinct": approved_count,
+        "photos_verified_distinct_originals": approved_count,
         "physical_model_galleries": len(manifest.get('items',{})),
         "reviewed_shared_galleries": len(aliases),
         "minimum_additional_verified_photos": sum(r["remaining"] for r in rows),
