@@ -14,20 +14,23 @@ class PhotoProposalProvenanceTests(unittest.TestCase):
             "license": "CC BY 4.0",
             "author": "Example photographer",
             "source_page": "https://example.org/photo",
+            "model_id": "example-drone",
+            "model_name": "Example drone",
+            "rights_evidence": "https://example.org/photo#license",
         }
 
     def test_attributed_source_is_eligible_for_proposal_only(self):
         self.assertTrue(eligible_source(self.entry))
 
     def test_missing_provenance_blocks_proposal(self):
-        for field in ("license", "author", "source_page", "sha256", "archived_original"):
+        for field in ("license", "author", "source_page", "sha256", "archived_original", "model_id", "model_name", "rights_evidence"):
             with self.subTest(field=field):
                 entry = dict(self.entry)
                 entry.pop(field)
                 self.assertFalse(eligible_source(entry))
 
     def test_blank_provenance_blocks_proposal(self):
-        for field in ("license", "author", "source_page"):
+        for field in ("license", "author", "source_page", "model_id", "model_name", "rights_evidence"):
             with self.subTest(field=field):
                 entry = dict(self.entry)
                 entry[field] = "  "
