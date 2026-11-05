@@ -20,9 +20,14 @@ def validate(data):
     if len(records) != len(EXPECTED_IDS):
         raise ValueError("Unexpected verified fact count")
     ids = []
+    allowed_fields = {"modelId", "modelName", "factName", "factValue", "sourceLabel", "sourceUrl", "status"}
     for record in records:
         if not isinstance(record, dict):
             raise ValueError("Malformed official fact")
+        if any(not isinstance(k, str) for k in record):
+            raise ValueError("Non-text official fact field name")
+        if set(record) - allowed_fields:
+            raise ValueError("Unexpected official fact field")
         if FORBIDDEN_KEYS.intersection(k.lower() for k in record):
             raise ValueError("Photo/network or operational field in text-only facts")
         for key in ("modelId", "modelName", "factName", "factValue",
@@ -30,8 +35,10 @@ def validate(data):
             if not isinstance(record.get(key), str) or not record[key].strip():
                 raise ValueError("Missing fact provenance: " + key)
         url = urlsplit(record["sourceUrl"])
-        if url.scheme != "https" or not url.hostname or url.username or url.password:
+        if url.scheme != "https" or not url.hostname or url.username or url.password or url.fragment or url.port not in (None, 443):
             raise ValueError("Invalid official HTTPS source")
+        if any(c in record["factValue"] for c in ("<script", "javascript:")):
+            raise ValueError("Unsafe official fact text")
         ids.append(record["modelId"])
     if len(ids) != len(set(ids)) or set(ids) != EXPECTED_IDS:
         raise ValueError("Unexpected or duplicate official fact IDs")
