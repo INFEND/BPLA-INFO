@@ -87,6 +87,7 @@ def audit(root):
     rows = []
     total_embedded = 0
     approved_count = 0
+    original_count = 0
     for model_id, model_name in models.items():
         records = manifest.get("items", {}).get(model_id, {}).get("files", [])
         if not isinstance(records, list):
@@ -123,6 +124,8 @@ def audit(root):
                 reviewed_angles.add(angle)
                 accepted += 1
                 approved_count += 1
+                if record.get("processing_status") == "verified_unmodified_original":
+                    original_count += 1
         if accepted >= REQUIRED:
             complete.append(model_id)
         rows.append({"id": model_id, "name": model_name, "embedded": len(records),
@@ -155,7 +158,7 @@ def audit(root):
         "models_total": len(models), "minimum_verified_photos_required": total_required,
         "models_complete": len(complete), "models_incomplete": len(models) - len(complete),
         "photos_embedded": total_embedded, "photos_verified_processed_distinct": approved_count,
-        "photos_verified_distinct_originals": approved_count,
+        "photos_verified_distinct_originals": original_count,
         "physical_model_galleries": len(manifest.get('items',{})),
         "reviewed_shared_galleries": len(aliases),
         "minimum_additional_verified_photos": sum(r["remaining"] for r in rows),
