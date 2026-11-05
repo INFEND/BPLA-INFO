@@ -33,6 +33,7 @@ public final class CardPresentation {
     public static String name(String source) {
         if(source==null)return "";
         String s=source.trim().replaceAll("\\s+"," ");
+        if(s.equalsIgnoreCase("1-20пс ночная"))return "1-20ПС «Ночная»";
         if(s.contains("«")||s.contains("»"))return s;
         Matcher m=NICK.matcher(s);
         return m.matches()&&m.group(1).matches(".*\\d.*")
