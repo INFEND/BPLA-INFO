@@ -34,9 +34,9 @@ class PhotoSortAndAlignmentTests(unittest.TestCase):
         self.assertIn('onlyFavorites=!onlyFavorites;home();',ACT)
 
     def test_three_metrics_share_exact_column_gravity(self):
-        self.assertIn('stat(stats,"АВТОНОМНОСТЬ",d.previewEndurance(),Gravity.START);',ACT)
-        self.assertIn('stat(stats,"СКОРОСТЬ",d.previewSpeed(),Gravity.CENTER_HORIZONTAL);',ACT)
-        self.assertIn('stat(stats,"ДАЛЬНОСТЬ",d.previewRange(),Gravity.END);',ACT)
+        self.assertIn('stat(stats,"АВТОНОМНОСТЬ",PreviewFormatter.endurance(d.previewEndurance(),d.specRows),Gravity.START);',ACT)
+        self.assertIn('stat(stats,"СКОРОСТЬ",PreviewFormatter.speed(d.previewSpeed(),d.specRows),Gravity.CENTER_HORIZONTAL);',ACT)
+        self.assertIn('stat(stats,"ДАЛЬНОСТЬ",PreviewFormatter.range(d.previewRange(),d.specRows),Gravity.END);',ACT)
         method=ACT.split('private void stat(',1)[1].split('private void save(',1)[0]
         self.assertIn('new LinearLayout.LayoutParams(0,-2,1)',method)
         self.assertIn('caption.setGravity(alignment|Gravity.CENTER_VERTICAL)',method)

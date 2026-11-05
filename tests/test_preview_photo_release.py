@@ -23,7 +23,7 @@ public final class PdfPreviewSmoke {
     eq(PreviewFormatter.endurance("15",copter),"15 мин");
     eq(PreviewFormatter.speed("120",copter),"120 км/ч");
     eq(PreviewFormatter.range("16",copter),"16 км");
-    eq(PreviewFormatter.endurance("24…720",Arrays.asList(
+    eq(PreviewFormatter.endurance("24…720",Collections.singletonList(
       new String[]{"Время полета, ч","24…720"})),"24–720 ч");
     eq(PreviewFormatter.speed("120",null),"—");
     eq(PreviewFormatter.endurance("15",null),"—");
@@ -43,12 +43,14 @@ class PdfPreviewRegression(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             p=pathlib.Path(directory)/"PdfPreviewSmoke.java"
             p.write_text(HARNESS,encoding="utf-8")
-            subprocess.run(["javac","-encoding","UTF-8","-d",directory,
+            compiled=subprocess.run(["javac","-encoding","UTF-8","-d",directory,
               str(JAVA/"SpecFormatter.java"),str(JAVA/"PreviewFormatter.java"),
               str(JAVA/"CardPresentation.java"),str(p)],
-              check=True,capture_output=True,text=True)
-            subprocess.run(["java","-cp",directory,"dev.infend.bplainfo.PdfPreviewSmoke"],
-              check=True,capture_output=True,text=True)
+              capture_output=True,text=True)
+            self.assertEqual(compiled.returncode,0,compiled.stdout+compiled.stderr)
+            result=subprocess.run(["java","-cp",directory,"dev.infend.bplainfo.PdfPreviewSmoke"],
+              capture_output=True,text=True)
+            self.assertEqual(result.returncode,0,result.stdout+result.stderr)
     def test_bulletin_contains_exact_source_of_units(self):
         data=json.loads((ASSETS/"bulletin30_2025.json").read_text("utf-8"))
         entries={r["name"].lower():r for r in data["entries"]}

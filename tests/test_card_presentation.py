@@ -62,8 +62,9 @@ class CardPresentationTests(unittest.TestCase):
             subprocess.run(["javac","-encoding","UTF-8","-d",folder,
                 str(JAVA/"SpecFormatter.java"),str(JAVA/"PreviewFormatter.java"),str(JAVA/"CardPresentation.java"),str(file)],
                 check=True,capture_output=True,text=True)
-            subprocess.run(["java","-cp",folder,"dev.infend.bplainfo.PresentationSmoke"],
-                check=True,capture_output=True,text=True)
+            result=subprocess.run(["java","-cp",folder,"dev.infend.bplainfo.PresentationSmoke"],
+                capture_output=True,text=True)
+            self.assertEqual(result.returncode,0,result.stdout+result.stderr)
     def test_no_android_icu_unsupported_regex(self):
         formatter=(JAVA/"CardPresentation.java").read_text("utf-8")
         self.assertNotIn("(?U)", formatter.split("public static String engine(")[1].split("public static String label(")[0].replace("// ICU regex on some Android builds rejects (?U); use portable code points.", ""))
