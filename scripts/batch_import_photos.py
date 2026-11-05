@@ -87,6 +87,27 @@ def prepare(staging, repo):
         for row in json.loads(vsu.read_text("utf-8"))["entries"]:
             if not row.get("targetId"):
                 models[row["id"]]=row["name"]
+    # Album-only aircraft are valid offline catalog cards too. Keep the same
+    # reviewed alias and aircraft-only rules as photo_progress.py.
+    import gzip
+    album=repo/"research/source_catalogs/catalog_album_2026_original.dat"
+    if album.is_file():
+        source=repo/"app/src/main/java/dev/infend/bplainfo/DroneStore.java"
+        aliases={}
+        if source.is_file():
+            code=source.read_text("utf-8")
+            start=code.find("private static String albumAliasTarget(")
+            end=code.find("private static void mergeAlbum(",start)
+            if start>=0 and end>start:
+                aliases={int(page):target for page,target in re.findall(
+                    r'case (\\d+):return "([^"]+)";',code[start:end])}
+        for row in json.loads(gzip.decompress(album.read_bytes()))["entries"]:
+            if row["type"] not in {"Самолётный","Коптерный","Барражирующий"}:
+                continue
+            if aliases.get(row["page"]) in models:
+                continue
+            if row["id"] not in models:
+                models[row["id"]]=row["name"]
     manifest_file=assets/"bundled_photos.json"
     manifest=json.loads(manifest_file.read_text("utf-8"))
     if manifest.get("schema")!=2 or manifest.get("storage")!="apk-assets-only":
