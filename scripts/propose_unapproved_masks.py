@@ -81,10 +81,8 @@ def main():
         if actual_sha != expected_sha:
             print("SKIP SHA256 MISMATCH", src.name)
             continue
-        if eligible_seen < args.offset:
-            eligible_seen += 1
-            continue
-        eligible_seen += 1
+        # Decode before applying offset so corrupt or undersized originals do not
+        # shift the boundaries of parallel review batches.
         # Corrupt archives must not abort the rest of the photo batch.
         try:
             with Image.open(src) as image:
@@ -96,6 +94,10 @@ def main():
         h,w=rgb.shape[:2]
         if min(h,w)<64:
             continue
+        if eligible_seen < args.offset:
+            eligible_seen += 1
+            continue
+        eligible_seen += 1
         # A rough foreground proposal. Never claim this is a verified drone silhouette.
         rect=(max(1,w//12),max(1,h//12),max(2,w-w//6),max(2,h-h//6))
         mask=np.zeros((h,w),np.uint8)
