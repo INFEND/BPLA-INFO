@@ -4,6 +4,8 @@ import json
 import pathlib
 import re
 import unittest
+from io import BytesIO
+from PIL import Image, UnidentifiedImageError
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "app/src/main/assets"
@@ -34,6 +36,19 @@ class OfflinePreviewIntegrity(unittest.TestCase):
                 digest = hashlib.sha256(data).hexdigest()
                 self.assertRegex(photo["sha256"], SHA)
                 self.assertEqual(digest, photo["sha256"], rel)
+                # A matching SHA alone cannot prove that Android can decode the asset.
+                # Decode all frames now and reject truncated or mislabeled files.
+                try:
+                    with Image.open(BytesIO(data)) as image:
+                        self.assertIn(image.format, {"JPEG", "PNG", "WEBP"}, rel)
+                        self.assertGreaterEqual(min(image.size), 64, rel)
+                        image.load()
+                        if photo["processing_status"] == "background_removed_verified":
+                            self.assertIn("A", image.getbands(), rel)
+                            lo, hi = image.getchannel("A").getextrema()
+                            self.assertEqual((lo, hi), (0, 255), rel)
+                except (OSError, UnidentifiedImageError) as exc:
+                    self.fail(f"Undecodable bundled image {rel}: {exc}")
                 self.assertNotIn(digest, seen_digests)
                 seen_digests.add(digest)
                 self.assertIn(photo["license"], ALLOWED)
