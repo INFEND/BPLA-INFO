@@ -30,7 +30,7 @@ public final class MainActivity extends Activity {
     private ThemePrefs t;
     private LinearLayout root,listHost;
     private int cardRenderEpoch=0;
-    private static final int CARD_BATCH_SIZE=24;
+    private static final int CARD_BATCH_SIZE=18;
     private String searchTerm="",category="Все";
     private boolean onlyFavorites=false,descending=false,showingDetail=false;
     private int sortBy=0;
@@ -54,22 +54,64 @@ public final class MainActivity extends Activity {
                 ArrayList<Drone> loaded=DroneStore.load(app);
                 runOnUiThread(()->{
                     if(isFinishing()||isDestroyed())return;
-                    records.addAll(loaded);
-                    home();
-                    long last=getPreferences(0).getLong("ota_checked",0);
-                    if(System.currentTimeMillis()-last>24*60*60*1000L){
-                        getPreferences(0).edit().putLong("ota_checked",System.currentTimeMillis()).apply();
-                        new OtaUpdater(this).check(true);
+                    try{
+                        records.clear();
+                        records.addAll(loaded);
+                        home();
+                    }catch(RuntimeException uiError){
+                        showStartupFailure("Отображение каталога",uiError);
+                        return;
+                    }
+                    try{
+                        long last=getPreferences(0).getLong("ota_checked",0);
+                        if(System.currentTimeMillis()-last>24*60*60*1000L){
+                            getPreferences(0).edit().putLong("ota_checked",System.currentTimeMillis()).apply();
+                            new OtaUpdater(this).check(true);
+                        }
+                    }catch(RuntimeException updateError){
+                        android.util.Log.w("BPLA-INFO","Background OTA check skipped",updateError);
                     }
                 });
             }catch(Exception error){
                 runOnUiThread(()->{
                     if(isFinishing()||isDestroyed())return;
-                    loading.addView(text("Не удалось открыть каталог: "+error.getClass().getSimpleName(),13,t.muted,false));
-                    loading.addView(button("ПОВТОРИТЬ",true,()->recreate()));
+                    showStartupFailure("Чтение каталога",error);
                 });
             }
         },"bpla-catalog-load").start();
+    }
+    /** A recoverable screen replaces a process crash without touching local records. */
+    private void showStartupFailure(String stage,Throwable failure){
+        android.util.Log.e("BPLA-INFO","Startup failure: "+stage,failure);
+        java.io.StringWriter trace=new java.io.StringWriter();
+        failure.printStackTrace(new java.io.PrintWriter(trace));
+        String report="БПЛА ИНФО · отчёт о запуске\\n"+
+            "Этап: "+stage+"\\n"+
+            "Ошибка: "+failure.getClass().getName()+"\\n"+trace;
+        try{
+            java.io.File file=new java.io.File(getFilesDir(),"last_startup_error.txt");
+            try(java.io.FileOutputStream out=new java.io.FileOutputStream(file)){
+                out.write(report.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            }
+        }catch(Exception writeError){
+            android.util.Log.w("BPLA-INFO","Could not write local crash report",writeError);
+        }
+        setup();
+        LinearLayout pane=vertical();
+        pane.setPadding(dp(22),dp(34),dp(22),dp(25));
+        root.addView(pane);
+        pane.addView(text("ОШИБКА ЗАГРУЗКИ",19,t.fg,true));
+        pane.addView(text("Данные и пользовательские фотографии не удалены.",13,t.muted,false));
+        pane.addView(text("Этап: "+stage+" | "+failure.getClass().getSimpleName(),12,t.muted,false));
+        pane.addView(button("СКОПИРОВАТЬ ОТЧЁТ",true,()->{
+            android.content.ClipboardManager manager=(android.content.ClipboardManager)
+                getSystemService(Context.CLIPBOARD_SERVICE);
+            if(manager!=null){
+                manager.setPrimaryClip(android.content.ClipData.newPlainText("БПЛА ИНФО, ошибка",report));
+                Toast.makeText(this,"Отчёт скопирован",Toast.LENGTH_SHORT).show();
+            }
+        }));
+        pane.addView(button("ПОВТОРИТЬ",false,this::recreate));
     }
     private int dp(float v){return (int)(getResources().getDisplayMetrics().density*v+0.5f);}
     private LinearLayout vertical(){LinearLayout l=new LinearLayout(this);l.setOrientation(LinearLayout.VERTICAL);return l;}
@@ -209,11 +251,16 @@ public final class MainActivity extends Activity {
             empty.addView(text("Измени фильтр или создай новую запись",13,t.muted,false));
             listHost.addView(empty,margins(-1,-2,0,8));return;
         }
-        renderCardBatch(target,found,0,epoch);
+        // Render after the first UI frame; never construct hundreds of cards in one run.
+        target.post(()->{
+            if(epoch!=cardRenderEpoch||target!=listHost)return;
+            try{renderCardBatch(target,found,0,epoch);}
+            catch(RuntimeException error){showStartupFailure("Список моделей",error);}
+        });
     }
     private void renderCardBatch(LinearLayout target,List<Drone> found,int offset,int epoch){
         if(epoch!=cardRenderEpoch||target!=listHost||isFinishing()||isDestroyed())return;
-        int end=Math.min(found.size(),offset+CARD_BATCH_SIZE);
+        int end=CatalogPaging.end(offset,found.size(),CARD_BATCH_SIZE);
         for(int index=offset;index<end;index++){
             Drone d=found.get(index);
             LinearLayout card=vertical();card.setPadding(dp(13),dp(12),dp(13),dp(12));card.setBackground(panel(t.panel,20));
@@ -241,7 +288,14 @@ public final class MainActivity extends Activity {
             if(t.animations){card.setAlpha(0f);card.setTranslationY(dp(13));card.animate().alpha(1).translationY(0).setDuration(180).setStartDelay(Math.min(index,8)*25L).start();}
         }
         if(end<found.size()){
-            target.postDelayed(()->renderCardBatch(target,found,end,epoch),12L);
+            final LinearLayout footer=vertical();
+            target.addView(footer,margins(-1,-2,0,8));
+            footer.addView(button("ПОКАЗАТЬ ЕЩЁ ("+end+" / "+found.size()+")",false,()->{
+                if(epoch!=cardRenderEpoch||target!=listHost)return;
+                target.removeView(footer);
+                try{renderCardBatch(target,found,end,epoch);}
+                catch(RuntimeException error){showStartupFailure("Продолжение списка",error);}
+            }),margins(-1,44,0,4));
         }
     }
     private void stat(LinearLayout row,String label,String value){
