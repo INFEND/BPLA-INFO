@@ -42,7 +42,7 @@ jobs:
         with:
           gradle-version: '9.6.1'
       - name: Install independent photo decoder
-        run: python3 -m pip install --disable-pip-version-check 'Pillow==11.3.0'
+        run: python3 -m pip install --disable-pip-version-check 'Pillow==11.3.0' 'numpy>=1.26,<3' 'opencv-python-headless>=4.10,<5'
       - name: Test manifest logic
         run: python3 -m unittest discover -s tests -v
       - name: Verify measurement display on JVM
