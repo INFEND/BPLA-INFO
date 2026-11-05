@@ -73,11 +73,20 @@ class PdfPreviewRegression(unittest.TestCase):
             self.assertEqual(packaged.read_bytes(),original.read_bytes())
             self.assertTrue(photo["model_review_approved"])
             self.assertFalse(photo["background_removed"])
-    def test_fullscreen_status_describes_original_and_retains_identity_warning(self):
+    def test_fullscreen_hides_status_while_originals_remain_verified(self):
         ui=(JAVA/"MainActivity.java").read_text("utf-8")
         lib=(JAVA/"PhotoLibrary.java").read_text("utf-8")
-        self.assertIn("ИСТОЧНИК ТРЕБУЕТ ПРОВЕРКИ",ui)
-        self.assertIn("ОРИГИНАЛЬНАЯ ФОТОГРАФИЯ · БЕЗ ИЗМЕНЕНИЙ",ui)
-        self.assertNotIn("ФОН НЕ УДАЛЁН",ui)
+        start=ui.index("private void showDocumentaryPhoto(")
+        end=ui.index("private void showFullPhoto(",start)
+        viewer=ui[start:end]
+        self.assertIn("PhotoLibrary.into(",viewer)
+        self.assertIn("FrameLayout",viewer)
+        for text in ("ИСТОЧНИК ТРЕБУЕТ ПРОВЕРКИ",
+                     "ОРИГИНАЛЬНАЯ ФОТОГРАФИЯ · БЕЗ ИЗМЕНЕНИЙ",
+                     "ФОН НЕ УДАЛЁН","СНИМОК ЗАГРУЖЕН",
+                     "ИСТОЧНИК","ЛИЦЕНЗИЯ","item.author","item.license"):
+            self.assertNotIn(text,viewer)
         self.assertIn("public boolean needsReview()",lib)
+        self.assertIn("this.author=author",lib)
+        self.assertIn("this.license=license",lib)
 if __name__=="__main__":unittest.main()
