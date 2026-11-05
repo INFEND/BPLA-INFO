@@ -748,7 +748,7 @@ public final class MainActivity extends Activity {
         photo.setColorFilter(t.muted);
         content.addView(photo,new FrameLayout.LayoutParams(-1,-1));
         // Keep only a close control. No credits, source/license buttons or load banners.
-        android.widget.TextView close=text("✕",24,t.text,true);
+        android.widget.TextView close=text("✕",24,t.fg,true);
         close.setGravity(Gravity.CENTER);
         close.setBackground(panel(t.panel,16));
         FrameLayout.LayoutParams closeParams=new FrameLayout.LayoutParams(dp(48),dp(48),Gravity.TOP|Gravity.RIGHT);
