@@ -16,6 +16,17 @@ def eligible_source(entry):
     if not all(isinstance(entry.get(key), str) and entry[key].strip() for key in required):
         return False
     license_text = entry["license"].strip().lower()
+    # This stage is a proposal, not publication, but never spend processing
+    # resources on records with no identifiable redistribution grant.
+    accepted = {"cc0 1.0", "cc by 4.0", "cc by-sa 4.0",
+                "public domain (u.s. government)",
+                "public domain (u.s. government), as marked on the official dvids photo page"}
+    if license_text not in accepted:
+        return False
+    if not re.fullmatch(r"[a-f0-9]{64}", entry["sha256"].strip().lower()):
+        return False
+    if not entry["source_page"].strip().startswith("https://"):
+        return False
     # ND licences prohibit derivative cutouts; reject all common CC BY-ND forms.
     if (re.search(r"(?<![a-z])(?:cc[ -])?by(?:-nc)?-nd(?:[ -]|$)", license_text)
             or re.search(r"creativecommons\.org/licenses/by(?:-nc)?-nd/", license_text)
