@@ -10,6 +10,7 @@ on:
       - 'tests/test_triage_mask_proposals.py'
       - 'tests/test_mask_license_eligibility.py'
       - 'tests/test_mask_batch_limit.py'
+      - 'tests/test_mask_batch_offset.py'
       - 'tests/test_photo_review_priority.py'
       - 'tests/test_photo_proposal_provenance.py'
       - '.github/workflows/photo-mask-proposals.yml'
@@ -40,6 +41,8 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_photo_review_priority.py' -v
       - name: Test batch limit after invalid-source skips
         run: python -m unittest discover -s tests -p 'test_mask_batch_limit.py' -v
+      - name: Test parallel batch offsets after corrupt originals
+        run: python -m unittest discover -s tests -p 'test_mask_batch_offset.py' -v
       - name: Test photo source licence eligibility
         run: python -m unittest discover -s tests -p 'test_mask_license_eligibility.py' -v
       - name: Test original RGB integrity verifier
