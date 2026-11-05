@@ -93,6 +93,7 @@ def audit(root):
         if not isinstance(records, list):
             raise ValueError("Invalid gallery: " + model_id)
         accepted = 0
+        accepted_originals = 0
         reviewed_angles = set()
         for record in records:
             rel = record["file"]
@@ -126,10 +127,11 @@ def audit(root):
                 approved_count += 1
                 if record.get("processing_status") == "verified_unmodified_original":
                     original_count += 1
+                    accepted_originals += 1
         if accepted >= REQUIRED:
             complete.append(model_id)
         rows.append({"id": model_id, "name": model_name, "embedded": len(records),
-                     "verified_distinct_processed": accepted, "verified_distinct_originals": accepted,
+                     "verified_distinct_processed": accepted, "verified_distinct_originals": accepted_originals,
                      "remaining": max(0, REQUIRED - accepted),
                      "complete": accepted >= REQUIRED})
     unknown = set(manifest.get("items", {})) - set(models)
