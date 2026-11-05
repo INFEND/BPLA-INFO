@@ -11,7 +11,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "app/src/main/assets"
 MANIFEST = ASSETS / "bundled_photos.json"
-ORIGINAL = "verified_unchanged_original"
+ORIGINAL = "verified_unmodified_original"
 
 
 def validate_original(photo, data):
@@ -63,3 +63,4 @@ class UnchangedOriginalTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

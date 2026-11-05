@@ -139,5 +139,48 @@ class BatchPhotoImporterTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"alpha"):
             importer.prepare(self.stage,self.repo)
 
+    def original_candidate(self):
+        item=self.candidate()
+        item.update(prepared=item['original'],file_name='unchanged_original.png',
+                    processing_status='verified_unmodified_original',
+                    model_review_approved=True,
+                    model_review_notes='Source caption and actual photograph identify the exact catalog model.',
+                    rights_evidence='CC0 permits redistribution of this original source fixture without changes.')
+        return item
+
+    def test_unmodified_original_accepts_source_bytes_without_mask_or_edit_license(self):
+        item=self.original_candidate()
+        self.batch([item])
+        path,manifest,pending=importer.prepare(self.stage,self.repo)
+        importer.apply_batch(path,manifest,pending,True)
+        photo=manifest['items']['test-model']['files'][0]
+        self.assertEqual((self.assets/photo['file']).read_bytes(),(self.stage/item['original']).read_bytes())
+        self.assertEqual(photo['sha256'],photo['original_sha256'])
+        self.assertFalse(photo['background_removed'])
+        self.assertTrue(photo['model_review_approved'])
+
+    def test_unmodified_original_rejects_reencoded_photo(self):
+        item=self.original_candidate()
+        item.update(prepared='first_prepared.webp',file_name='modified_original.webp')
+        self.batch([item])
+        with self.assertRaisesRegex(ValueError,'Unmodified original bytes changed'):
+            importer.prepare(self.stage,self.repo)
+
+    def test_unmodified_original_requires_positive_model_identification(self):
+        item=self.original_candidate()
+        item.pop('model_review_approved')
+        self.batch([item])
+        with self.assertRaisesRegex(ValueError,'Exact model identity not approved'):
+            importer.prepare(self.stage,self.repo)
+
+    def test_original_import_into_new_bulletin_model(self):
+        (self.assets/'bulletin30_2025.json').write_text(json.dumps({'entries':[
+            {'id':'bulletin-model','name':'Bulletin model'}]}))
+        item=self.original_candidate()
+        item.update(model_id='bulletin-model',model_name='Bulletin model')
+        self.batch([item])
+        _,manifest,_=importer.prepare(self.stage,self.repo)
+        self.assertEqual(len(manifest['items']['bulletin-model']['files']),1)
+
 if __name__=="__main__":
     unittest.main()

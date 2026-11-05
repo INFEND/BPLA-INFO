@@ -20,7 +20,7 @@ ANGLE_RE = re.compile(r"[a-z0-9][a-z0-9_-]{2,60}\Z")
 PHOTO_RE = re.compile(r"[a-z0-9][a-z0-9_-]{2,100}\.(?:webp|png|jpg|jpeg)\Z")
 SHA_RE = re.compile(r"[a-f0-9]{64}\Z")
 LICENSES = {"CC0 1.0", "CC BY 4.0", "CC BY-SA 4.0", "Public domain (U.S. Government)"}
-STATES = {"verified_clean_original", "background_removed_verified"}
+STATES = {"verified_clean_original", "background_removed_verified", "verified_unmodified_original"}
 
 def sha256(data):
     return hashlib.sha256(data).hexdigest()
@@ -76,6 +76,12 @@ def prepare(staging, repo):
     assets=repo/"app/src/main/assets"
     catalog=json.loads((assets/"catalog_lostarmour_2024_verified.json").read_text("utf-8"))
     models={x["id"]:x["name"] for x in catalog["entries"]}
+    bulletin=assets/"bulletin30_2025.json"
+    if bulletin.is_file():
+        for row in json.loads(bulletin.read_text("utf-8"))["entries"]:
+            if row["id"] in models and models[row["id"]]!=row["name"]:
+                raise ValueError("Conflicting catalog model: "+row["id"])
+            models[row["id"]]=row["name"]
     manifest_file=assets/"bundled_photos.json"
     manifest=json.loads(manifest_file.read_text("utf-8"))
     if manifest.get("schema")!=2 or manifest.get("storage")!="apk-assets-only":
@@ -109,6 +115,11 @@ def prepare(staging, repo):
             raise ValueError("Only verified processing states are accepted")
         if entry.get("visual_review_approved") is not True:
             raise ValueError("Visual review not approved: "+target)
+        model_note=None
+        if status=="verified_unmodified_original":
+            if entry.get("model_review_approved") is not True:
+                raise ValueError("Exact model identity not approved: "+target)
+            model_note=clean_text(entry.get("model_review_notes"),"model_review_notes",15)
         angle=entry.get("angle_id")
         if not isinstance(angle,str) or not ANGLE_RE.fullmatch(angle):
             raise ValueError("Explicit valid angle_id required: "+target)
@@ -125,7 +136,7 @@ def prepare(staging, repo):
             raise ValueError("License does not explicitly permit redistribution and edits")
         source=clean_text(entry.get("source"),"source",12)
         rights=clean_text(entry.get("rights_evidence"),"rights_evidence",30)
-        if not any(x in rights.lower() for x in ("modify","modification","derivative","редакт")):
+        if status!="verified_unmodified_original" and not any(x in rights.lower() for x in ("modify","modification","derivative","редакт")):
             raise ValueError("Rights for modifications not documented: "+target)
         original_path=staging_file(staging,entry.get("original"))
         prepared_path=staging_file(staging,entry.get("prepared"))
@@ -140,6 +151,8 @@ def prepare(staging, repo):
             raise ValueError("Same original reused as multiple photos or angles: "+target)
         originals.add(original_sha)
         digest=sha256(prepared)
+        if status=="verified_unmodified_original" and digest!=original_sha:
+            raise ValueError("Unmodified original bytes changed: "+target)
         expected_prepared=entry.get("prepared_sha256")
         if expected_prepared is not None and expected_prepared!=digest:
             raise ValueError("Prepared SHA-256 mismatch: "+target)
@@ -160,6 +173,10 @@ def prepare(staging, repo):
             "visual_review_notes":note,"visual_review_approved":True,
             "angle_review_approved":True,"angle_id":angle
         })
+        if model_note is not None:
+            gallery[-1].update(model_review_approved=True,model_review_notes=model_note,
+                               publication_status="verified",background_removed=False,
+                               changes="None; source file embedded byte for byte")
         pending.append((assets/target,prepared,repo/original_rel,original))
     return manifest_file,new,pending
 

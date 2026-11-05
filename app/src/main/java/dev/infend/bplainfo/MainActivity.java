@@ -374,7 +374,6 @@ public final class MainActivity extends Activity {
         group.addView(amount,new LinearLayout.LayoutParams(-1,-2));
     }
     private void save(){DroneStore.save(this,records);}
-
     /** Edge-to-edge rounded thumbnail with a 6dp gutter. The bitmap itself is not stretched. */
     private FrameLayout addPhotoThumbnail(LinearLayout gallery){
         FrameLayout frame=new FrameLayout(this);
@@ -738,12 +737,37 @@ public final class MainActivity extends Activity {
         }
         viewer.setOnClickListener(v->dialog.dismiss());
     }
+    private void appendPhotoReferences(LinearLayout bar,String file){
+        // These are optional attribution pages opened only on a user's tap.
+        // Image decoding always uses the physical APK asset in PhotoLibrary.
+        try(java.io.InputStream in=getAssets().open("photo_credits.json")){
+            java.io.ByteArrayOutputStream bytes=new java.io.ByteArrayOutputStream();
+            byte[] buffer=new byte[8192];int n;
+            while((n=in.read(buffer))!=-1){
+                if(bytes.size()+n>2_000_000)throw new java.io.IOException("Photo credits too large");
+                bytes.write(buffer,0,n);
+            }
+            org.json.JSONObject entry=new org.json.JSONObject(bytes.toString("UTF-8")).getJSONObject("items").optJSONObject(file);
+            if(entry==null)return;
+            String[] fields={"source_page","license_page"};
+            String[] labels={"ИСТОЧНИК","ЛИЦЕНЗИЯ"};
+            for(int i=0;i<fields.length;i++){
+                Uri address=Uri.parse(entry.optString(fields[i],""));
+                if(!"https".equals(address.getScheme())||address.getHost()==null)continue;
+                bar.addView(button(labels[i],false,()->{
+                    try{startActivity(new Intent(Intent.ACTION_VIEW,address));}
+                    catch(Exception unavailable){android.widget.Toast.makeText(this,"Не удалось открыть ссылку",android.widget.Toast.LENGTH_SHORT).show();}
+                }),margins(-2,36,0,0));
+            }
+        }catch(Exception ignored){}
+    }
     private void showDocumentaryPhoto(PhotoLibrary.Photo item){
         android.app.Dialog overlay=new android.app.Dialog(this);
         LinearLayout content=vertical();
         content.setPadding(dp(13),dp(13),dp(13),dp(22));
         content.setBackgroundColor(t.bg);
         LinearLayout bar=horizontal();content.addView(bar,margins(-1,47,0,0));
+        appendPhotoReferences(bar,item.file);
         View blank=new View(this);
         bar.addView(blank,new LinearLayout.LayoutParams(0,-1,1));
         bar.addView(button("✕",false,overlay::dismiss),margins(45,40,0,0));
@@ -754,7 +778,7 @@ public final class MainActivity extends Activity {
         int screenHeight=getResources().getDisplayMetrics().heightPixels;
         int photoHeight=Math.max(dp(240),Math.min((int)(screenHeight*0.68f),dp(760)));
         content.addView(photo,new LinearLayout.LayoutParams(-1,photoHeight));
-        String credit=item.needsReview()?"ПРЕДВАРИТЕЛЬНОЕ ФОТО · ФОН НЕ УДАЛЁН":"ФОТО ВСТРОЕНО В ПРИЛОЖЕНИЕ";
+        String credit=item.needsReview()?"ИСТОЧНИК ТРЕБУЕТ ПРОВЕРКИ":("verified_unmodified_original".equals(item.processingStatus)?"ОРИГИНАЛЬНАЯ ФОТОГРАФИЯ · БЕЗ ИЗМЕНЕНИЙ":"ФОТО ВСТРОЕНО В ПРИЛОЖЕНИЕ");
         if(!item.author.isEmpty())credit+=" | "+item.author;
         if(!item.license.isEmpty())credit+=" | "+item.license;
         if(!item.source.isEmpty())credit+=" | "+item.source;

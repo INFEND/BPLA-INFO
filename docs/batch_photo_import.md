@@ -1,5 +1,19 @@
 # Batch import, photo originals and licensing
 
+## Current policy — 5 November 2026
+
+This section supersedes older background-removal requirements below. Add **3–5 real photographs of the exact model without changing publisher image bytes**. Do not crop, upscale, enhance, remove backgrounds, re-encode, generate substitutes or synthesize views. Preserve publisher watermarks. The same image under two filenames is not two photographs.
+
+Use `processing_status: verified_unmodified_original`. Set `original` and `prepared` to the same downloaded file. The importer enforces equality of the packaged SHA-256 and `original_sha256`, requires `model_review_approved: true` with meaningful `model_review_notes`, and keeps `background_removed: false`. Existing visual and distinct-angle review flags remain mandatory. Redistribution permission is required; editing permission is unnecessary when no edits are made.
+
+Inspect the actual image and the original publisher caption together. A caption mentioning an aircraft does not establish that the aircraft is visible: operators, control stations, launch tubes and unrelated aircraft in the same gallery do not replace model photos. Do not attach a generic-model photograph to an unconfirmed specific variant.
+
+Put publisher and license links in `app/src/main/assets/photo_credits.json`, keyed by the packaged photo path. These links open only when tapped; image decoding still reads the embedded APK file. Keep download provenance outside Android assets in `research/photos/`.
+
+The new batch is recorded in `research/photos/original_batch_2026_11_05.json`. The current review of all 52 embedded photos is in `research/photos/original_policy_review_2026_11_05.json`. Previous rejection of an attempted cutout does not reject its untouched publisher photograph. The 12 galleries in v1.0.27 do not complete the whole catalog.
+
+## Legacy processing modes and importer mechanics
+
 This importer works only with **already downloaded, visually reviewed local files**. It does not download images or decide whether a UAV model or license is genuine. Never use Wikimedia/Wikipedia, runtime photo links or generated substitutes for real photographs.
 
 Staging folder contains batch.json and original/prepared image files. Each record in photos[] requires: model_id, model_name (matching catalog), file_name, original, original_sha256, prepared, author, license, source (offline text), rights_evidence (explicit redistribution/modification permission), processing_status, visual_review_approved=true and visual_review_notes. Accepted licenses: CC0 1.0, CC BY 4.0, CC BY-SA 4.0, and verified U.S. Government public-domain work. New processing status is verified_clean_original (genuinely clean framing) or background_removed_verified (transparent alpha was visually reviewed). Do not claim either status without inspection. Per model 1 to 5 nonduplicate photos.

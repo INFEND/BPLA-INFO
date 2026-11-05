@@ -34,6 +34,7 @@ class LocalPhotoRegressionTests(unittest.TestCase):
         self.assertEqual(MANIFEST["schema"],2)
         self.assertEqual(MANIFEST["storage"],"apk-assets-only")
         ids = {entry["id"]:entry["name"] for entry in CATALOG["entries"]}
+        ids.update({entry["id"]:entry["name"] for entry in json.loads((ASSETS/"bulletin30_2025.json").read_text("utf-8"))["entries"]})
         referenced=set()
         for model_id, entry in MANIFEST["items"].items():
             self.assertIn(model_id, ids)
@@ -46,7 +47,7 @@ class LocalPhotoRegressionTests(unittest.TestCase):
                 self.assertNotIn(file,files)
                 files.add(file)
                 self.assertTrue(record["author"] and record["license"] and record["source"])
-                self.assertIn(record["processing_status"], ("needs_background_review", "background_removed_verified", "verified_clean_original"))
+                self.assertIn(record["processing_status"], ("needs_background_review", "background_removed_verified", "verified_clean_original", "verified_unmodified_original"))
                 if record["processing_status"] != "needs_background_review":
                     self.assertRegex(record["original_sha256"], r"^[0-9a-f]{64}$")
                 self.assertNotIn("url",json.dumps(record).lower())

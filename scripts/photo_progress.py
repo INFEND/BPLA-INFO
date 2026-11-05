@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 
 REQUIRED = 3
-APPROVED = {"background_removed_verified"}
+APPROVED = {"background_removed_verified", "verified_unmodified_original"}
 REVIEWED = {"needs_background_review"}
 
 
@@ -71,6 +71,11 @@ def audit(root):
                 raise ValueError("Repeated APK bytes: " + rel)
             hashes_seen.add(digest)
             total_embedded += 1
+            if record.get("processing_status") == "verified_unmodified_original":
+                if record.get("original_sha256") != digest:
+                    raise ValueError("Unmodified original bytes changed: " + rel)
+                if record.get("model_review_approved") is not True:
+                    continue
             if record.get("processing_status") in APPROVED and record.get("visual_review_approved") is True and record.get("angle_review_approved") is True:
                 angle = record.get('angle_id')
                 if not isinstance(angle, str) or not angle.strip():
@@ -98,7 +103,7 @@ def audit(root):
         "minimum_additional_verified_photos": sum(r["remaining"] for r in rows),
         "completion_percent": round(100 * len(complete) / len(models), 2) if models else 0,
         "models": rows,
-        "definition": "Complete means >=3 embedded real photos with distinct reviewed angles, verified background removal and visual approval. A hash check alone never proves model identity or visual quality."
+        "definition": "Complete means >=3 embedded genuine photos with reviewed model identity and distinct useful views. Verified unmodified originals keep the publisher file byte for byte; background removal is not required. A hash alone never proves model identity."
     }
 
 def main():

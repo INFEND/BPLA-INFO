@@ -40,6 +40,7 @@ public final class PhotoLibrary {
         }
         public boolean needsReview(){
             return !("background_removed_verified".equals(processingStatus) ||
+                     "verified_unmodified_original".equals(processingStatus) ||
                      "verified_clean_original".equals(processingStatus));
         }
     }

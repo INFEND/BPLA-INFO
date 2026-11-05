@@ -109,5 +109,29 @@ class ProgressTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Repeated APK bytes"):
             module.audit(self.root)
 
+    def test_three_verified_originals_complete_without_background_removal(self):
+        for i in range(3):
+            self.add('original%d.jpg'%i,state='verified_unmodified_original')
+        for photo in self.manifest['items']['model-one']['files']:
+            photo.update(original_sha256=photo['sha256'],model_review_approved=True,
+                         background_removed=False)
+        self.save()
+        self.assertEqual(module.audit(self.root)['models_complete'],1)
+
+    def test_original_without_model_review_does_not_count(self):
+        self.add('original.jpg',state='verified_unmodified_original')
+        photo=self.manifest['items']['model-one']['files'][0]
+        photo['original_sha256']=photo['sha256']
+        self.save()
+        self.assertEqual(module.audit(self.root)['photos_verified_processed_distinct'],0)
+
+    def test_mismatched_original_hash_fails_completion(self):
+        self.add('original.jpg',state='verified_unmodified_original')
+        photo=self.manifest['items']['model-one']['files'][0]
+        photo.update(original_sha256='0'*64,model_review_approved=True)
+        self.save()
+        with self.assertRaisesRegex(ValueError,'Unmodified original bytes changed'):
+            module.audit(self.root)
+
 if __name__ == "__main__":
     unittest.main()

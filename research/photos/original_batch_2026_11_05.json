@@ -1,0 +1,627 @@
+{
+  "schema": 1,
+  "reviewed_date": "2026-11-05",
+  "policy": "Verified real model photographs, publisher bytes unchanged. No image generation, background removal, cropping or re-encoding.",
+  "entries": [
+    {
+      "model_id": "lostarmour-pdf-2024-041",
+      "model_name": "PUMA AE RQ-20",
+      "file": "photos/original_dvids_8347954.jpg",
+      "source_page": "https://www.dvidshub.net/image/8347954/joint-base-mcguire-dix-lakehurst-2nd-bn-254th-rgt-rg-86-puma-rq-20a-15-april-2024",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2404/8347954/2000w_q95.jpg",
+      "sha256": "76e1afc26cc0ce0ec7577f522ef6df3f6886f0feaf4f05ecbfdc02ea81c60040",
+      "dimensions": [
+        1999,
+        1333
+      ],
+      "author": "Daniel Amburg",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies Puma. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Top view of the real Puma wing and body during inspection; supplemental close-up. Original publisher framing and background retained without editing.",
+      "angle_id": "top-body-detail",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "lostarmour-pdf-2024-041",
+      "model_name": "PUMA AE RQ-20",
+      "file": "photos/original_dvids_8347956.jpg",
+      "source_page": "https://www.dvidshub.net/image/8347956/joint-base-mcguire-dix-lakehurst-2nd-bn-254th-rgt-rg-86-puma-rq-20a-15-april-2024",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2404/8347956/2000w_q95.jpg",
+      "sha256": "285a6b57484dd1def9069b17dc2b24becb6c95b6bbda48185823597f11f4873c",
+      "dimensions": [
+        1999,
+        1333
+      ],
+      "author": "Daniel Amburg",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies Puma. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Complete real Puma airframe banking in flight, with fuselage and wings visible. Original publisher framing and background retained without editing.",
+      "angle_id": "banked-side-flight",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "lostarmour-pdf-2024-041",
+      "model_name": "PUMA AE RQ-20",
+      "file": "photos/original_dvids_8347957.jpg",
+      "source_page": "https://www.dvidshub.net/image/8347957/joint-base-mcguire-dix-lakehurst-2nd-bn-254th-rgt-rg-86-puma-rq-20a-15-april-2024",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2404/8347957/2000w_q95.jpg",
+      "sha256": "7df9b4bc0f610853fc2e65f0ca007e915c8c0944cef113e0870c5a87532123e7",
+      "dimensions": [
+        1999,
+        1333
+      ],
+      "author": "Daniel Amburg",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies Puma. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Complete real Puma at hand launch viewed from the side. Original publisher framing and background retained without editing.",
+      "angle_id": "side-hand-launch",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "lostarmour-pdf-2024-042",
+      "model_name": "PUMA LE",
+      "file": "photos/original_dvids_9457898.jpg",
+      "source_page": "https://www.dvidshub.net/image/9457898/coast-guard-members-conduct-uas-training-aboard-cutter",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2512/9457898/2000w_q95.jpg",
+      "sha256": "d5edcba923b1f49454f9f50a42a427c04a4ef63a2ee6c2f43dd8d654bf75a926",
+      "dimensions": [
+        2000,
+        2667
+      ],
+      "author": "Petty Officer 3rd Class Roberto Nieves",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies PUMA LE. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Puma LE viewed directly from the front during a deck demonstration. Original publisher framing and background retained without editing.",
+      "angle_id": "front-carried",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "lostarmour-pdf-2024-042",
+      "model_name": "PUMA LE",
+      "file": "photos/original_dvids_9457900.jpg",
+      "source_page": "https://www.dvidshub.net/image/9457900/coast-guard-members-conduct-uas-training-aboard-cutter",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2512/9457900/2000w_q95.jpg",
+      "sha256": "d0fc8d62b584b084c90680168122a94698a24bb4a45608018169ed9c57453d9d",
+      "dimensions": [
+        2000,
+        2667
+      ],
+      "author": "Petty Officer 3rd Class Roberto Nieves",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies PUMA LE. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Puma LE at an elevated front oblique angle during the same demonstration. Original publisher framing and background retained without editing.",
+      "angle_id": "front-oblique-carried",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "lostarmour-pdf-2024-081",
+      "model_name": "VECTOR",
+      "file": "photos/original_dvids_9498998.jpg",
+      "source_page": "https://www.dvidshub.net/image/9498998/22nd-meusoc-uas-operations-camp-santiago",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2601/9498998/2000w_q95.jpg",
+      "sha256": "69963126028528a564efa55fce7a13f24b5c47d2a67eb0ce1aef9f8701b26faa",
+      "dimensions": [
+        1999,
+        1333
+      ],
+      "author": "Cpl. Emily Hazelbaker",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies Vector. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Vector viewed from below while being carried; complete airframe visible. Original publisher framing and background retained without editing.",
+      "angle_id": "underside-carried",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "lostarmour-pdf-2024-081",
+      "model_name": "VECTOR",
+      "file": "photos/original_dvids_9498983.jpg",
+      "source_page": "https://www.dvidshub.net/image/9498983/22nd-meusoc-uas-operations-camp-santiago",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2601/9498983/2000w_q95.jpg",
+      "sha256": "6aa4ace320c472701a018dfc621a52eaaa84c625218a07db76d8eeb90d6435ca",
+      "dimensions": [
+        1999,
+        1333
+      ],
+      "author": "Cpl. Emily Hazelbaker",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies Vector. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Vector banking in flight; the whole aircraft is visible against the sky. Original publisher framing and background retained without editing.",
+      "angle_id": "underside-banked-flight",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p008l",
+      "model_name": "Scan Eagle",
+      "file": "photos/original_dvids_426477.jpg",
+      "source_page": "https://www.dvidshub.net/image/426477/scaneagle-gives-troops-ever-vigilant-eye-sky",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/1107/426477/2000w_q95.jpg",
+      "sha256": "641f7721f8c9d0f598dcadb118dd97e326cc0f47c03d122f3acb1d5d008adea2",
+      "dimensions": [
+        2000,
+        1334
+      ],
+      "author": "Spc. Darriel Swatts",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies ScanEagle. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Complete ScanEagle wings and nose viewed head-on on the ground. Original publisher framing and background retained without editing.",
+      "angle_id": "front-ground",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p008l",
+      "model_name": "Scan Eagle",
+      "file": "photos/original_dvids_426478.jpg",
+      "source_page": "https://www.dvidshub.net/image/426478/scaneagle-gives-troops-ever-vigilant-eye-sky",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/1107/426478/2000w_q95.jpg",
+      "sha256": "582c45323e79df522c151592edc5651a8ea3b2e334dae75cc3907bb42f93665c",
+      "dimensions": [
+        2000,
+        1545
+      ],
+      "author": "Spc. Darriel Swatts",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies ScanEagle. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Complete ScanEagle approaching the retrieval line, viewed from below the nose. Original publisher framing and background retained without editing.",
+      "angle_id": "front-underside-flight",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p008l",
+      "model_name": "Scan Eagle",
+      "file": "photos/original_dvids_426480.jpg",
+      "source_page": "https://www.dvidshub.net/image/426480/scaneagle-gives-troops-ever-vigilant-eye-sky",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/1107/426480/2000w_q95.jpg",
+      "sha256": "982e7725a96078c29e54e9df13d96c9fe96dd31fbf29494b93f5217675714ba4",
+      "dimensions": [
+        2000,
+        2589
+      ],
+      "author": "Spc. Darriel Swatts",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies ScanEagle. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "ScanEagle top fuselage close-up during retrieval; outer wing portions are outside the original frame. Original publisher framing and background retained without editing.",
+      "angle_id": "upper-body-carried",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p008l",
+      "model_name": "Scan Eagle",
+      "file": "photos/original_dvids_573232.jpg",
+      "source_page": "https://www.dvidshub.net/image/573232/unmanned-aerial-vehicle-demo",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/1205/573232/2000w_q95.jpg",
+      "sha256": "842118eb9e0f98ed64019641779c508ae09a3d00daa5e6cbad3b08a69a9e9d6e",
+      "dimensions": [
+        2000,
+        1137
+      ],
+      "author": "Petty Officer 1st Class Andrew Kendrick",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies ScanEagle. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Complete ScanEagle from a front quarter angle in flight. Original publisher framing and background retained without editing.",
+      "angle_id": "front-quarter-flight",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p008l",
+      "model_name": "Scan Eagle",
+      "file": "photos/original_dvids_573235.jpg",
+      "source_page": "https://www.dvidshub.net/image/573235/unmanned-aerial-vehicle-demo",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/1205/573235/2000w_q95.jpg",
+      "sha256": "6f624563f10bd178951376ca8745d988f6e94a977c6b23a936477139235538fd",
+      "dimensions": [
+        2000,
+        3006
+      ],
+      "author": "Petty Officer 1st Class Andrew Kendrick",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies ScanEagle. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Complete ScanEagle from a rear quarter angle during retrieval. Original publisher framing and background retained without editing.",
+      "angle_id": "rear-quarter-flight",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p067r",
+      "model_name": "Black Hornet",
+      "file": "photos/original_dvids_2771167.jpg",
+      "source_page": "https://www.dvidshub.net/image/2771167/training-future-marines-take-mix",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/1608/2771167/2000w_q95.jpg",
+      "sha256": "520f6ad2f76563b96c3d53c06e74e70e2a289d682ce3b735380f1cc926f04e0c",
+      "dimensions": [
+        2000,
+        1335
+      ],
+      "author": "Cpl. Thor Larson",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies Black Hornet. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Black Hornet PD-100 era airframe clearly visible in a close flight photograph. Original publisher framing and background retained without editing.",
+      "angle_id": "front-quarter-close-flight",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p067r",
+      "model_name": "Black Hornet",
+      "file": "photos/original_dvids_2771169.jpg",
+      "source_page": "https://www.dvidshub.net/image/2771169/training-future-marines-take-mix",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/1608/2771169/2000w_q95.jpg",
+      "sha256": "8d61b4501aa3e03a8e5e19b4de26013350a184b2367a224adc5632ac4c3a0ab7",
+      "dimensions": [
+        2000,
+        1335
+      ],
+      "author": "Cpl. Thor Larson",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies Black Hornet. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Complete Black Hornet photographed from the side in flight. Original publisher framing and background retained without editing.",
+      "angle_id": "side-flight",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p067r",
+      "model_name": "Black Hornet",
+      "file": "photos/original_dvids_4670040.jpg",
+      "source_page": "https://www.dvidshub.net/image/4670040/marines-with-spmagtf-cr-cc-conduct-uas-operations",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/1808/4670040/2000w_q95.jpg",
+      "sha256": "dced0687576974fca43fcdb3811cddf6f020c2dc3186087b36efcac0641357d6",
+      "dimensions": [
+        2000,
+        3000
+      ],
+      "author": "Cpl. Gabino Perez",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies Black Hornet. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Black Hornet PD-100 at hand launch viewed from an elevated front angle; natural documentary framing retained. Original publisher framing and background retained without editing.",
+      "angle_id": "front-upper-launch",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p021l",
+      "model_name": "Shark",
+      "file": "photos/original_shark_00.webp",
+      "source_page": "https://armyinform.com.ua/2025/11/10/pyatirka-krylatyh-z-yastrubiv-gostrozori-drony-rozvidnyky-prochisuyut-vorozhyj-tyl/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2025/11/01_golovna-2-scaled.webp",
+      "sha256": "86dd56929b8bc5678789326de146a34de15e3f0b0634243cd308c5ba6adae8b6",
+      "dimensions": [
+        2048,
+        1365
+      ],
+      "author": "Антон Шевельов / Міністерство оборони України",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "Publisher report and adjacent gallery identify SHARK; attached only to the generic Shark catalog entry, not Mini Shark, SHARK-M or SHARK-D.",
+      "visual_review_notes": "Complete SHARK airframe tilted toward the camera. No changes to publisher image bytes.",
+      "angle_id": "upper-front-group",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p021l",
+      "model_name": "Shark",
+      "file": "photos/original_shark_17.webp",
+      "source_page": "https://armyinform.com.ua/2025/11/10/pyatirka-krylatyh-z-yastrubiv-gostrozori-drony-rozvidnyky-prochisuyut-vorozhyj-tyl/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2025/11/18-scaled.webp",
+      "sha256": "0cfbbbf7f40288e4c9f3efea867975fa6a606250d5418c5f3cd3a23d959d1cfe",
+      "dimensions": [
+        2048,
+        1365
+      ],
+      "author": "Антон Шевельов / Міністерство оборони України",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "Publisher report and adjacent gallery identify SHARK; attached only to the generic Shark catalog entry, not Mini Shark, SHARK-M or SHARK-D.",
+      "visual_review_notes": "SHARK nose and camera detail from the front; wing tips outside the original frame. No changes to publisher image bytes.",
+      "angle_id": "front-nose-detail",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p021l",
+      "model_name": "Shark",
+      "file": "photos/original_shark_21.webp",
+      "source_page": "https://armyinform.com.ua/2025/11/10/pyatirka-krylatyh-z-yastrubiv-gostrozori-drony-rozvidnyky-prochisuyut-vorozhyj-tyl/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2025/11/22-1-scaled.webp",
+      "sha256": "09cc041170259fb94c5ff1e4a83db37d250b75bef68269adc7cf92cbf59b2a35",
+      "dimensions": [
+        2048,
+        1365
+      ],
+      "author": "Антон Шевельов / Міністерство оборони України",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "Publisher report and adjacent gallery identify SHARK; attached only to the generic Shark catalog entry, not Mini Shark, SHARK-M or SHARK-D.",
+      "visual_review_notes": "SHARK fuselage, tail and propeller from the rear side; upper wing tip outside the original frame. No changes to publisher image bytes.",
+      "angle_id": "rear-side-carried",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p020l",
+      "model_name": "Лелека-100 (Аист)",
+      "file": "photos/original_leleka100_00.jpg",
+      "source_page": "https://armyinform.com.ua/2024/03/14/yak-zhurnalist-programist-geodezyst-i-pidpryyemecz-znahodyat-vorozhu-tehniku-zamaskovanu-pid-kupu-smittya-fotoreportazh/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2024/03/leleka-7.jpg",
+      "sha256": "02d178a580950fdfbfa7380e29ec22d38ba30b58617358ed73e4b534144d96b8",
+      "dimensions": [
+        1500,
+        1000
+      ],
+      "author": "Антон Шевельов / Міністерство оборони України",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "Publisher report and adjacent gallery identify Leleka-100; attached only to the generic Leleka-100 catalog entry, not a specific BASIC, EFT, LR or VTOL variant.",
+      "visual_review_notes": "Leleka-100 in a group photograph; identifiable airframe and wing shape. No changes to publisher image bytes.",
+      "angle_id": "front-upper-group",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p020l",
+      "model_name": "Лелека-100 (Аист)",
+      "file": "photos/original_leleka100_01.jpg",
+      "source_page": "https://armyinform.com.ua/2024/03/14/yak-zhurnalist-programist-geodezyst-i-pidpryyemecz-znahodyat-vorozhu-tehniku-zamaskovanu-pid-kupu-smittya-fotoreportazh/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2024/03/leleka-3.jpg",
+      "sha256": "642b8982cfb21a6d8a2aab60a19307909ad5da2340732d40dbaca3588c1e8dec",
+      "dimensions": [
+        1500,
+        1000
+      ],
+      "author": "Антон Шевельов / Міністерство оборони України",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "Publisher report and adjacent gallery identify Leleka-100; attached only to the generic Leleka-100 catalog entry, not a specific BASIC, EFT, LR or VTOL variant.",
+      "visual_review_notes": "Whole Leleka-100 at hand launch, viewed from below and the side. No changes to publisher image bytes.",
+      "angle_id": "side-lower-launch",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p020l",
+      "model_name": "Лелека-100 (Аист)",
+      "file": "photos/original_leleka100_02.jpg",
+      "source_page": "https://armyinform.com.ua/2024/03/14/yak-zhurnalist-programist-geodezyst-i-pidpryyemecz-znahodyat-vorozhu-tehniku-zamaskovanu-pid-kupu-smittya-fotoreportazh/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2024/03/leleka-13.jpg",
+      "sha256": "972245173c3c8626225e8839d3606ce0035c0dd40a2d74a73d619510c36f446e",
+      "dimensions": [
+        1500,
+        1000
+      ],
+      "author": "Антон Шевельов / Міністерство оборони України",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "Publisher report and adjacent gallery identify Leleka-100; attached only to the generic Leleka-100 catalog entry, not a specific BASIC, EFT, LR or VTOL variant.",
+      "visual_review_notes": "Leleka-100 side view on the ground; original person and surroundings retained. No changes to publisher image bytes.",
+      "angle_id": "side-ground",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p020l",
+      "model_name": "Лелека-100 (Аист)",
+      "file": "photos/original_leleka100_06.jpg",
+      "source_page": "https://armyinform.com.ua/2024/03/14/yak-zhurnalist-programist-geodezyst-i-pidpryyemecz-znahodyat-vorozhu-tehniku-zamaskovanu-pid-kupu-smittya-fotoreportazh/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2024/03/leleka-6.jpg",
+      "sha256": "0b5d180f8eeab64ac5bfdc6010d8519535316bc1a4701adab3a78216872b6aae",
+      "dimensions": [
+        1500,
+        1000
+      ],
+      "author": "Антон Шевельов / Міністерство оборони України",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "Publisher report and adjacent gallery identify Leleka-100; attached only to the generic Leleka-100 catalog entry, not a specific BASIC, EFT, LR or VTOL variant.",
+      "visual_review_notes": "Whole Leleka-100 carried vertically with underside and airframe details visible. No changes to publisher image bytes.",
+      "angle_id": "underside-carried",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p028r",
+      "model_name": "Jump 20",
+      "file": "photos/original_dvids_6175896.jpg",
+      "source_page": "https://www.dvidshub.net/image/6175896/jump-20-launch",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2004/6175896/2000w_q95.jpg",
+      "sha256": "5eb5c02cadefac9078cf8f0c7c88c5790df0dbda628ecd34c0f5a1dcbfcd81db",
+      "dimensions": [
+        2000,
+        1500
+      ],
+      "author": "Sarah Tate",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies JUMP 20. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "JUMP 20 on the ground, photographed from the front during an engine start; real aircraft and propeller visible. Original publisher framing and background retained without editing.",
+      "angle_id": "front-ground",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p028r",
+      "model_name": "Jump 20",
+      "file": "photos/original_dvids_7654087.jpg",
+      "source_page": "https://www.dvidshub.net/image/7654087/aerovironment-jump-20",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2302/7654087/2000w_q95.jpg",
+      "sha256": "e9645426d79ea1aaf9e74e79514f5e69f69dd482c5492ce93245fc962c4f0e59",
+      "dimensions": [
+        2000,
+        1430
+      ],
+      "author": "David Hylton",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies JUMP 20. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "JUMP 20 complete airframe viewed from the rear side in flight. Original publisher framing and background retained without editing.",
+      "angle_id": "rear-side-flight",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p028r",
+      "model_name": "Jump 20",
+      "file": "photos/original_dvids_9587088.jpg",
+      "source_page": "https://www.dvidshub.net/image/9587088/22nd-meu-soc-jump-20-operations-aboard-uss-san-antonio",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2603/9587088/2000w_q95.jpg",
+      "sha256": "b971b68b06300662b3ddbe4d146ee7fd0281a8a729697bd09a3bf4607455f6da",
+      "dimensions": [
+        1999,
+        1333
+      ],
+      "author": "Sgt. Maurion Moore",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies JUMP 20. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "JUMP 20 complete airframe viewed from above and behind on a deck. Original publisher framing and background retained without editing.",
+      "angle_id": "upper-rear-ground",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p028r",
+      "model_name": "Jump 20",
+      "file": "photos/original_dvids_9587098.jpg",
+      "source_page": "https://www.dvidshub.net/image/9587098/22nd-meu-soc-jump-20-operations-aboard-uss-san-antonio",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2603/9587098/2000w_q95.jpg",
+      "sha256": "f40d0e92891ab7a6fe268289abbbadc787cc67396c7159af228bc57925ee6049",
+      "dimensions": [
+        1999,
+        1333
+      ],
+      "author": "Sgt. Maurion Moore",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies JUMP 20. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "JUMP 20 full wings, underside and tail viewed from behind in flight. Original publisher framing and background retained without editing.",
+      "angle_id": "underside-rear-flight",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p028r",
+      "model_name": "Jump 20",
+      "file": "photos/original_dvids_9587102.jpg",
+      "source_page": "https://www.dvidshub.net/image/9587102/22nd-meu-soc-jump-20-operations-aboard-uss-san-antonio",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2603/9587102/2000w_q95.jpg",
+      "sha256": "5db941a3589025f612d411d201ff3f6784355a70f5403f6d8302e8c4b0cc3f3a",
+      "dimensions": [
+        1999,
+        1333
+      ],
+      "author": "Sgt. Maurion Moore",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies JUMP 20. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "JUMP 20 photographed head-on during landing with whole aircraft in view. Original publisher framing and background retained without editing.",
+      "angle_id": "front-hover",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p197r",
+      "model_name": "Switchblade 300",
+      "file": "photos/original_dvids_6857277.jpg",
+      "source_page": "https://www.dvidshub.net/image/6857277/v1-3-puma-switchblade-and-stalker-shoot",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2109/6857277/2000w_q95.jpg",
+      "sha256": "f370d5b87a64ac391ee21ad57a91d636ecf734aef8fef5333b413b239547c6e2",
+      "dimensions": [
+        1999,
+        1333
+      ],
+      "author": "Cpl. Alexis Moradian",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies Switchblade 300. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Complete Switchblade 300 airframe on the ground with wings unfolded; photographed from above and the side. Original publisher framing and background retained without editing.",
+      "angle_id": "upper-side-ground",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p197r",
+      "model_name": "Switchblade 300",
+      "file": "photos/original_dvids_5861378.jpg",
+      "source_page": "https://www.dvidshub.net/image/5861378/us-marines-1-6-conduct-live-fire-mout",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/1910/5861378/2000w_q95.jpg",
+      "sha256": "f0ce23ce16ca4bc129860dda005525654f66c38ac2182d6e5c4c458f086ccf3c",
+      "dimensions": [
+        2000,
+        3000
+      ],
+      "author": "Cpl. Timothy Lutz",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies Switchblade 300. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Close photograph of a real folded Switchblade 300 training unit held in hand; original training markings retained. Original publisher framing and background retained without editing.",
+      "angle_id": "folded-body-close",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p197r",
+      "model_name": "Switchblade 300",
+      "file": "photos/original_dvids_5861379.jpg",
+      "source_page": "https://www.dvidshub.net/image/5861379/us-marines-1-6-conduct-live-fire-mout",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/1910/5861379/2000w_q95.jpg",
+      "sha256": "37f9d76fc3fefe50ccf2ee74acbcdca148e7bf99f2a1906562fd5e60e93d7416",
+      "dimensions": [
+        2000,
+        3000
+      ],
+      "author": "Cpl. Timothy Lutz",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies Switchblade 300. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Switchblade 300 airborne after launch, with deployed wings and body visible in the original frame. Original publisher framing and background retained without editing.",
+      "angle_id": "side-launch-flight",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p197r",
+      "model_name": "Switchblade 300",
+      "file": "photos/original_dvids_6857276.jpg",
+      "source_page": "https://www.dvidshub.net/image/6857276/v1-3-puma-switchblade-and-stalker-shoot",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2109/6857276/2000w_q95.jpg",
+      "sha256": "0a14e30379cae41322084c1d172a30d79ba70c8e1f5e4bc7a3321a8a331b18f1",
+      "dimensions": [
+        2000,
+        3000
+      ],
+      "author": "Cpl. Alexis Moradian",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies Switchblade 300. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Switchblade 300 10C immediately after launch, viewed from behind; photographed unit identified explicitly by the source. Original publisher framing and background retained without editing.",
+      "angle_id": "rear-launch",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    }
+  ]
+}

@@ -60,25 +60,24 @@ class PdfPreviewRegression(unittest.TestCase):
             self.assertIn(["Максимальная скорость, км/ч","120"],rows)
             self.assertIn(["Тактический радиус, км","16"],rows)
         self.assertIn(["Время полета, ч","24…720"],entries["ab12dmn"]["specRows"])
-    def test_preview_photos_are_real_unmodified_source_bytes(self):
+    def test_verified_photos_are_real_unmodified_source_bytes(self):
         manifest=json.loads((ASSETS/"bundled_photos.json").read_text("utf-8"))
-        self.assertEqual(len(manifest["items"]),6)
         photos=[r for x in manifest["items"].values() for r in x["files"]]
-        self.assertEqual(len(photos),21)
-        previews=[r for r in photos if r.get("publication_status")=="preview_unreviewed"]
-        self.assertEqual(len(previews),19)
-        self.assertTrue(all(not r["visual_review_approved"] and not r["background_removed"] for r in previews))
-        self.assertEqual(sum(r["license"]=="CC BY 4.0" for r in previews),15)
-        self.assertEqual(sum(r["license"]=="Public domain (U.S. Government)" for r in previews),4)
-        for photo in previews:
+        self.assertGreaterEqual(len(photos),21)
+        originals=[r for r in photos if r.get("processing_status")=="verified_unmodified_original"]
+        self.assertEqual(len(originals),len(photos))
+        for photo in originals:
             packaged=ASSETS/photo["file"]
-            original=ROOT/photo["source_archive"]
+            original=ROOT/photo["original_archive"]
             self.assertEqual(hashlib.sha256(packaged.read_bytes()).hexdigest(),photo["sha256"])
             self.assertEqual(packaged.read_bytes(),original.read_bytes())
-    def test_photo_viewer_must_warn_unreviewed(self):
+            self.assertTrue(photo["model_review_approved"])
+            self.assertFalse(photo["background_removed"])
+    def test_fullscreen_status_describes_original_and_retains_identity_warning(self):
         ui=(JAVA/"MainActivity.java").read_text("utf-8")
         lib=(JAVA/"PhotoLibrary.java").read_text("utf-8")
-        self.assertIn("ПРЕДВАРИТЕЛЬНОЕ ФОТО",ui)
-        self.assertIn("ФОН НЕ УДАЛЁН",ui)
+        self.assertIn("ИСТОЧНИК ТРЕБУЕТ ПРОВЕРКИ",ui)
+        self.assertIn("ОРИГИНАЛЬНАЯ ФОТОГРАФИЯ · БЕЗ ИЗМЕНЕНИЙ",ui)
+        self.assertNotIn("ФОН НЕ УДАЛЁН",ui)
         self.assertIn("public boolean needsReview()",lib)
 if __name__=="__main__":unittest.main()

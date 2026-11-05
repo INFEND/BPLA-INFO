@@ -61,7 +61,12 @@ class OfflinePreviewIntegrity(unittest.TestCase):
                     self.assertNotEqual(photo.get("publication_status"), "verified")
                 else:
                     self.assertIn(photo["processing_status"],
-                                  {"verified_clean_original", "background_removed_verified"})
+                                  {"verified_clean_original", "background_removed_verified", "verified_unmodified_original"})
+                if photo["processing_status"] == "verified_unmodified_original":
+                    self.assertEqual(photo["original_sha256"], digest)
+                    self.assertIs(photo.get("model_review_approved"), True)
+                    self.assertIs(photo.get("visual_review_approved"), True)
+                    self.assertIs(photo.get("background_removed"), False)
         self.assertGreater(len(seen_paths), 0)
 
     def test_preview_counts_are_not_verified_cutouts(self):

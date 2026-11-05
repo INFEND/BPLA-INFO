@@ -12,7 +12,7 @@ PHOTO_PATTERN = re.compile(r"photos/[a-z0-9][a-z0-9_-]{2,100}\.(?:webp|png|jpg|j
 LEGACY = ("assets/photo_sources.json",)
 MAX_SIZE = 12_000_000
 Image.MAX_IMAGE_PIXELS = 30_000_000
-VALID_PROCESSING = {"needs_background_review", "background_removed_verified", "verified_clean_original"}
+VALID_PROCESSING = {"needs_background_review", "background_removed_verified", "verified_clean_original", "verified_unmodified_original"}
 
 def valid_image_header(file, binary):
     if file.endswith(".webp"):
@@ -64,6 +64,11 @@ def audit(path):
                     raise ValueError("Missing or invalid photo processing status: " + file)
                 if status != "needs_background_review" and not re.fullmatch(r"[a-f0-9]{64}", record.get("original_sha256", "")):
                     raise ValueError("Verified photo lacks original SHA-256: " + file)
+                if status == "verified_unmodified_original":
+                    if record["sha256"] != record["original_sha256"]:
+                        raise ValueError("Unmodified original bytes changed: " + file)
+                    if record.get("model_review_approved") is not True or record.get("visual_review_approved") is not True:
+                        raise ValueError("Original model/photo identity not reviewed: " + file)
                 if not PHOTO_PATTERN.fullmatch(file):
                     raise ValueError("Invalid embedded photo path: " + file)
                 if file in referenced:
