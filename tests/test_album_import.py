@@ -66,9 +66,11 @@ class AlbumImportTests(unittest.TestCase):
         self.assertIn('"ДАЛЬНОСТЬ ХОДА"',drone)
         self.assertIn('"ВРЕМЯ РАБОТЫ"',drone)
         ui=UI.read_text("utf-8")
-        self.assertIn('"Морской","Наземный"',ui)
-        self.assertIn('category.equals("Морской")',ui)
-        self.assertIn('category.equals("Наземный")',ui)
+        self.assertNotIn('"Морской","Наземный"',ui)
+        self.assertNotIn('category.equals("Морской")',ui)
+        self.assertNotIn('category.equals("Наземный")',ui)
+        self.assertIn('CardPresentation.isAir(d.type(),d.sourceGroup)',ui)
+        self.assertIn('if(type.equals("Морской")||type.equals("Наземный"))continue;',store)
 
 if __name__=="__main__":
     unittest.main()

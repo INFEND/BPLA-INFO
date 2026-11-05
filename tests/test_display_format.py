@@ -8,26 +8,26 @@ JAVA=ROOT/"app/src/main/java/dev/infend/bplainfo/SpecFormatter.java"
 ACTIVITY=(ROOT/"app/src/main/java/dev/infend/bplainfo/MainActivity.java").read_text("utf-8")
 ICON=(ROOT/"app/src/main/java/dev/infend/bplainfo/SettingsIconView.java").read_text("utf-8")
 SAMPLES={
-    "160 км/ч (публикация 2026 г.)":"~160 КМ/Ч",
-    "200 км/ч (по публикациям)":"~200 КМ/Ч",
-    "100 Км/Ч":"100 КМ/Ч",
-    "1.5 км":"1,5 КМ",
-    "2,5 часа":"2,5 Ч",
-    "65 минут":"65 МИН",
+    "160 км/ч (публикация 2026 г.)":"~160 км/ч",
+    "200 км/ч (по публикациям)":"~200 км/ч",
+    "100 Км/Ч":"100 км/ч",
+    "1.5 км":"1,5 км",
+    "2,5 часа":"2,5 ч",
+    "65 минут":"65 мин",
     "до 1,2 кг (без дополнительной батареи)":"до 1,2 КГ (без дополнительной батареи)",
-    "140–160 км/ч (зависит от конфигурации)":"~140–160 КМ/Ч",
-    "12 м":"12 М",
-    "1,4 г":"1,4 Г",
+    "140–160 км/ч (зависит от конфигурации)":"~140–160 км/ч",
+    "12 м":"12 м",
+    "1,4 г":"1,4 г",
     "н/д":""
 }
 
 class DisplayRegression(unittest.TestCase):
     def test_code_and_icons(self):
-        self.assertIn('titleBar("БПЛА  ИНФО","Каталог беспилотных систем",null)',ACTIVITY)
+        self.assertIn('titleBar("БПЛА  ИНФО","Каталог БПЛА",null)',ACTIVITY)
         self.assertNotIn("АВИАЦИОННЫЙ АРХИВ",ACTIVITY)
         self.assertIn('private String activeSettingsSection=""',ACTIVITY)
         self.assertIn("settingsBodies.put(id,body)",ACTIVITY)
-        self.assertIn("SpecFormatter.display(item[1])",ACTIVITY)
+        self.assertIn("CardPresentation.rows(d.values,d.specRows)",ACTIVITY)
         self.assertIn('new SettingsIconView(this,id,',ACTIVITY)
         self.assertNotIn("glyphs={",ACTIVITY)
         for icon in ('"dark"','"light"','"appearance"','"ota"','"about"','"motion"'):
