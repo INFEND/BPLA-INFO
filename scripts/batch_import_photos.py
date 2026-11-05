@@ -100,7 +100,7 @@ def prepare(staging, repo):
             end=code.find("private static void mergeAlbum(",start)
             if start>=0 and end>start:
                 aliases={int(page):target for page,target in re.findall(
-                    r'case (\\d+):return "([^"]+)";',code[start:end])}
+                    r'case (\d+):return "([^"]+)";',code[start:end])}
         for row in json.loads(gzip.decompress(album.read_bytes()))["entries"]:
             if row["type"] not in {"Самолётный","Коптерный","Барражирующий"}:
                 continue
