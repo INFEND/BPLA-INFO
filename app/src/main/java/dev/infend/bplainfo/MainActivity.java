@@ -128,7 +128,7 @@ public final class MainActivity extends Activity {
     private void home(){
         showingDetail=false;showingSettings=false;activeSettingsSection="";
         setup();
-        titleBar("БПЛА  ИНФО","Каталог беспилотных систем",null);
+        titleBar("БПЛА  ИНФО","Каталог БПЛА",null);
         LinearLayout inner=vertical();inner.setPadding(dp(14),0,dp(14),dp(30));
         ScrollView sc=scroll(root);sc.addView(inner);
         LinearLayout controls=horizontal();inner.addView(controls,margins(-1,-2,0,9));
@@ -147,7 +147,7 @@ public final class MainActivity extends Activity {
         });
         HorizontalScrollView strip=new HorizontalScrollView(this);strip.setHorizontalScrollBarEnabled(false);
         LinearLayout chips=horizontal();strip.addView(chips);inner.addView(strip,margins(-1,47,0,6));
-        for(String group:new String[]{"Все","Самолётный","Мультикоптер","Многомоторный","Барражирующие боеприпасы","Морской","Наземный"}){
+        for(String group:new String[]{"Все","Самолётный","Мультикоптер","Многомоторный","Барражирующие боеприпасы"}){
             TextView chip=button(group,category.equals(group),()->{category=group;home();});
             chips.addView(chip,margins(-2,39,0,0));
         }
@@ -168,8 +168,8 @@ public final class MainActivity extends Activity {
             if(category.equals("Мультикоптер")&&!kind.equals("мультикоптер"))continue;
             if(category.equals("Многомоторный")&&!kind.equals("многомоторный"))continue;
             if(category.equals("Барражирующие боеприпасы")&&!kind.contains("барраж"))continue;
-            if(category.equals("Морской")&&!kind.equals("морской"))continue;
-            if(category.equals("Наземный")&&!kind.equals("наземный"))continue;
+            // Hide legacy non-aircraft records without deleting user photos or favorites.
+            if(!CardPresentation.isAir(d.type(),d.sourceGroup))continue;
             if(!q.isEmpty()){
                 boolean match=false;
                 for(String field:d.values){if(field!=null&&field.toLowerCase(Locale.ROOT).contains(q)){match=true;break;}}
@@ -201,7 +201,7 @@ public final class MainActivity extends Activity {
         target.removeAllViews();
         List<Drone> found=filtered();
         View parent=(View)listHost.getParent();
-        if(parent!=null){View count=((View)parent).getRootView().findViewById(1234001);if(count instanceof TextView)((TextView)count).setText("НАЙДЕНО: "+found.size()+"   |   ВСЕГО: "+records.size());}
+        if(parent!=null){View count=((View)parent).getRootView().findViewById(1234001);if(count instanceof TextView)((TextView)count).setText("НАЙДЕНО: "+found.size()+"   |   ВСЕГО: "+records.stream().filter(d->CardPresentation.isAir(d.type(),d.sourceGroup)).count());}
         if(found.isEmpty()){
             LinearLayout empty=vertical();empty.setPadding(dp(20),dp(36),dp(20),dp(36));empty.setGravity(Gravity.CENTER);
             empty.setBackground(panel(t.panel,22));
@@ -226,8 +226,8 @@ public final class MainActivity extends Activity {
             typeIcon.setPadding(dp(3),dp(3),dp(3),dp(3));
             head.addView(typeIcon,margins(37,37,0,0));
             LinearLayout labels=vertical();head.addView(labels,new LinearLayout.LayoutParams(0,-2,1));
-            labels.addView(text(d.name(),20,t.fg,true));
-            String engine=d.engineType().trim();
+            labels.addView(text(CardPresentation.name(d.name()),20,t.fg,true));
+            String engine=CardPresentation.engine(d.engineType());
             String modelType=d.displayType();
             String subtitle=engine.isEmpty()?modelType:modelType+" | "+engine;
             labels.addView(text(subtitle,13,t.fg,true));
@@ -246,7 +246,7 @@ public final class MainActivity extends Activity {
     }
     private void stat(LinearLayout row,String label,String value){
         String formatted=SpecFormatter.display(value);
-        if(formatted.isEmpty())return;
+        if(formatted.isEmpty())formatted="—";
         LinearLayout group=vertical();group.setPadding(dp(4),dp(3),dp(3),dp(2));
         row.addView(group,new LinearLayout.LayoutParams(0,-2,1));
         group.addView(text(label,9,t.muted,true));
@@ -255,7 +255,7 @@ public final class MainActivity extends Activity {
     private void save(){DroneStore.save(this,records);}
     private void detail(Drone d){
         hideKeyboard();showingDetail=true;setup();
-        titleBar(d.name(),d.catalogSource.isEmpty()?"ТЕХНИЧЕСКАЯ КАРТОЧКА":"АРХИВ | КЛАССИФИКАТОР 2024",this::home);
+        titleBar(CardPresentation.name(d.name()),"ТЕХНИЧЕСКАЯ КАРТОЧКА",this::home);
         LinearLayout content=vertical();content.setPadding(dp(15),0,dp(15),dp(26));scroll(root).addView(content);
         LinearLayout photos=vertical();photos.setPadding(dp(12),dp(13),dp(12),dp(13));
         photos.setBackground(outlined(t.panel,t.stroke,20));
@@ -327,24 +327,13 @@ public final class MainActivity extends Activity {
         actions.addView(button("⋮",false,()->more(d)),margins(45,-1,4,0));
         LinearLayout table=vertical();table.setPadding(dp(15),dp(14),dp(15),dp(14));table.setBackground(panel(t.panel,19));
         content.addView(table,margins(-1,-2,0,6));table.addView(text("ХАРАКТЕРИСТИКИ БПЛА",15,t.accent,true),margins(-1,-2,0,9));
-        if(!d.specRows.isEmpty()){
-            for(String[] item:d.specRows){
-                if(item.length<2||SpecFormatter.display(item[1]).isEmpty())continue;
-                LinearLayout row=vertical();row.setPadding(0,dp(6),0,dp(8));table.addView(row);
-                row.addView(text(item[0].toUpperCase(Locale.ROOT),10,t.muted,true));
-                row.addView(text(SpecFormatter.display(item[1]),15,t.fg,true));
-                View divider=new View(this);divider.setBackgroundColor(t.stroke);
-                table.addView(divider,new LinearLayout.LayoutParams(-1,dp(1)));
-            }
-        }else{
-            for(int i=1;i<14;i++){
-                if(SpecFormatter.display(d.get(i)).isEmpty())continue;
-                LinearLayout row=vertical();row.setPadding(0,dp(6),0,dp(8));table.addView(row);
-                row.addView(text(Drone.TITLES[i].toUpperCase(Locale.ROOT),10,t.muted,true));
-                row.addView(text(SpecFormatter.display(d.get(i)),15,t.fg,true));
-                View divider=new View(this);divider.setBackgroundColor(t.stroke);
-                table.addView(divider,new LinearLayout.LayoutParams(-1,dp(1)));
-            }
+        // Consistent order for base fields, PDF fields and locally edited cards.
+        for(String[] item:CardPresentation.rows(d.values,d.specRows)){
+            LinearLayout row=vertical();row.setPadding(0,dp(6),0,dp(8));table.addView(row);
+            row.addView(text(item[0],10,t.muted,true));
+            row.addView(text(item[1],15,t.fg,true));
+            View divider=new View(this);divider.setBackgroundColor(t.stroke);
+            table.addView(divider,new LinearLayout.LayoutParams(-1,dp(1)));
         }
     }
     private void loadVisibleDocumentaryPhotos(HorizontalScrollView strip,

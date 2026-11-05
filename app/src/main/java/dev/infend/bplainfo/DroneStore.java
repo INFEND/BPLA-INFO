@@ -376,6 +376,8 @@ public final class DroneStore {
            type.equals("Самолётный")||type.equals("Коптерный")||
            type.equals("Барражирующий")||type.equals("Морской")||type.equals("Наземный")))
          throw new org.json.JSONException("Invalid album entry "+i);
+       // Never import maritime or ground records into the aircraft catalog.
+       if(type.equals("Морской")||type.equals("Наземный"))continue;
        Drone found=null;
        String matchId=albumAliasTarget(page);
        if(!matchId.isEmpty()){
