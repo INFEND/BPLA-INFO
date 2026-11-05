@@ -50,6 +50,7 @@ public final class PhotoLibrary {
     private static final ExecutorService EXECUTOR=Executors.newFixedThreadPool(2);
     private static final Handler UI=new Handler(Looper.getMainLooper());
     private static Map<String,List<Photo>> ITEMS;
+    private static Map<String,String> ALIASES=Collections.emptyMap();
     private PhotoLibrary(){}
 
     /** Removes all old downloaded media, including incomplete .part files. */
@@ -116,6 +117,21 @@ public final class PhotoLibrary {
                     }
                     if(!list.isEmpty())built.put(id,Collections.unmodifiableList(list));
                 }
+                // Only explicit, reviewed catalog aliases share a gallery.
+                // No fuzzy name matching and no copying photos between variants.
+                HashMap<String,String> aliases=new HashMap<>();
+                JSONObject declared=root.optJSONObject("aliases");
+                if(declared!=null){
+                    java.util.Iterator<String> aliasKeys=declared.keys();
+                    while(aliasKeys.hasNext()){
+                        String alias=aliasKeys.next();
+                        JSONObject record=declared.optJSONObject(alias);
+                        if(record==null||!record.optBoolean("model_review_approved",false))continue;
+                        String target=record.optString("target_id","");
+                        if(!built.containsKey(alias)&&built.containsKey(target))aliases.put(alias,target);
+                    }
+                }
+                ALIASES=Collections.unmodifiableMap(aliases);
             }catch(Exception e){
                 android.util.Log.w("BPLA-INFO","Bundled photo manifest invalid",e);
             }
@@ -123,6 +139,7 @@ public final class PhotoLibrary {
         }
         if(drone==null)return Collections.emptyList();
         String id="seed-mara-2m".equals(drone.id)?"lostarmour-pdf-2024-036":drone.id;
+        if(ALIASES.containsKey(id))id=ALIASES.get(id);
         List<Photo> list=ITEMS.get(id);
         return list==null?Collections.emptyList():list;
     }

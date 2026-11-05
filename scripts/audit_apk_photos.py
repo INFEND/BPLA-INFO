@@ -91,6 +91,12 @@ def audit(path):
                   if name.startswith("assets/photos/") and not name.endswith("/")}
         if actual != referenced:
             raise ValueError("Unindexed photo binaries: " + repr(actual - referenced))
+        for alias,review in manifest.get('aliases',{}).items():
+            target=review.get('target_id')
+            if (alias in manifest['items'] or target not in manifest['items'] or
+                    alias==target or review.get('model_review_approved') is not True or
+                    len(review.get('model_review_notes','').strip())<15):
+                raise ValueError('Invalid or unreviewed photo gallery alias: '+alias)
         print(f"PASS: {path}: {len(manifest['items'])} model galleries, {len(referenced)} physical photos decoded with Pillow, no legacy photo manifest")
 
 if __name__ == "__main__":

@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "reviewed_date": "2026-11-05",
+  "scope": "Selected inspected sources only. This is not evidence that all remaining catalog cards have been exhaustively searched. No source below is accepted solely from its title.",
+  "entries": [
+    {
+      "model": "DJI Mavic 3",
+      "source_page": "https://www.dvidshub.net/image/9545197/jiatf-401-partners-with-cbp-counter-drone-training-summit-point-training-facility",
+      "status": "rejected_identity_conflict",
+      "notes": "The caption says Mavic 3, but the photographed white angular aircraft does not visually match. Do not accept the caption alone or guess another exact model."
+    },
+    {
+      "model": "DJI Mavic 3",
+      "source_page": "https://armyinform.com.ua/2023/02/09/kurs-pidgotovky-operatoriv-bpla-reportazh/",
+      "status": "wrong_model_for_requested_card",
+      "notes": "The article mentions Mavic 3, but several actual photographs show Mavic 2 Enterprise Dual; MAVIC 2 ENTERPRISE is legible on a photographed arm. Author-owned photos may be reusable only after exact variant review for the proper card."
+    },
+    {
+      "model": "DJI Mavic 3 / Valkyrie",
+      "source_page": "https://armyinform.com.ua/2023/09/07/sokolnychyj-na-peredovij-ta-jogo-kiberyastrub-abo-yak-operator-bpla-vlashtovuye-fotopolyuvannya-na-voroga/",
+      "status": "rights_unconfirmed",
+      "notes": "Photo credit explicitly says personal archive of Garmin. The publisher general CC license is not enough to override this third-party credit."
+    },
+    {
+      "model": "Aeryon SkyRanger R60",
+      "source_page": "https://www.dvidshub.net/image/9315959",
+      "status": "wrong_model_for_requested_card",
+      "notes": "RQ-28A SkyRanger is a differently branded aircraft, not Aeryon SkyRanger R60. Do not merge identical product words."
+    },
+    {
+      "model": "БУМЕРАНГ",
+      "source_page": "https://focus.ua/uk/digital/559429-ukrajinski-rozrobniki-viprobuvali-noviy-dron-bumerang-dlya-zsu-u-chomu-yogo-fishka-video",
+      "status": "insufficient_verified_views_and_rights",
+      "notes": "Correct Ukrainian flying-wing candidate with two published images; no verified three-view redistribution set. The unrelated Russian FPV of the same name must not fill this card."
+    },
+    {
+      "model": "ВАЛЬКИРИЯ",
+      "source_page": "https://armyinform.com.ua/2023/04/12/shho-u-vorozhomu-tylu-shukaye-aerorozvidka/",
+      "status": "aircraft_not_in_gallery",
+      "notes": "Inspected gallery shows DJI-type quadcopters and screen images, not the named Valkyrie fixed-wing aircraft."
+    },
+    {
+      "model": "FlyEye",
+      "source_page": "https://armyinform.com.ua/2025/04/29/nich-ne-shovaye-yak-letyuchi-ochi-zahidnogo-zrazka-bachat-voroga-kriz-temryavu-reb-ta-ppo/",
+      "status": "rights_unconfirmed",
+      "notes": "Photographs attributed to 23 OMBr, not the publisher own photographer. Verify original rights independently."
+    },
+    {
+      "model": "DeltaQuad PRO",
+      "source_page": "https://www.deltaquad.com/newsroom/article/Record-breaking-BVLOS-Rail-Inspection-Flight/",
+      "status": "rights_unconfirmed",
+      "notes": "Manufacturer identity source found, but redistribution rights and three distinct real photo views have not been established."
+    },
+    {
+      "model": "SIRKO",
+      "source_page": "https://armyinform.com.ua/2023/05/02/u-harkovi-prezentuvaly-pershyj-ukrayinskyj-bpla-pid-nazvoyu-sirko/",
+      "status": "partially_selected",
+      "notes": "Three clearly identified author photographs imported. Distant launch frames and controller/screen images excluded. Not Sirko 2 or ground Sirko S1."
+    },
+    {
+      "model": "PD-1",
+      "source_page": "https://armyinform.com.ua/2020/02/24/bezpilotnyj-kompleks-pd-1-narodzhenyj-vijnoyu/",
+      "status": "insufficient_verified_real_views",
+      "notes": "Three studio promotional views have render-like appearance and were not verified as actual photographs. One factory view is not a three-angle set. None imported."
+    },
+    {
+      "model": "PD-2",
+      "source_page": "https://armyinform.com.ua/2022/02/08/yak-na-ukrspeczsystems-stvoryuyut-novi-bezpilotni-kompleksy/",
+      "status": "insufficient_confirmed_views",
+      "notes": "The complete aircraft in image 1 visibly bears PD-2. Other images are components, distant workshop planes or cropped details. The lead close-up carries a Defense Express watermark; independent rights unconfirmed. No complete gallery imported."
+    },
+    {
+      "model": "Мара-2 / Кара",
+      "source_page": "https://armyinform.com.ua/2022/11/28/yaki-bpla-pokazaly-na-naczionalnomu-oboronnomu-hakatoni/",
+      "status": "insufficient_verified_views",
+      "notes": "Actual exhibition photographs seen, but fewer than three useful verified views per exact model. Diagrams, people-only images and unrelated drones excluded. No photographs imported."
+    },
+    {
+      "model": "Switchblade 600",
+      "source_page": "https://www.dvidshub.net/image/8767609/switchblade-600-loitering-munitions-training",
+      "status": "no_usable_three_view_set",
+      "notes": "All 19 public photos in this report inspected. Mostly launch tubes, operators, smoke, and an unrelated reconnaissance quadcopter. Do not label launcher photos or that quadcopter as the Switchblade 600 airframe. None imported."
+    }
+  ]
+}

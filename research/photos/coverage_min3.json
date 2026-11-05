@@ -1,982 +1,4225 @@
 {
-  "schema": 1,
-  "as_of": "2026-11-03",
-  "source_commit": "dfa35fa6e4d8020ad20de1c8f807a9171f78feb5",
-  "is_snapshot": true,
-  "requirements": [
-    "At least three genuine photos for every exact catalog model",
-    "Distinct useful angles; repeated crop does not count",
-    "Background removed without invented airframe details",
-    "Conservative enhancement; source credits and original bytes preserved",
-    "Photos physically embedded in APK",
-    "Completion additionally requires visual_review_approved=true and angle_review_approved=true"
-  ],
-  "totals": {
-    "catalog_models": 87,
-    "required_qualifying_photos": 261,
-    "embedded_photos": 2,
-    "verified_background_removed_photos": 0,
-    "models_complete": 0,
-    "archived_source_candidates": 26
-  },
+  "models_total": 525,
+  "minimum_verified_photos_required": 1575,
+  "models_complete": 31,
+  "models_incomplete": 494,
+  "photos_embedded": 87,
+  "photos_verified_processed_distinct": 85,
+  "physical_model_galleries": 21,
+  "reviewed_shared_galleries": 10,
+  "minimum_additional_verified_photos": 1482,
+  "completion_percent": 5.9,
   "models": [
     {
-      "model_id": "lostarmour-pdf-2024-001",
-      "model_name": "БУМЕРАНГ",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-002",
-      "model_name": "DELTAQUAD PRO",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-003",
-      "model_name": "ДОМАХА",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 7,
-      "complete": false,
-      "next_step": "Review and process archived sources; acquire missing distinct angles"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-004",
-      "model_name": "ELF-K",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-005",
-      "model_name": "A1-СМ ФУРИЯ",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 7,
-      "complete": false,
-      "next_step": "Review and process archived sources; acquire missing distinct angles"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-006",
-      "model_name": "FURY",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-007",
-      "model_name": "GALKA",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-008",
-      "model_name": "ГЕНДАЛЬФ",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-009",
-      "model_name": "SIRKO",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-010",
-      "model_name": "SIRKO 2",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-011",
-      "model_name": "СКИФ",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-012",
-      "model_name": "SKIPPER",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-013",
-      "model_name": "SOIKA",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-014",
-      "model_name": "SPARROW",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-015",
-      "model_name": "ВАЛЬКИРИЯ",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-016",
-      "model_name": "GHOST HUNTER",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-017",
-      "model_name": "GRAY WIDOW / GRAY WIDOW - 2M",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-018",
-      "model_name": "PATRIOT RV 010",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-019",
-      "model_name": "Quantix Recon",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-020",
-      "model_name": "R-15",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-021",
-      "model_name": "ШУКАЧ",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-022",
-      "model_name": "SHULIKA-K1",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-023",
-      "model_name": "SHULIKA-S1",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-024",
-      "model_name": "WIMAN 2",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-025",
-      "model_name": "AVENGER",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-026",
-      "model_name": "BACKFIRE K1",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-027",
-      "model_name": "БШ 20",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-028",
-      "model_name": "COBRA",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-029",
-      "model_name": "CORVO (PPDS)",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-030",
-      "model_name": "DARTS",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-031",
-      "model_name": "ELF",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-032",
-      "model_name": "FLYEYE",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-033",
-      "model_name": "GOR",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-034",
-      "model_name": "ХАКИ-20",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-035",
-      "model_name": "КИЕВСКАЯ РУСЬ",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-036",
-      "model_name": "МАРА-2М",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-037",
-      "model_name": "MINI SHARK",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-038",
-      "model_name": "OBSERVER-S",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-039",
-      "model_name": "ОГР",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-040",
-      "model_name": "ПРИВИД С1",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-041",
-      "model_name": "PUMA AE RQ-20",
-      "required": 3,
-      "embedded_photos": 2,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 2,
-      "complete": false,
-      "next_step": "Review and process archived sources; acquire missing distinct angles"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-042",
-      "model_name": "PUMA LE",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 2,
-      "complete": false,
-      "next_step": "Review and process archived sources; acquire missing distinct angles"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-043",
-      "model_name": "PUNISHER",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-044",
-      "model_name": "РАМА",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-045",
-      "model_name": "RQ-35 HEIDRUN",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-046",
-      "model_name": "РУБАКА",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-047",
-      "model_name": "ЩЕДРИК",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-048",
-      "model_name": "СИЧ",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-049",
-      "model_name": "SKYNETUA",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-050",
-      "model_name": "SPARROW LE",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-051",
-      "model_name": "SPECTATOR-M1",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-052",
-      "model_name": "THOR",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-053",
-      "model_name": "UA-BETA",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-054",
-      "model_name": "UJ-22 AIRBORNE",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-055",
-      "model_name": "BAYRAKTAR MINI",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-056",
-      "model_name": "CETUS",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 6,
-      "complete": false,
-      "next_step": "Review and process archived sources; acquire missing distinct angles"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-057",
-      "model_name": "ЧАКЛУН",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-058",
-      "model_name": "LELEKA-100 (BASIC)",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-059",
-      "model_name": "LELEKA-100 (EFT)",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-060",
-      "model_name": "LELEKA-100 LR",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-061",
-      "model_name": "AQ 400 SCYTHE",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-062",
-      "model_name": "UJ-26 BEAVER",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-063",
-      "model_name": "BAYRAKTAR TB2",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-064",
-      "model_name": "LUNA NG",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-065",
-      "model_name": "ЛЮТИЙ",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-066",
-      "model_name": "MUGIN-5 PRO",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-067",
-      "model_name": "ONE 150",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-068",
-      "model_name": "PD-1",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-069",
-      "model_name": "PD-2",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-070",
-      "model_name": "PENGUIN-C",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-071",
-      "model_name": "RAYBIRD-3",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-072",
-      "model_name": "EOS C",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-073",
-      "model_name": "FDG33",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-074",
-      "model_name": "JUPITER H1 (B)",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-075",
-      "model_name": "JUPITER H1 (C)",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-076",
-      "model_name": "JUPITER H3",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-077",
-      "model_name": "LELEKA-100 (VTOL)",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-078",
-      "model_name": "POSEIDON H10",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-079",
-      "model_name": "POSEIDON H6",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-080",
-      "model_name": "TEKEVER AR3",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-081",
-      "model_name": "VECTOR",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 2,
-      "complete": false,
-      "next_step": "Review and process archived sources; acquire missing distinct angles"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-082",
-      "model_name": "LOKI",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-083",
-      "model_name": "RAM",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-084",
-      "model_name": "RAM-2",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-085",
-      "model_name": "RAM-2S",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-086",
-      "model_name": "WARMATE (2.0)",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
-    },
-    {
-      "model_id": "lostarmour-pdf-2024-087",
-      "model_name": "WARMATE (3.0)",
-      "required": 3,
-      "embedded_photos": 0,
-      "verified_background_removed_photos": 0,
-      "missing_verified_photos": 3,
-      "archived_source_candidates": 0,
-      "complete": false,
-      "next_step": "Find and verify genuine licensed source photos of this exact variant"
+      "id": "lostarmour-pdf-2024-001",
+      "name": "БУМЕРАНГ",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-002",
+      "name": "DELTAQUAD PRO",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-003",
+      "name": "ДОМАХА",
+      "embedded": 5,
+      "verified_distinct_processed": 4,
+      "remaining": 0,
+      "complete": true
+    },
+    {
+      "id": "lostarmour-pdf-2024-004",
+      "name": "ELF-K",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-005",
+      "name": "A1-СМ ФУРИЯ",
+      "embedded": 5,
+      "verified_distinct_processed": 5,
+      "remaining": 0,
+      "complete": true
+    },
+    {
+      "id": "lostarmour-pdf-2024-006",
+      "name": "FURY",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-007",
+      "name": "GALKA",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-008",
+      "name": "ГЕНДАЛЬФ",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-009",
+      "name": "SIRKO",
+      "embedded": 3,
+      "verified_distinct_processed": 3,
+      "remaining": 0,
+      "complete": true
+    },
+    {
+      "id": "lostarmour-pdf-2024-010",
+      "name": "SIRKO 2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-011",
+      "name": "СКИФ",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-012",
+      "name": "SKIPPER",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-013",
+      "name": "SOIKA",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-014",
+      "name": "SPARROW",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-015",
+      "name": "ВАЛЬКИРИЯ",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-016",
+      "name": "GHOST HUNTER",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-017",
+      "name": "GRAY WIDOW / GRAY WIDOW - 2M",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-018",
+      "name": "PATRIOT RV 010",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-019",
+      "name": "Quantix Recon",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-020",
+      "name": "R-15",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-021",
+      "name": "ШУКАЧ",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-022",
+      "name": "SHULIKA-K1",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-023",
+      "name": "SHULIKA-S1",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-024",
+      "name": "WIMAN 2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-025",
+      "name": "AVENGER",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-026",
+      "name": "BACKFIRE K1",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-027",
+      "name": "БШ 20",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-028",
+      "name": "COBRA",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-029",
+      "name": "CORVO (PPDS)",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-030",
+      "name": "DARTS",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-031",
+      "name": "ELF",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-032",
+      "name": "FLYEYE",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-033",
+      "name": "GOR",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-034",
+      "name": "ХАКИ-20",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-035",
+      "name": "КИЕВСКАЯ РУСЬ",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-036",
+      "name": "МАРА-2М",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-037",
+      "name": "MINI SHARK",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-038",
+      "name": "OBSERVER-S",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-039",
+      "name": "ОГР",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-040",
+      "name": "ПРИВИД С1",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-041",
+      "name": "PUMA AE RQ-20",
+      "embedded": 5,
+      "verified_distinct_processed": 5,
+      "remaining": 0,
+      "complete": true
+    },
+    {
+      "id": "lostarmour-pdf-2024-042",
+      "name": "PUMA LE",
+      "embedded": 4,
+      "verified_distinct_processed": 4,
+      "remaining": 0,
+      "complete": true
+    },
+    {
+      "id": "lostarmour-pdf-2024-043",
+      "name": "PUNISHER",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-044",
+      "name": "РАМА",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-045",
+      "name": "RQ-35 HEIDRUN",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-046",
+      "name": "РУБАКА",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-047",
+      "name": "ЩЕДРИК",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-048",
+      "name": "СИЧ",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-049",
+      "name": "SKYNETUA",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-050",
+      "name": "SPARROW LE",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-051",
+      "name": "SPECTATOR-M1",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-052",
+      "name": "THOR",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-053",
+      "name": "UA-BETA",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-054",
+      "name": "UJ-22 AIRBORNE",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-055",
+      "name": "BAYRAKTAR MINI",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-056",
+      "name": "CETUS",
+      "embedded": 5,
+      "verified_distinct_processed": 4,
+      "remaining": 0,
+      "complete": true
+    },
+    {
+      "id": "lostarmour-pdf-2024-057",
+      "name": "ЧАКЛУН",
+      "embedded": 5,
+      "verified_distinct_processed": 5,
+      "remaining": 0,
+      "complete": true
+    },
+    {
+      "id": "lostarmour-pdf-2024-058",
+      "name": "LELEKA-100 (BASIC)",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-059",
+      "name": "LELEKA-100 (EFT)",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-060",
+      "name": "LELEKA-100 LR",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-061",
+      "name": "AQ 400 SCYTHE",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-062",
+      "name": "UJ-26 BEAVER",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-063",
+      "name": "BAYRAKTAR TB2",
+      "embedded": 5,
+      "verified_distinct_processed": 5,
+      "remaining": 0,
+      "complete": true
+    },
+    {
+      "id": "lostarmour-pdf-2024-064",
+      "name": "LUNA NG",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-065",
+      "name": "ЛЮТИЙ",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-066",
+      "name": "MUGIN-5 PRO",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-067",
+      "name": "ONE 150",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-068",
+      "name": "PD-1",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-069",
+      "name": "PD-2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-070",
+      "name": "PENGUIN-C",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-071",
+      "name": "RAYBIRD-3",
+      "embedded": 3,
+      "verified_distinct_processed": 3,
+      "remaining": 0,
+      "complete": true
+    },
+    {
+      "id": "lostarmour-pdf-2024-072",
+      "name": "EOS C",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-073",
+      "name": "FDG33",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-074",
+      "name": "JUPITER H1 (B)",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-075",
+      "name": "JUPITER H1 (C)",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-076",
+      "name": "JUPITER H3",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-077",
+      "name": "LELEKA-100 (VTOL)",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-078",
+      "name": "POSEIDON H10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-079",
+      "name": "POSEIDON H6",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-080",
+      "name": "TEKEVER AR3",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-081",
+      "name": "VECTOR",
+      "embedded": 4,
+      "verified_distinct_processed": 4,
+      "remaining": 0,
+      "complete": true
+    },
+    {
+      "id": "lostarmour-pdf-2024-082",
+      "name": "LOKI",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-083",
+      "name": "RAM",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-084",
+      "name": "RAM-2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-085",
+      "name": "RAM-2S",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-086",
+      "name": "WARMATE (2.0)",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "lostarmour-pdf-2024-087",
+      "name": "WARMATE (3.0)",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p007l",
+      "name": "Frame V2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p007r",
+      "name": "ACS-3М",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p008l",
+      "name": "Scan Eagle",
+      "embedded": 5,
+      "verified_distinct_processed": 5,
+      "remaining": 0,
+      "complete": true
+    },
+    {
+      "id": "bulletin30-2025-p008r",
+      "name": "H10 Poseidon VTOL",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p009l",
+      "name": "FreeUA-V2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p009r",
+      "name": "Гор2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p010l",
+      "name": "Airplast V1. О",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p010r",
+      "name": "Н10 Poseidon MkIV",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p011r",
+      "name": "Buntar Skyhopper",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p012r",
+      "name": "А1-СМ Фурия",
+      "embedded": 5,
+      "verified_distinct_processed": 5,
+      "remaining": 0,
+      "complete": true,
+      "shared_gallery": "lostarmour-pdf-2024-005"
+    },
+    {
+      "id": "bulletin30-2025-p013l",
+      "name": "Сокол-2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p014l",
+      "name": "Sirco",
+      "embedded": 3,
+      "verified_distinct_processed": 3,
+      "remaining": 0,
+      "complete": true,
+      "shared_gallery": "lostarmour-pdf-2024-009"
+    },
+    {
+      "id": "bulletin30-2025-p014r",
+      "name": "Sirco-2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p015l",
+      "name": "Siromaha-10В",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p015r",
+      "name": "Sirco-2М1",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p016l",
+      "name": "Мара-2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p016r",
+      "name": "Кара",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p017l",
+      "name": "Hawk",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p017r",
+      "name": "UA-Бета",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p018r",
+      "name": "Оbserver-S",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p019r",
+      "name": "PD-1900",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p020l",
+      "name": "Лелека-100 (Аист)",
+      "embedded": 4,
+      "verified_distinct_processed": 4,
+      "remaining": 0,
+      "complete": true
+    },
+    {
+      "id": "bulletin30-2025-p020r",
+      "name": "Эльф",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p021l",
+      "name": "Shark",
+      "embedded": 3,
+      "verified_distinct_processed": 3,
+      "remaining": 0,
+      "complete": true
+    },
+    {
+      "id": "bulletin30-2025-p021r",
+      "name": "М-10 Око",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p022l",
+      "name": "Галка МК2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p023l",
+      "name": "Spy Arrow",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p024l",
+      "name": "DeltaQuad PRO VTOL",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p024r",
+      "name": "Bayraktar Mini UAV",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p025l",
+      "name": "Aerostar",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p026r",
+      "name": "RQ-20 Puma",
+      "embedded": 5,
+      "verified_distinct_processed": 5,
+      "remaining": 0,
+      "complete": true,
+      "shared_gallery": "lostarmour-pdf-2024-041"
+    },
+    {
+      "id": "bulletin30-2025-p027l",
+      "name": "H6 Poseidon VTOL",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p027r",
+      "name": "EOS C VTOL",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p028l",
+      "name": "Mugine-5 Pro",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p028r",
+      "name": "Jump 20",
+      "embedded": 5,
+      "verified_distinct_processed": 5,
+      "remaining": 0,
+      "complete": true
+    },
+    {
+      "id": "bulletin30-2025-p029r",
+      "name": "ACS-3",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p030l",
+      "name": "SKIF",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p030r",
+      "name": "Гор",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p031l",
+      "name": "Primoco UAV One 150",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p032r",
+      "name": "Mikrovisor SM 7",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p034l",
+      "name": "D-80 Discovery",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p034r",
+      "name": "E-300 Enterprise",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p035l",
+      "name": "PD-3",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p035r",
+      "name": "АН-БК-1 Горлица",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p036l",
+      "name": "AQ-400 Коса",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p036r",
+      "name": "Сокол 300",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p037l",
+      "name": "Чайка ПВО",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p037r",
+      "name": "Bullet",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p038l",
+      "name": "Грохот",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p039l",
+      "name": "М-49 Гайдамака",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p039r",
+      "name": "Коготь 2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p040l",
+      "name": "Хаба многоразового использования",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p040r",
+      "name": "БАТОН цифра день",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p041l",
+      "name": "Харон",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p041r",
+      "name": "Бэкфайер",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p042l",
+      "name": "Коготь",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p042r",
+      "name": "GAARPIA",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p043l",
+      "name": "Besomar 3210",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p043r",
+      "name": "Besomar 3210-N",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p044l",
+      "name": "Besomar 3310",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p045l",
+      "name": "BLACKOUT бомбер",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p045r",
+      "name": "Молния",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p046l",
+      "name": "Харон 2.1",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p046r",
+      "name": "Харон 2.0 с ночной камерой",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p047l",
+      "name": "Жевжик IN-01",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p047r",
+      "name": "ЯН 1502",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p048l",
+      "name": "Зигзаг",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p048r",
+      "name": "Доре",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p049l",
+      "name": "ТОР Оператор",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p049r",
+      "name": "Тор ударный",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p050l",
+      "name": "SKY DEVIL",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p050r",
+      "name": "Siromaha 10K",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p051l",
+      "name": "Шпатель",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p051r",
+      "name": "Saker Hunter",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p052l",
+      "name": "SHARK-M",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p052r",
+      "name": "SHARK-D",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p053l",
+      "name": "ПР-1",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p053r",
+      "name": "Pomsta-T",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p054l",
+      "name": "POLYDRONE pawnPlane",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p054r",
+      "name": "PD-2 с вертикальным взлетом и посадкой",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p055l",
+      "name": "Сокол (самолётный, стр. 55)",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p055r",
+      "name": "Сойка",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p056l",
+      "name": "Харон 2.0",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p058l",
+      "name": "Локи",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p058r",
+      "name": "Лунь",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p059l",
+      "name": "Лелека-100М2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p059r",
+      "name": "Аист - 100",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p060l",
+      "name": "Besomar Разведчик 1100",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p060r",
+      "name": "VB140 фламинго",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p061l",
+      "name": "Stingray 1 Ударный",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p061r",
+      "name": "Stingray 1 Фальш-цель",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p064l",
+      "name": "РОКСОЛЯНА",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p064r",
+      "name": "Бандерик-24 разведчик",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p065l",
+      "name": "Malloy Aeronautics T150",
+      "embedded": 4,
+      "verified_distinct_processed": 4,
+      "remaining": 0,
+      "complete": true
+    },
+    {
+      "id": "bulletin30-2025-p065r",
+      "name": "Quantix Recon UAS",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p066l",
+      "name": "WARDOG Scout",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p066r",
+      "name": "Phoenix 03 Heavy UCAV",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p067l",
+      "name": "Aeryon SkyRanger R60",
+      "embedded": 4,
+      "verified_distinct_processed": 4,
+      "remaining": 0,
+      "complete": true
+    },
+    {
+      "id": "bulletin30-2025-p067r",
+      "name": "Black Hornet",
+      "embedded": 3,
+      "verified_distinct_processed": 3,
+      "remaining": 0,
+      "complete": true
+    },
+    {
+      "id": "bulletin30-2025-p068l",
+      "name": "Autel Robotics EVO 2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p068r",
+      "name": "DJI Mavic 2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p069l",
+      "name": "AUTEL EVO",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p069r",
+      "name": "DJI Mavic 3",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p070l",
+      "name": "DJI Mini 2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p070r",
+      "name": "DJI Air 2S",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p071l",
+      "name": "Parrot ANAFI",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p071r",
+      "name": "CyberLux K8 UAS",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p072l",
+      "name": "LuckyStrike",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p072r",
+      "name": "Кажан",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p073l",
+      "name": "КанИот",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p073r",
+      "name": "К-Бобр 1-20",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p074l",
+      "name": "1-20ТА",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p074r",
+      "name": "1-20пс ночная",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p075l",
+      "name": "Бандерик-24",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p075r",
+      "name": "Бандерик-24 сбрасыватель",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p076l",
+      "name": "Гава Ками 10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p076r",
+      "name": "Гава",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p077l",
+      "name": "R-34",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p077r",
+      "name": "WIY KRUK",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p078l",
+      "name": "WIY POMSTA-X",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p078r",
+      "name": "WIY POMSTA XV",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p079l",
+      "name": "Горынь-10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p079r",
+      "name": "Бомбер",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p080l",
+      "name": "Ласточка-11",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p080r",
+      "name": "Ласточка-13",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p081l",
+      "name": "Мольфар",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p081r",
+      "name": "Шмавик",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p082l",
+      "name": "Buntar-З",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p082r",
+      "name": "Фарш",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p083l",
+      "name": "Чупакабра-13",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p083r",
+      "name": "Saker Scout В",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p084l",
+      "name": "URS FQ-10B",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p084r",
+      "name": "POLYDRONE-TORUK",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p085l",
+      "name": "HEAVY SHOT IMMORTAL",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p085r",
+      "name": "H10F-MD PICA-дневная версия",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p086l",
+      "name": "Black Widow",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p086r",
+      "name": "Оса",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p087l",
+      "name": "Viper SM 3",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p087r",
+      "name": "Р-18",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p088l",
+      "name": "Vampire (Баба-Яга)",
+      "embedded": 4,
+      "verified_distinct_processed": 4,
+      "remaining": 0,
+      "complete": true
+    },
+    {
+      "id": "bulletin30-2025-p088r",
+      "name": "Большой Бандерик",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p089l",
+      "name": "Surpriser",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p089r",
+      "name": "HEAVY SHOT",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p090l",
+      "name": "Revolver 860",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p090r",
+      "name": "DJI Matrice 300 RTK",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p091l",
+      "name": "ГРИФ-Т1",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p091r",
+      "name": "ГРИФ-Т2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p092l",
+      "name": "Hummel-10’’",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p092r",
+      "name": "Hummel-13’’",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p093l",
+      "name": "Hunter D-1K",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p093r",
+      "name": "Hunter D-1KT",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p094l",
+      "name": "Hunter D-2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p094r",
+      "name": "Hunter D-3",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p095l",
+      "name": "Гурзуф",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p095r",
+      "name": "Гурзуф тепловизионный",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p096l",
+      "name": "JET-8",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p096r",
+      "name": "JET-8 тепловизионный",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p097l",
+      "name": "JET-10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p097r",
+      "name": "JET-10 с тепловизионной камерой",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p098l",
+      "name": "BRK-7 SERPEN",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p098r",
+      "name": "BRK-7 WYVERN-D",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p099r",
+      "name": "X-8",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p100l",
+      "name": "Дебош 8*8 аналог день",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p100r",
+      "name": "Дебош 8*8 аналог ночь",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p101l",
+      "name": "Дебош 8*8 цифра день",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p101r",
+      "name": "Дебош 8*8 цифра ночь",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p102l",
+      "name": "AFS-7Д",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p102r",
+      "name": "AFS-7Т",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p103l",
+      "name": "AFS-8Д",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p103r",
+      "name": "AFS-8Т",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p104l",
+      "name": "AFS-10Д",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p104r",
+      "name": "AFS-10Н+Т",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p105l",
+      "name": "Амага-10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p105r",
+      "name": "Амага 10-0",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p106l",
+      "name": "JET-13-FO",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p106r",
+      "name": "Волчок 10-О",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p107l",
+      "name": "БОМБ 15-0",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p107r",
+      "name": "БОМБ 10-0",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p108l",
+      "name": "УД-10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p108r",
+      "name": "С100",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p109l",
+      "name": "Босоркун 5.8",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p109r",
+      "name": "Босоркун 5.8Т",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p110l",
+      "name": "Босоркун 5.8 (с модулем автоматического донаведения)",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p110r",
+      "name": "Гава Ками 8",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p111l",
+      "name": "Хищник 7 standart",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p111r",
+      "name": "Хищник 7 plus",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p112l",
+      "name": "Gedz-8",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p112r",
+      "name": "Gedz-8 Зенитный",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p113l",
+      "name": "Gedz-10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p113r",
+      "name": "GREK",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p114l",
+      "name": "Хищник 9 ultra",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p114r",
+      "name": "Хищник Курьер Combat 10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p115l",
+      "name": "Хищник 10 ultra",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p115r",
+      "name": "Хищник Курьер Combat 11",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p116l",
+      "name": "Хищник REBOFF 13 10 км",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p116r",
+      "name": "Хищник REBOFF 10 Lite 15 км",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p117l",
+      "name": "Хищник REBOFF 13 15 км",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p117r",
+      "name": "Хищник REBOFF 13 20 км",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p118l",
+      "name": "Хищник REBOFF 13 25 км",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p118r",
+      "name": "STALKER XO-10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p119l",
+      "name": "STALKER XO-15",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p119r",
+      "name": "Чума 010",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p120l",
+      "name": "ESKLBR FPV 7",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p120r",
+      "name": "Удод-7",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p121l",
+      "name": "Butterfly 10-A",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p121r",
+      "name": "Butterfly 10-B",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p122l",
+      "name": "Чупакабра-7",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p122r",
+      "name": "Чупакабра-10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p123l",
+      "name": "Ай-Петри",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p123r",
+      "name": "Ай-Петри тепловизор",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p124l",
+      "name": "Ай-Петри Аналог",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p124r",
+      "name": "BLINK 8",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p125r",
+      "name": "BLINK 8.1",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p126l",
+      "name": "ФАУСТ-8",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p126r",
+      "name": "ФАУСТ-10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p127l",
+      "name": "FPV-15-A1",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p127r",
+      "name": "Blackbird Wing 7",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p128l",
+      "name": "Blackbird Wing 10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p128r",
+      "name": "URS FQ-10ka с донаведением",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p129l",
+      "name": "SMARTDRONE K10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p129r",
+      "name": "Winfly-7",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p130l",
+      "name": "УМО-Ю",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p130r",
+      "name": "УМО-10-0",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p131l",
+      "name": "Летучая мышь Е620",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p131r",
+      "name": "Летучая мышь Е630",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p132l",
+      "name": "Чугайстер",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p132r",
+      "name": "PD-DADCAT-9X4T",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p133l",
+      "name": "DroneSquad FURY Pro",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p133r",
+      "name": "PEGASUS ARMS 25",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p134l",
+      "name": "Генерал Черешня-7 дневная камера",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p134r",
+      "name": "Генерал Черешня-7 тепловизионная камера",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p135l",
+      "name": "Генерал Черешня-8 дневная камера",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p135r",
+      "name": "Генерал Черешня-8 тепловизионная камера",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p136l",
+      "name": "Генерал Черешня-9 дневная камера",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p136r",
+      "name": "Генерал Черешня-9 тепловизионная камера",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p137l",
+      "name": "Генерал Черешня-10 дневная камера",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p137r",
+      "name": "Генерал Черешня-10 тепловизионная камера",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p138l",
+      "name": "Генерал Черешня KN-104 дневная камера",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p138r",
+      "name": "Генерал Черешня KN-104 тепловизионная камера",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p139l",
+      "name": "KH-S7",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p139r",
+      "name": "Бандерик-К",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p140l",
+      "name": "Impulse",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p140r",
+      "name": "Генерал Черешня AIR",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p141l",
+      "name": "Eagle interceptor",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p141r",
+      "name": "Штык-АА",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p142l",
+      "name": "Генерал Черешня AIR NIGHT",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p142r",
+      "name": "WINFLY 10 Hunter V1",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p143l",
+      "name": "WINFLY 8",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p143r",
+      "name": "WINFLY 10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p144l",
+      "name": "Vyriy PRO-10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p144r",
+      "name": "Vyriy-8 Ukraine",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p145l",
+      "name": "Метатель 200/10-0",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p145r",
+      "name": "Метатель 200/10-К",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p146l",
+      "name": "Ведьма-200",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p146r",
+      "name": "Метатель 200/1О-В",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p147r",
+      "name": "URS FQ-10KN",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p148l",
+      "name": "R-18",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p148r",
+      "name": "Пробой 7.1",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p149l",
+      "name": "Укропчик-ЮТ",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p149r",
+      "name": "Укропчик-ЮС",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p150l",
+      "name": "Укропчик 10Д",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p150r",
+      "name": "Укропчик-8Т",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p151l",
+      "name": "Укропчик-8С",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p151r",
+      "name": "Укропчик-8Д",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p152l",
+      "name": "Укропчик-7Д",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p152r",
+      "name": "УД-10А.З",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p153l",
+      "name": "УД-10 ФО",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p153r",
+      "name": "УД-10А.2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p154l",
+      "name": "Tesak-8",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p154r",
+      "name": "Таб-10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p155r",
+      "name": "Таб-8",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p156l",
+      "name": "Световод 15-0",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p156r",
+      "name": "Световод 10-0",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p157l",
+      "name": "Световод 5-0",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p157r",
+      "name": "STRIKE",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p158l",
+      "name": "Striker-FPV",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p158r",
+      "name": "Stark 10 Thermal",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p159l",
+      "name": "Stark-10 Therma",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p159r",
+      "name": "Spook-8",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p160r",
+      "name": "SOVA-10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p161l",
+      "name": "Сокол (коптерный, стр. 161)",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p161r",
+      "name": "S0VA-7",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p162l",
+      "name": "SOTUA-MLS",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p162r",
+      "name": "SOTUA-MLS для дневного использования с цифровой видеосвязью и усилителем сигнала",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p163l",
+      "name": "SKYRIPER 9 тепловизионный",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p163r",
+      "name": "SKYRIPER 9 ночной",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p164l",
+      "name": "Skyriper-9",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p164r",
+      "name": "Скопа-воздух 2.8",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p165r",
+      "name": "ШМАВИК дневной+тепловизор",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p166l",
+      "name": "SeaGull-10N",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p166r",
+      "name": "SeaGull-10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p167l",
+      "name": "SeaGull-8Т",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p167r",
+      "name": "SeaGull-8N",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p168l",
+      "name": "SeaGull-8D",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p168r",
+      "name": "SeaGull-8",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p169l",
+      "name": "Samum-7",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p169r",
+      "name": "Saker Hetman",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p170l",
+      "name": "Рарог 5.8 Т",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p170r",
+      "name": "Рарог 5.8",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p171l",
+      "name": "POLYDRONE-TORUK 22",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p171r",
+      "name": "TORUK15X4 OBSERVER",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p172l",
+      "name": "POLYDRONE-TORUK 15",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p172r",
+      "name": "POLYDRONE-TORUK 10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p173l",
+      "name": "PERUN-X9",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p174l",
+      "name": "Peacemaker 10 с донаведением",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p174r",
+      "name": "Peacemaker-10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p175l",
+      "name": "Peacemaker 7",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p175r",
+      "name": "PD-DADCAT-10X4",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p176l",
+      "name": "OPTIK 10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p176r",
+      "name": "PD-DADCAT-9X4",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p177l",
+      "name": "Optalink",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p177r",
+      "name": "Nostromo 10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p178l",
+      "name": "Насморк-тепловизионный",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p178r",
+      "name": "Насморк-дневной",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p179l",
+      "name": "Mosquitos 10",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p179r",
+      "name": "Мольфар-Т",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p180l",
+      "name": "Кошмарик",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p180r",
+      "name": "Укроптер",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p181l",
+      "name": "Kolibri 10м ADVANCE T",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p181r",
+      "name": "Kolibri 10м ADVANCE",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p182l",
+      "name": "Kolibri 8\" PRO T",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p182r",
+      "name": "Kolibri 8\" PRO",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p183l",
+      "name": "Kolibri 7\" ADVANCE T",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p183r",
+      "name": "Хищник 13",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p184l",
+      "name": "Хищник 13 Бомбер",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p184r",
+      "name": "Херсонес",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p185l",
+      "name": "Mavka Relay 24",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p185r",
+      "name": "Mavka Relay 16",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p186l",
+      "name": "Saker Scout В ретранслятор",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p186r",
+      "name": "Чупакабра Ретранслятор ФПВ-дрон 13",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p187l",
+      "name": "Горизонт mk2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p187r",
+      "name": "Бандерик-24 ретранслятор",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p188l",
+      "name": "Wiy SEEMKA",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p188r",
+      "name": "WARDOG-TRN",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p189l",
+      "name": "Highiine-T",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p189r",
+      "name": "ТETER UK с системой питания с земли",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p190l",
+      "name": "UKROPTER PLATFORM",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p190r",
+      "name": "Saker Scout C",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p191l",
+      "name": "URS FQ-10K дневная",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p194l",
+      "name": "Пилум",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p194r",
+      "name": "Бобер",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p195l",
+      "name": "Phoenix Ghost",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p195r",
+      "name": "Banshee Jet 80",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p196l",
+      "name": "ST-35 Гром",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p196r",
+      "name": "RAM II UAS",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p197l",
+      "name": "Warmate",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p197r",
+      "name": "Switchblade 300",
+      "embedded": 4,
+      "verified_distinct_processed": 4,
+      "remaining": 0,
+      "complete": true
+    },
+    {
+      "id": "bulletin30-2025-p198l",
+      "name": "Sypaq Corvo PPDS",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p198r",
+      "name": "Switchblade 600",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p199l",
+      "name": "Рубака",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p199r",
+      "name": "Хаки-20",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p200l",
+      "name": "DefendTex D40",
+      "embedded": 3,
+      "verified_distinct_processed": 3,
+      "remaining": 0,
+      "complete": true
+    },
+    {
+      "id": "bulletin30-2025-p200r",
+      "name": "Pholos-2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p201l",
+      "name": "RAM 2X",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p204l",
+      "name": "AB12DMN",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bulletin30-2025-p204r",
+      "name": "КТ-1",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bpla-vsu-pdf-2026-p06",
+      "name": "Columba",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bpla-vsu-pdf-2026-p12",
+      "name": "Mara 2P",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bpla-vsu-pdf-2026-p17",
+      "name": "EOS VTOL",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bpla-vsu-pdf-2026-p19",
+      "name": "Anser",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bpla-vsu-pdf-2026-p34",
+      "name": "PGZ-19 Orlik",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bpla-vsu-pdf-2026-p36",
+      "name": "RQ-11 Raven",
+      "embedded": 4,
+      "verified_distinct_processed": 4,
+      "remaining": 0,
+      "complete": true
+    },
+    {
+      "id": "bpla-vsu-pdf-2026-p48",
+      "name": "Penguin (модификация не уточнена)",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bpla-vsu-pdf-2026-p50",
+      "name": "Primoco UAV one (модификация не уточнена)",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bpla-vsu-pdf-2026-p52",
+      "name": "Vector (Integrated Dynamics, Пакистан)",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bpla-vsu-pdf-2026-p53",
+      "name": "Mugin (модификация не уточнена)",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "bpla-vsu-pdf-2026-p55",
+      "name": "Стрепет С",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p005",
+      "name": "Ту-141 Стриж",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p006",
+      "name": "Ту-143 Рейс",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p007",
+      "name": "UJ-25 Скайлайн",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p008",
+      "name": "Морок",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p009",
+      "name": "Паляница",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p010",
+      "name": "J-80 Банши",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p012",
+      "name": "Е-300 Энтерпрайз",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p015",
+      "name": "на базе легкомоторного самолета А-22 Фоксбат",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p020",
+      "name": "PPDS Корво",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p022",
+      "name": "Кобра",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p023",
+      "name": "Сыч",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p024",
+      "name": "Авенджер",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p025",
+      "name": "К-1 Бэкфаер",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p028",
+      "name": "Дартс",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p030",
+      "name": "EADS Хафан MALE UAS",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p035",
+      "name": "РD-2 Лютый",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p036",
+      "name": "Рарог",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p038",
+      "name": "АСS-3М",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p039",
+      "name": "Н-10 Посейдон",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p040",
+      "name": "Н-6 Посейдон",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p041",
+      "name": "ЕОС С",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p043",
+      "name": "Текевер AR3",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p044",
+      "name": "Текевер AR5",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p045",
+      "name": "Текевер AR5 Эволюшн",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p046",
+      "name": "Юпитер Н 1 (В)",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p047",
+      "name": "Юпитер Н 1 (С)",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p050",
+      "name": "Луна UAS",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p057",
+      "name": "Фури",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p062",
+      "name": "RQ-11 Райвн",
+      "embedded": 4,
+      "verified_distinct_processed": 4,
+      "remaining": 0,
+      "complete": true,
+      "shared_gallery": "bpla-vsu-pdf-2026-p36"
+    },
+    {
+      "id": "album-2026-p065",
+      "name": "Скай обсервер",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p066",
+      "name": "УА-Бета",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p068",
+      "name": "Сетус",
+      "embedded": 5,
+      "verified_distinct_processed": 4,
+      "remaining": 0,
+      "complete": true,
+      "shared_gallery": "lostarmour-pdf-2024-056"
+    },
+    {
+      "id": "album-2026-p069",
+      "name": "Тор",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p070",
+      "name": "Скайнета",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p072",
+      "name": "RQ-35 Хейдрун",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p074",
+      "name": "Эльф-К",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p075",
+      "name": "Пунишер",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p076",
+      "name": "Рам",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p077",
+      "name": "Рам-2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p078",
+      "name": "Рам-2S",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p079",
+      "name": "UJ-32 Ласточка",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p080",
+      "name": "Пилум",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p083",
+      "name": "Вармейт 2.0",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p084",
+      "name": "Вармейт 3.0",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p087",
+      "name": "Спай Арроу",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p092",
+      "name": "Раллус",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p094",
+      "name": "Патриот",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p096",
+      "name": "Виман-2",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p097",
+      "name": "Хост Хантер",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p098",
+      "name": "Грей Видоу/Грей Видоу 2м",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p101",
+      "name": "Сирко",
+      "embedded": 3,
+      "verified_distinct_processed": 3,
+      "remaining": 0,
+      "complete": true,
+      "shared_gallery": "lostarmour-pdf-2024-009"
+    },
+    {
+      "id": "album-2026-p102",
+      "name": "Шкиппер",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p103",
+      "name": "Галка",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p106",
+      "name": "Шулика S-1",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p107",
+      "name": "Шулика К-1",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p109",
+      "name": "Блэк Хорнет",
+      "embedded": 3,
+      "verified_distinct_processed": 3,
+      "remaining": 0,
+      "complete": true,
+      "shared_gallery": "bulletin30-2025-p067r"
+    },
+    {
+      "id": "album-2026-p110",
+      "name": "Атлас Про",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p111",
+      "name": "DJI Мэйвик-3",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p112",
+      "name": "EFT E 610",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p113",
+      "name": "Кажан-Е630",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p114",
+      "name": "Хэви шот",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p116",
+      "name": "Маллоу Т150",
+      "embedded": 4,
+      "verified_distinct_processed": 4,
+      "remaining": 0,
+      "complete": true,
+      "shared_gallery": "bulletin30-2025-p065l"
+    },
+    {
+      "id": "album-2026-p117",
+      "name": "Револьвер 860",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p118",
+      "name": "Фортем Дрон Хантер F700",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p119",
+      "name": "Королева шершней",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p122",
+      "name": "Свичблэйд 300",
+      "embedded": 4,
+      "verified_distinct_processed": 4,
+      "remaining": 0,
+      "complete": true,
+      "shared_gallery": "bulletin30-2025-p197r"
+    },
+    {
+      "id": "album-2026-p123",
+      "name": "Свичблэйд 600",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p124",
+      "name": "Феникс Хост",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p125",
+      "name": "Q-SLAM-40",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p126",
+      "name": "PHOLOS",
+      "embedded": 0,
+      "verified_distinct_processed": 0,
+      "remaining": 3,
+      "complete": false
+    },
+    {
+      "id": "album-2026-p127",
+      "name": "ДефендТекс D40",
+      "embedded": 3,
+      "verified_distinct_processed": 3,
+      "remaining": 0,
+      "complete": true,
+      "shared_gallery": "bulletin30-2025-p200l"
     }
   ],
-  "completion_audit": "scripts/photo_progress.py"
+  "definition": "Counts cover catalog cards from base, bulletin, VSU PDF and the aircraft-only album, including explicit source aliases. Complete means >=3 genuine photos with reviewed model identity and distinct useful views. Explicitly reviewed equivalent cards may share one physical gallery; physical photo totals count each binary once. Required/remaining photo counts are card-level slots. Unmodified originals preserve publisher bytes; background removal is not required."
 }

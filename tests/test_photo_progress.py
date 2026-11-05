@@ -133,5 +133,40 @@ class ProgressTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'Unmodified original bytes changed'):
             module.audit(self.root)
 
+    def test_reviewed_alias_shares_gallery_without_inflating_physical_photo_count(self):
+        for i in range(3):self.add('photo%d.jpg'%i)
+        self.manifest['aliases']={'model-two':{'target_id':'model-one',
+            'model_review_approved':True,'model_review_notes':'Two catalog spellings were reviewed as the exact same aircraft model.'}}
+        self.save()
+        report=module.audit(self.root)
+        self.assertEqual(report['models_complete'],2)
+        self.assertEqual(report['photos_embedded'],3)
+        self.assertEqual(report['minimum_additional_verified_photos'],0)
+
+    def test_unreviewed_alias_is_rejected(self):
+        self.manifest['aliases']={'model-two':{'target_id':'model-one'}}
+        self.save()
+        with self.assertRaisesRegex(ValueError,'unreviewed gallery alias'):
+            module.audit(self.root)
+
+    def test_pdf_adds_distinct_models_but_respects_explicit_target(self):
+        (self.assets/'catalog_bpla_vsu_pdf.json').write_text(json.dumps({'entries':[
+            {'id':'pdf-one','name':'Alias One','targetId':'model-one','type':'Самолётный'},
+            {'id':'pdf-two','name':'Distinct Model','type':'Самолётный'}]}))
+        self.assertEqual(module.audit(self.root)['models_total'],3)
+
+    def test_album_counts_new_aircraft_and_skips_reviewed_alias_and_ground_model(self):
+        import gzip
+        archive=self.root/'research/source_catalogs/catalog_album_2026_original.dat'
+        archive.parent.mkdir(parents=True)
+        archive.write_bytes(gzip.compress(json.dumps({'entries':[
+            {'id':'album-one','name':'Aircraft alias','type':'Самолётный','page':5},
+            {'id':'album-two','name':'Another aircraft','type':'Коптерный','page':6},
+            {'id':'album-three','name':'Ground machine','type':'Наземный','page':7}]}).encode()))
+        code=self.root/'app/src/main/java/dev/infend/bplainfo/DroneStore.java'
+        code.parent.mkdir(parents=True)
+        code.write_text('private static String albumAliasTarget(int page){ case 5:return "model-one"; } private static void mergeAlbum(')
+        self.assertEqual(module.audit(self.root)['models_total'],3)
+
 if __name__ == "__main__":
     unittest.main()

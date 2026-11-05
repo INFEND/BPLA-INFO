@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "reviewed_date": "2026-11-05",
+  "policy": "Verified photographs with untouched publisher bytes.",
+  "entries": [
+    {
+      "model_id": "lostarmour-pdf-2024-009",
+      "model_name": "SIRKO",
+      "file": "photos/original_sirko_00.jpg",
+      "source_page": "https://armyinform.com.ua/2023/05/02/u-harkovi-prezentuvaly-pershyj-ukrayinskyj-bpla-pid-nazvoyu-sirko/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2023/05/golovna-5.jpg",
+      "sha256": "5c95a21e60430a531c579d4c64b1ac6bc135c50ce116b01adfc2ecfc6a55de35",
+      "dimensions": [
+        1200,
+        800
+      ],
+      "author": "Оксана Іванець / АрміяInform",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "The original on-site presentation explicitly identifies Sirko. The Sirko marks on the wings and photographed airframe were checked visually. This is the first Sirko flying-wing aircraft, not Sirko 2 or a ground robot.",
+      "visual_review_notes": "Close whole-airframe view from above and the front quarter, resting on its case. Publisher bytes, framing and background are unchanged.",
+      "angle_id": "upper-front-quarter",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "lostarmour-pdf-2024-009",
+      "model_name": "SIRKO",
+      "file": "photos/original_sirko_01.jpg",
+      "source_page": "https://armyinform.com.ua/2023/05/02/u-harkovi-prezentuvaly-pershyj-ukrayinskyj-bpla-pid-nazvoyu-sirko/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2023/05/1-12.jpg",
+      "sha256": "9533180f9168fd379145184eb931e0bcb48e5f6ce398a79e42a6a20fa25fcba7",
+      "dimensions": [
+        1200,
+        800
+      ],
+      "author": "Оксана Іванець / АрміяInform",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "The original on-site presentation explicitly identifies Sirko. The Sirko marks on the wings and photographed airframe were checked visually. This is the first Sirko flying-wing aircraft, not Sirko 2 or a ground robot.",
+      "visual_review_notes": "Opposite front-side view while carried, with the original lower wing edge outside the frame. Publisher bytes, framing and background are unchanged.",
+      "angle_id": "opposite-side-carried",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "lostarmour-pdf-2024-009",
+      "model_name": "SIRKO",
+      "file": "photos/original_sirko_02.jpg",
+      "source_page": "https://armyinform.com.ua/2023/05/02/u-harkovi-prezentuvaly-pershyj-ukrayinskyj-bpla-pid-nazvoyu-sirko/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2023/05/2-14.jpg",
+      "sha256": "08cb965ec8a57f64137f4133d434965db8c4a0c005ee723a4637a582c6c785ef",
+      "dimensions": [
+        1200,
+        800
+      ],
+      "author": "Оксана Іванець / АрміяInform",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "The original on-site presentation explicitly identifies Sirko. The Sirko marks on the wings and photographed airframe were checked visually. This is the first Sirko flying-wing aircraft, not Sirko 2 or a ground robot.",
+      "visual_review_notes": "Whole airframe at a low frontal angle on grass; original surroundings and partial grass overlap retained. Publisher bytes, framing and background are unchanged.",
+      "angle_id": "front-level-ground",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    }
+  ]
+}

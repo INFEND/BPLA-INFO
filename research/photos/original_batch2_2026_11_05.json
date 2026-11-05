@@ -1,0 +1,367 @@
+{
+  "schema": 1,
+  "reviewed_date": "2026-11-05",
+  "policy": "Verified exact-model photographs, publisher image files unchanged. No image generation, background removal, cropping or re-encoding.",
+  "entries": [
+    {
+      "model_id": "bpla-vsu-pdf-2026-p36",
+      "model_name": "RQ-11 Raven",
+      "file": "photos/original_dvids_4103917.jpg",
+      "source_page": "https://www.dvidshub.net/image/4103917/us-army-europe-rq-11-raven-system",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/1801/4103917/2000w_q95.jpg",
+      "sha256": "d1b147960ef88b39a67fd7e271d2d97401c8b0a6d5ecccf3dee5e0eb261e4cce",
+      "dimensions": [
+        2000,
+        1333
+      ],
+      "author": "Spc. Dustin Biven",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies RQ-11 Raven. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Real RQ-11 Raven from above the tail during inspection; original image includes a close view of the fuselage and tail. Original publisher framing and background retained without editing.",
+      "angle_id": "rear-upper-close",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bpla-vsu-pdf-2026-p36",
+      "model_name": "RQ-11 Raven",
+      "file": "photos/original_dvids_4103921.jpg",
+      "source_page": "https://www.dvidshub.net/image/4103921/us-army-europe-rq-11-raven-system",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/1801/4103921/2000w_q95.jpg",
+      "sha256": "0132b926f866c1fd49101c1d913a8055578ea28ed8cfdaf677b413a33fb90f2e",
+      "dimensions": [
+        1999,
+        1333
+      ],
+      "author": "Spc. Dustin Biven",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies RQ-11 Raven. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Whole RQ-11 Raven viewed from the front quarter at hand launch. Original publisher framing and background retained without editing.",
+      "angle_id": "front-quarter-launch",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bpla-vsu-pdf-2026-p36",
+      "model_name": "RQ-11 Raven",
+      "file": "photos/original_dvids_7552422.jpg",
+      "source_page": "https://www.dvidshub.net/image/7552422/ravens-take-sky",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2212/7552422/2000w_q95.jpg",
+      "sha256": "a94f825368919633267a680199bb552df0b64f8d272f358fc3d1390eaa0db202",
+      "dimensions": [
+        2000,
+        2389
+      ],
+      "author": "Sgt. Rebecca Call",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies RQ-11 Raven. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Whole RQ-11 Raven viewed from above during launch. Original publisher framing and background retained without editing.",
+      "angle_id": "upper-oblique-launch",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bpla-vsu-pdf-2026-p36",
+      "model_name": "RQ-11 Raven",
+      "file": "photos/original_dvids_7552424.jpg",
+      "source_page": "https://www.dvidshub.net/image/7552424/preparing-launch",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2212/7552424/2000w_q95.jpg",
+      "sha256": "d1792ea45816c759d52968a93b9b62043bd0dc47f4d61cd113f0e6b6c86e94fd",
+      "dimensions": [
+        1999,
+        1580
+      ],
+      "author": "Sgt. Rebecca Call",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies RQ-11 Raven. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Whole RQ-11 Raven viewed from the side before hand launch. Original publisher framing and background retained without editing.",
+      "angle_id": "side-hand-launch",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "lostarmour-pdf-2024-057",
+      "model_name": "ЧАКЛУН",
+      "file": "photos/original_chaklun_03.jpg",
+      "source_page": "https://armyinform.com.ua/2024/07/08/nazdognav-odnogo-v-golovu-sholom-letiv-50-metriv-yak-zsu-z-chakluniv-palyat-voroga-fotoreportazh-armiyainform/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2024/07/chaklun-2-scaled.jpg",
+      "sha256": "04e6451abb4c78105c20f8343f97a23a41cd49c848262b45b9e15a9d957b11ed",
+      "dimensions": [
+        2048,
+        1365
+      ],
+      "author": "Віталій Павленко / АрміяInform",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "The original photographic report explicitly identifies the black fixed-wing aircraft as Chaklun. It is attached to the generic CHAKLUN catalog card; no claim is made about a narrower variant.",
+      "visual_review_notes": "Complete black foam Chaklun held upright, viewed from the front. Publisher image bytes, original framing, watermark and background are unchanged.",
+      "angle_id": "front-carried",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "lostarmour-pdf-2024-057",
+      "model_name": "ЧАКЛУН",
+      "file": "photos/original_chaklun_04.jpg",
+      "source_page": "https://armyinform.com.ua/2024/07/08/nazdognav-odnogo-v-golovu-sholom-letiv-50-metriv-yak-zsu-z-chakluniv-palyat-voroga-fotoreportazh-armiyainform/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2024/07/dzhordzh-scaled.jpg",
+      "sha256": "c5fde0c2aa06c4edcac77094decf54e27b13b957f7f42b2b504c93ac23ea83df",
+      "dimensions": [
+        2048,
+        1365
+      ],
+      "author": "Віталій Павленко / АрміяInform",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "The original photographic report explicitly identifies the black fixed-wing aircraft as Chaklun. It is attached to the generic CHAKLUN catalog card; no claim is made about a narrower variant.",
+      "visual_review_notes": "Chaklun fuselage and wings viewed from below and from the side while carried. Publisher image bytes, original framing, watermark and background are unchanged.",
+      "angle_id": "side-underside-carried",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "lostarmour-pdf-2024-057",
+      "model_name": "ЧАКЛУН",
+      "file": "photos/original_chaklun_05.jpg",
+      "source_page": "https://armyinform.com.ua/2024/07/08/nazdognav-odnogo-v-golovu-sholom-letiv-50-metriv-yak-zsu-z-chakluniv-palyat-voroga-fotoreportazh-armiyainform/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2024/07/chakluny-v-roboti-1-scaled.jpg",
+      "sha256": "49a2c425d7b22b21115faf6b15e87d183056cad5f53bfc68a278ab23244609bc",
+      "dimensions": [
+        2048,
+        1365
+      ],
+      "author": "Віталій Павленко / АрміяInform",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "The original photographic report explicitly identifies the black fixed-wing aircraft as Chaklun. It is attached to the generic CHAKLUN catalog card; no claim is made about a narrower variant.",
+      "visual_review_notes": "Whole Chaklun top surface and planform visible above its carrier. Publisher image bytes, original framing, watermark and background are unchanged.",
+      "angle_id": "upper-surface-held",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "lostarmour-pdf-2024-057",
+      "model_name": "ЧАКЛУН",
+      "file": "photos/original_chaklun_09.jpg",
+      "source_page": "https://armyinform.com.ua/2024/07/08/nazdognav-odnogo-v-golovu-sholom-letiv-50-metriv-yak-zsu-z-chakluniv-palyat-voroga-fotoreportazh-armiyainform/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2024/07/chakluny-v-roboti-3-scaled.jpg",
+      "sha256": "cc360a610684f3c6d363f7967fd78718abdf897bd66983023940e56079d86d35",
+      "dimensions": [
+        2048,
+        1365
+      ],
+      "author": "Віталій Павленко / АрміяInform",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "The original photographic report explicitly identifies the black fixed-wing aircraft as Chaklun. It is attached to the generic CHAKLUN catalog card; no claim is made about a narrower variant.",
+      "visual_review_notes": "Chaklun viewed from an elevated front quarter angle while carried. Publisher image bytes, original framing, watermark and background are unchanged.",
+      "angle_id": "upper-front-quarter-carried",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "lostarmour-pdf-2024-057",
+      "model_name": "ЧАКЛУН",
+      "file": "photos/original_chaklun_10.jpg",
+      "source_page": "https://armyinform.com.ua/2024/07/08/nazdognav-odnogo-v-golovu-sholom-letiv-50-metriv-yak-zsu-z-chakluniv-palyat-voroga-fotoreportazh-armiyainform/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2024/07/chakluny-v-roboti-2-scaled.jpg",
+      "sha256": "08394b19d31c84f0212af38ab20b4b7a228240398739298bd451f557c6129e32",
+      "dimensions": [
+        2048,
+        1365
+      ],
+      "author": "Віталій Павленко / АрміяInform",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "The original photographic report explicitly identifies the black fixed-wing aircraft as Chaklun. It is attached to the generic CHAKLUN catalog card; no claim is made about a narrower variant.",
+      "visual_review_notes": "Whole Chaklun airframe photographed in flight from the side. Publisher image bytes, original framing, watermark and background are unchanged.",
+      "angle_id": "side-flight",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "lostarmour-pdf-2024-063",
+      "model_name": "BAYRAKTAR TB2",
+      "file": "photos/original_bayraktar_army_00.jpg",
+      "source_page": "https://armyinform.com.ua/2021/07/16/onovlena-versiya-kompleksu-bayraktar-tv2-z-radiusom-diyi-300-kilometriv-stane-chastynoyu-systemy-strymuvannya-rosijskoyi-agresiyi/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2021/07/golovna-18.jpg",
+      "sha256": "22555b06816a23ee84fe8113f6ca5fb668685f04fc05c7c2ac64be53c9998e33",
+      "dimensions": [
+        1200,
+        740
+      ],
+      "author": "Дмитро Завтонов / АрміяInform",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "The author identifies this aircraft as the Ukrainian Navy Bayraktar TB2. Photographs show the real airframe, not a render. Attached only to the generic TB2 card, not Bayraktar Mini, TB3 or another aircraft.",
+      "visual_review_notes": "Complete Bayraktar TB2 in flight, viewed from below with wings, inverted V tail and landing gear visible. Publisher image bytes, original framing, watermark and background are unchanged.",
+      "angle_id": "underside-flight",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "lostarmour-pdf-2024-063",
+      "model_name": "BAYRAKTAR TB2",
+      "file": "photos/original_bayraktar_army_02.jpg",
+      "source_page": "https://armyinform.com.ua/2021/07/16/onovlena-versiya-kompleksu-bayraktar-tv2-z-radiusom-diyi-300-kilometriv-stane-chastynoyu-systemy-strymuvannya-rosijskoyi-agresiyi/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2021/07/5f4a1464.jpg",
+      "sha256": "1a79332ce9459b5a64a1f9b9f276a416e908211560efa4345b8570dbb099551a",
+      "dimensions": [
+        1200,
+        800
+      ],
+      "author": "Дмитро Завтонов / АрміяInform",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "The author identifies this aircraft as the Ukrainian Navy Bayraktar TB2. Photographs show the real airframe, not a render. Attached only to the generic TB2 card, not Bayraktar Mini, TB3 or another aircraft.",
+      "visual_review_notes": "TB2 fuselage and tail from the front left quarter; one outer wing portion lies outside the original photograph. Publisher image bytes, original framing, watermark and background are unchanged.",
+      "angle_id": "front-left-quarter-ground",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "lostarmour-pdf-2024-063",
+      "model_name": "BAYRAKTAR TB2",
+      "file": "photos/original_bayraktar_army_08.jpg",
+      "source_page": "https://armyinform.com.ua/2021/07/16/onovlena-versiya-kompleksu-bayraktar-tv2-z-radiusom-diyi-300-kilometriv-stane-chastynoyu-systemy-strymuvannya-rosijskoyi-agresiyi/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2021/07/5f4a1587.jpg",
+      "sha256": "3a2866ede8c858f0118455b2910cbcf5e61fd8218d72cc76c29c7aee9775118c",
+      "dimensions": [
+        1200,
+        800
+      ],
+      "author": "Дмитро Завтонов / АрміяInform",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "The author identifies this aircraft as the Ukrainian Navy Bayraktar TB2. Photographs show the real airframe, not a render. Attached only to the generic TB2 card, not Bayraktar Mini, TB3 or another aircraft.",
+      "visual_review_notes": "Complete TB2 on the apron from a front quarter angle. Publisher image bytes, original framing, watermark and background are unchanged.",
+      "angle_id": "front-quarter-full-ground",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "lostarmour-pdf-2024-063",
+      "model_name": "BAYRAKTAR TB2",
+      "file": "photos/original_bayraktar_army_09.jpg",
+      "source_page": "https://armyinform.com.ua/2021/07/16/onovlena-versiya-kompleksu-bayraktar-tv2-z-radiusom-diyi-300-kilometriv-stane-chastynoyu-systemy-strymuvannya-rosijskoyi-agresiyi/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2021/07/5f4a1591.jpg",
+      "sha256": "ba795d7efa09ff25e3876a3445226deda9c1b2101208e8de0bfc33fb97c5d212",
+      "dimensions": [
+        1200,
+        800
+      ],
+      "author": "Дмитро Завтонов / АрміяInform",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "The author identifies this aircraft as the Ukrainian Navy Bayraktar TB2. Photographs show the real airframe, not a render. Attached only to the generic TB2 card, not Bayraktar Mini, TB3 or another aircraft.",
+      "visual_review_notes": "TB2 fuselage, landing gear and tail from the right side; supplemental side view with wing partly outside the frame. Publisher image bytes, original framing, watermark and background are unchanged.",
+      "angle_id": "right-side-ground",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "lostarmour-pdf-2024-063",
+      "model_name": "BAYRAKTAR TB2",
+      "file": "photos/original_dvids_9621161.jpg",
+      "source_page": "https://www.dvidshub.net/image/9621161/39th-abw-leadership-visits-polish-military-contingent",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2604/9621161/2000w_q95.jpg",
+      "sha256": "9c0ce1af9ee6298620710fd8307f8a1c506185b335f4a43b2b7b4203d3ad0ad1",
+      "dimensions": [
+        2000,
+        1331
+      ],
+      "author": "Staff Sgt. Koby Saunders",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption explicitly identifies TB2. The photographed airframe was visually checked; no substitution of another model or generated image.",
+      "visual_review_notes": "Whole Bayraktar TB2 viewed directly from the front during a documented visit; original group and surroundings retained. Original publisher framing and background retained without editing.",
+      "angle_id": "front-whole-display",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p088l",
+      "model_name": "Vampire (Баба-Яга)",
+      "file": "photos/original_vampire_tar_00.webp",
+      "source_page": "https://armyinform.com.ua/2024/12/20/geksakopter-vampire-na-peredovij-yak-praczyuye-shvydkisnyj-i-dalekosyazhnyj-dron-vazhkovagovyk/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2024/12/01_golovna-2.webp",
+      "sha256": "9da81d5d3348e066111b21ee8d119fa3ca5fcd55bf2b64ae8c37fff47f5264fb",
+      "dimensions": [
+        1500,
+        1000
+      ],
+      "author": "Руслан Тарасов / АрміяInform",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "The original report explicitly identifies the photographed six-rotor aircraft as Vampire. Airframe and rotor arrangement were visually checked; no unidentified FPV photographs from the same report are included.",
+      "visual_review_notes": "Complete Vampire in level flight seen from the front. Publisher image bytes, original framing, watermark and background are unchanged.",
+      "angle_id": "front-level-flight",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p088l",
+      "model_name": "Vampire (Баба-Яга)",
+      "file": "photos/original_vampire_tar_04.webp",
+      "source_page": "https://armyinform.com.ua/2024/12/20/geksakopter-vampire-na-peredovij-yak-praczyuye-shvydkisnyj-i-dalekosyazhnyj-dron-vazhkovagovyk/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2024/12/05.webp",
+      "sha256": "ea01ebed22dcf5cab8c1424d76dbbaaf04c4f537a90551b1c5dfc02e2cf1bf11",
+      "dimensions": [
+        1500,
+        1000
+      ],
+      "author": "Руслан Тарасов / АрміяInform",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "The original report explicitly identifies the photographed six-rotor aircraft as Vampire. Airframe and rotor arrangement were visually checked; no unidentified FPV photographs from the same report are included.",
+      "visual_review_notes": "Whole Vampire viewed from an elevated quarter angle on the ground. Publisher image bytes, original framing, watermark and background are unchanged.",
+      "angle_id": "upper-quarter-ground",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p088l",
+      "model_name": "Vampire (Баба-Яга)",
+      "file": "photos/original_vampire_tar_10.webp",
+      "source_page": "https://armyinform.com.ua/2024/12/20/geksakopter-vampire-na-peredovij-yak-praczyuye-shvydkisnyj-i-dalekosyazhnyj-dron-vazhkovagovyk/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2024/12/11.webp",
+      "sha256": "61d2d9db9194d8e4e771eb3b83724074cd87641c4b6275321a339c485c13630f",
+      "dimensions": [
+        1500,
+        1000
+      ],
+      "author": "Руслан Тарасов / АрміяInform",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "The original report explicitly identifies the photographed six-rotor aircraft as Vampire. Airframe and rotor arrangement were visually checked; no unidentified FPV photographs from the same report are included.",
+      "visual_review_notes": "Whole Vampire seen from a low quarter angle in flight. Publisher image bytes, original framing, watermark and background are unchanged.",
+      "angle_id": "lower-quarter-flight",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p088l",
+      "model_name": "Vampire (Баба-Яга)",
+      "file": "photos/original_vampire_00.webp",
+      "source_page": "https://armyinform.com.ua/2025/11/11/valkiriyi-ta-bdzholy-na-yaki-zasluzhyly-rosiyany-baba-yaga-ta-fpv-drony-110-yi-brygady-vynyshhyly-sotni-vorozhyh-czilej/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2025/11/110_01_golovna-scaled.webp",
+      "sha256": "e90f057faced4d930a2c5785bfb8e0ecaea0f8d9460deb0cdc7818582c6c3d94",
+      "dimensions": [
+        2048,
+        1365
+      ],
+      "author": "Антон Шевельов / Міністерство оборони України",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "The original report explicitly identifies the photographed six-rotor aircraft as Vampire. Airframe and rotor arrangement were visually checked; no unidentified FPV photographs from the same report are included.",
+      "visual_review_notes": "Vampire viewed from below the nose in a close flight photograph; complete rotor span visible. Publisher image bytes, original framing, watermark and background are unchanged.",
+      "angle_id": "front-lower-close-flight",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    }
+  ]
+}

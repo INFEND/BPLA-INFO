@@ -82,6 +82,11 @@ def prepare(staging, repo):
             if row["id"] in models and models[row["id"]]!=row["name"]:
                 raise ValueError("Conflicting catalog model: "+row["id"])
             models[row["id"]]=row["name"]
+    vsu=assets/"catalog_bpla_vsu_pdf.json"
+    if vsu.is_file():
+        for row in json.loads(vsu.read_text("utf-8"))["entries"]:
+            if not row.get("targetId"):
+                models[row["id"]]=row["name"]
     manifest_file=assets/"bundled_photos.json"
     manifest=json.loads(manifest_file.read_text("utf-8"))
     if manifest.get("schema")!=2 or manifest.get("storage")!="apk-assets-only":

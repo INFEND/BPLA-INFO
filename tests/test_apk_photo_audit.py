@@ -1,9 +1,12 @@
 import importlib.util
+import hashlib
+import io
 import json
 from pathlib import Path
 import tempfile
 import unittest
 import zipfile
+from PIL import Image
 
 ROOT=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location("audit_apk_photos",ROOT/"scripts/audit_apk_photos.py")
@@ -49,6 +52,37 @@ class ApkPhotoAuditTests(unittest.TestCase):
             }]}}}
             self.make_apk(path,manifest)
             with self.assertRaisesRegex(ValueError,"original SHA-256"):
+                audit.audit(path)
+
+    def test_reviewed_alias_uses_one_physical_photo(self):
+        # Alias cards must share the audited original, rather than introduce
+        # duplicate binaries or bypass the exact-model review requirement.
+        image=io.BytesIO()
+        Image.new('RGB',(600,400),(18,68,95)).save(image,format='JPEG')
+        binary=image.getvalue()
+        digest=hashlib.sha256(binary).hexdigest()
+        manifest={'schema':2,'storage':'apk-assets-only','items':{'canonical':{'files':[{
+            'file':'photos/original_test.jpg','sha256':digest,'original_sha256':digest,
+            'author':'Test author','license':'CC0 1.0','source':'Fixture photograph',
+            'processing_status':'verified_unmodified_original',
+            'model_review_approved':True,'visual_review_approved':True
+        }]}},'aliases':{'alternate-name':{
+            'target_id':'canonical','model_review_approved':True,
+            'model_review_notes':'Reviewed alternate spelling of the same aircraft model.'
+        }}}
+        with tempfile.TemporaryDirectory() as folder:
+            path=Path(folder)/'test.apk'
+            def write():self.make_apk(path,manifest,{'assets/photos/original_test.jpg':binary})
+            write()
+            audit.audit(path)
+            manifest['aliases']['alternate-name']['model_review_approved']=False
+            write()
+            with self.assertRaisesRegex(ValueError,'unreviewed photo gallery alias'):
+                audit.audit(path)
+            manifest['aliases']['alternate-name']['model_review_approved']=True
+            manifest['aliases']['alternate-name']['target_id']='missing-model'
+            write()
+            with self.assertRaisesRegex(ValueError,'unreviewed photo gallery alias'):
                 audit.audit(path)
 
 if __name__=="__main__":

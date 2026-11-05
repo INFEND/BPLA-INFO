@@ -10,7 +10,9 @@ Inspect the actual image and the original publisher caption together. A caption 
 
 Put publisher and license links in `app/src/main/assets/photo_credits.json`, keyed by the packaged photo path. These links open only when tapped; image decoding still reads the embedded APK file. Keep download provenance outside Android assets in `research/photos/`.
 
-The new batch is recorded in `research/photos/original_batch_2026_11_05.json`. The current review of all 52 embedded photos is in `research/photos/original_policy_review_2026_11_05.json`. Previous rejection of an attempted cutout does not reject its untouched publisher photograph. The 12 galleries in v1.0.27 do not complete the whole catalog.
+The first batch is recorded in `research/photos/original_batch_2026_11_05.json`. The review of all 52 photos released in v1.0.27 is in `research/photos/original_policy_review_2026_11_05.json`; subsequent batches have numbered provenance files listed in `research/photos/README.md`. Previous rejection of an attempted cutout does not reject its untouched publisher photograph. Completed galleries do not complete the whole catalog.
+
+`photo_progress.py` includes all aircraft cards from the base catalog, bulletin, VSU PDF and album. Its total is a card count, not a claim that every transliteration is a unique airframe. Explicit reviewed equivalents may share one gallery using a root `aliases` record with `name`, `target_id`, `model_review_approved: true` and meaningful `model_review_notes`. The target must be a canonical gallery in `items`; alias chains, unreviewed matches and variant substitutions are rejected. Aliases never add to physical photo totals. Recompute `research/photos/coverage_min3.json` after every import.
 
 ## Legacy processing modes and importer mechanics
 
@@ -56,5 +58,5 @@ An angle ID represents a genuinely distinct verified camera viewpoint, **not** a
 filename, crop, rotation, or duplicate original. Reusing the same angle ID for
 the same model is rejected, including across existing and newly staged photos.
 The importer preserves both review flags and the angle ID in the offline APK
-manifest, allowing `scripts/photo_progress.py` to count qualifying cutouts.
+manifest, allowing `scripts/photo_progress.py` to count qualifying photographs.
 This metadata does not replace human inspection and must never be fabricated.

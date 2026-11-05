@@ -1,0 +1,235 @@
+{
+  "schema": 1,
+  "reviewed_date": "2026-11-05",
+  "policy": "Verified photographs with untouched publisher bytes. Product documents are identity references only; they are not images embedded in the application.",
+  "entries": [
+    {
+      "model_id": "bulletin30-2025-p067l",
+      "model_name": "Aeryon SkyRanger R60",
+      "file": "photos/original_dvids_6405878.jpg",
+      "source_page": "https://www.dvidshub.net/image/6405878/2d-lar-light-skyranger",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2010/6405878/2000w_q95.jpg",
+      "sha256": "d1a11f32ce8f93aec8bacad23f96c7c22e5726fba94e2511ac59a5b62b8ab62f",
+      "dimensions": [
+        2000,
+        1333
+      ],
+      "author": "Lance Cpl. Jacqueline Parsons",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "DVIDS identifies Aeryon SkyRanger. The white center body, four black arms and separate curved white landing legs match the manufacturer-authored SkyRanger R60 product photograph, checked visually. Not the black R70/R80D or an unrelated Sky Ranger aircraft.",
+      "visual_review_notes": "Whole SkyRanger R60 viewed from below at an oblique angle in flight. Original publisher framing and background retained without editing.",
+      "angle_id": "lower-quarter-flight",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported",
+      "identity_reference": "https://droneadvisor.tech/wp-content/uploads/2019/05/SkyRangerR60SpecSheet_.pdf"
+    },
+    {
+      "model_id": "bulletin30-2025-p067l",
+      "model_name": "Aeryon SkyRanger R60",
+      "file": "photos/original_dvids_6405881.jpg",
+      "source_page": "https://www.dvidshub.net/image/6405881/2d-lar-light-skyranger",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2010/6405881/2000w_q95.jpg",
+      "sha256": "f037284463b42292c86be5f1ce09f48a665b0ae9d43461d30f7f4fb6d1050f4c",
+      "dimensions": [
+        1999,
+        1333
+      ],
+      "author": "Lance Cpl. Jacqueline Parsons",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "DVIDS identifies Aeryon SkyRanger. The white center body, four black arms and separate curved white landing legs match the manufacturer-authored SkyRanger R60 product photograph, checked visually. Not the black R70/R80D or an unrelated Sky Ranger aircraft.",
+      "visual_review_notes": "Whole SkyRanger R60 seen head-on on the ground. Original publisher framing and background retained without editing.",
+      "angle_id": "front-level-ground",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported",
+      "identity_reference": "https://droneadvisor.tech/wp-content/uploads/2019/05/SkyRangerR60SpecSheet_.pdf"
+    },
+    {
+      "model_id": "bulletin30-2025-p067l",
+      "model_name": "Aeryon SkyRanger R60",
+      "file": "photos/original_dvids_6689705.jpg",
+      "source_page": "https://www.dvidshub.net/image/6689705/51st-ces-airmen-get-birds-eye-view",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2106/6689705/2000w_q95.jpg",
+      "sha256": "27e454eb57f4b12d8dab84cdb1ac72b5a78a34ef6826a9cacebd12e55324879b",
+      "dimensions": [
+        2000,
+        1331
+      ],
+      "author": "Tech. Sgt. Nicholas Alder",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "DVIDS identifies Aeryon SkyRanger. The white center body, four black arms and separate curved white landing legs match the manufacturer-authored SkyRanger R60 product photograph, checked visually. Not the black R70/R80D or an unrelated Sky Ranger aircraft.",
+      "visual_review_notes": "SkyRanger R60 viewed from the side while held for inspection. Original publisher framing and background retained without editing.",
+      "angle_id": "side-carried",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported",
+      "identity_reference": "https://droneadvisor.tech/wp-content/uploads/2019/05/SkyRangerR60SpecSheet_.pdf"
+    },
+    {
+      "model_id": "bulletin30-2025-p067l",
+      "model_name": "Aeryon SkyRanger R60",
+      "file": "photos/original_dvids_6689702.jpg",
+      "source_page": "https://www.dvidshub.net/image/6689702/51st-ces-airmen-get-birds-eye-view",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2106/6689702/2000w_q95.jpg",
+      "sha256": "ba434c4c64b3ee42606755f3691c07e879438fdbdbe4bce205450569863d23b0",
+      "dimensions": [
+        2000,
+        1331
+      ],
+      "author": "Tech. Sgt. Nicholas Alder",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "DVIDS identifies Aeryon SkyRanger. The white center body, four black arms and separate curved white landing legs match the manufacturer-authored SkyRanger R60 product photograph, checked visually. Not the black R70/R80D or an unrelated Sky Ranger aircraft.",
+      "visual_review_notes": "Supplemental close view of the SkyRanger R60 upper body and battery; arms extend outside the original frame. Original publisher framing and background retained without editing.",
+      "angle_id": "top-body-detail",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported",
+      "identity_reference": "https://droneadvisor.tech/wp-content/uploads/2019/05/SkyRangerR60SpecSheet_.pdf"
+    },
+    {
+      "model_id": "bulletin30-2025-p065l",
+      "model_name": "Malloy Aeronautics T150",
+      "file": "photos/original_dvids_9044310.jpg",
+      "source_page": "https://www.dvidshub.net/image/9044310/trv-150",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2505/9044310/2000w_q95.jpg",
+      "sha256": "a157f8d54d4eca5b1d1a275f0d8faec730aa89529f7d47a42114b0ac9c77738a",
+      "dimensions": [
+        1999,
+        1333
+      ],
+      "author": "Sgt. 1st Class Emily Whisenhunt / U.S. Army",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official caption identifies TRV-150. BAE Systems, the Malloy parent manufacturer, explicitly identifies TRV-150 as the US-adapted version of Malloy T-150. This is the T150 model family card, not the T400/T600/T650. Only logistics configurations are shown.",
+      "visual_review_notes": "Malloy T150/TRV-150 seen close from the front on the ground; original framing retained. No changes to original publisher bytes.",
+      "angle_id": "front-ground",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported",
+      "identity_reference": "https://www.baesystems.com/en/article/UK-built-uncrewed-air-system-advanced-low-cost-counter-drone-capability"
+    },
+    {
+      "model_id": "bulletin30-2025-p065l",
+      "model_name": "Malloy Aeronautics T150",
+      "file": "photos/original_dvids_9044297.jpg",
+      "source_page": "https://www.dvidshub.net/image/9044297/drone-capabilities-brief",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2505/9044297/2000w_q95.jpg",
+      "sha256": "aafe8d8665ae4511e5bce0da127cd9d45a3582d063c8a9553e691dfa25d10912",
+      "dimensions": [
+        1999,
+        1333
+      ],
+      "author": "Sgt. 1st Class Emily Whisenhunt / U.S. Army",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official caption identifies TRV-150. BAE Systems, the Malloy parent manufacturer, explicitly identifies TRV-150 as the US-adapted version of Malloy T-150. This is the T150 model family card, not the T400/T600/T650. Only logistics configurations are shown.",
+      "visual_review_notes": "Malloy T150/TRV-150 viewed from an upper quarter angle at a public display; one propeller end is outside the original image. No changes to original publisher bytes.",
+      "angle_id": "upper-quarter-display",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported",
+      "identity_reference": "https://www.baesystems.com/en/article/UK-built-uncrewed-air-system-advanced-low-cost-counter-drone-capability"
+    },
+    {
+      "model_id": "bulletin30-2025-p065l",
+      "model_name": "Malloy Aeronautics T150",
+      "file": "photos/original_dvids_8296223.jpg",
+      "source_page": "https://www.dvidshub.net/image/8296223/tactical-resupply-vehicle-150-takes-off-marine-corps-warfighting-laboratorys-stern-landing-vessel-project-convergence-capstone-4",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2403/8296223/2000w_q95.jpg",
+      "sha256": "6bc0f05c4f1335fa64a02eb29e839881c2e44b0ece054ebb41f03fd63081b898",
+      "dimensions": [
+        1999,
+        1333
+      ],
+      "author": "Kevin Ray J. Salvador / U.S. Marine Corps",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official caption identifies TRV-150. BAE Systems, the Malloy parent manufacturer, explicitly identifies TRV-150 as the US-adapted version of Malloy T-150. This is the T150 model family card, not the T400/T600/T650. Only logistics configurations are shown.",
+      "visual_review_notes": "Whole Malloy T150/TRV-150 seen from below in flight at a ship ramp. No changes to original publisher bytes.",
+      "angle_id": "lower-quarter-flight",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported",
+      "identity_reference": "https://www.baesystems.com/en/article/UK-built-uncrewed-air-system-advanced-low-cost-counter-drone-capability"
+    },
+    {
+      "model_id": "bulletin30-2025-p065l",
+      "model_name": "Malloy Aeronautics T150",
+      "file": "photos/original_dvids_8296222.jpg",
+      "source_page": "https://www.dvidshub.net/image/8296222/tactical-resupply-vehicle-150-takes-off-marine-corps-warfighting-laboratorys-stern-landing-vessel-project-convergence-capstone-4",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2403/8296222/2000w_q95.jpg",
+      "sha256": "67981f9c0c1ed4453e48df0a678c26775cb81f46483bc61669abbed999339010",
+      "dimensions": [
+        1999,
+        1333
+      ],
+      "author": "Kevin Ray J. Salvador / U.S. Marine Corps",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official caption identifies TRV-150. BAE Systems, the Malloy parent manufacturer, explicitly identifies TRV-150 as the US-adapted version of Malloy T-150. This is the T150 model family card, not the T400/T600/T650. Only logistics configurations are shown.",
+      "visual_review_notes": "Whole Malloy T150/TRV-150 viewed from an elevated quarter angle over the deck. No changes to original publisher bytes.",
+      "angle_id": "upper-quarter-flight",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported",
+      "identity_reference": "https://www.baesystems.com/en/article/UK-built-uncrewed-air-system-advanced-low-cost-counter-drone-capability"
+    },
+    {
+      "model_id": "lostarmour-pdf-2024-071",
+      "model_name": "RAYBIRD-3",
+      "file": "photos/original_raybird_00.jpg",
+      "source_page": "https://armyinform.com.ua/2021/06/04/yak-pid-kyyevom-vyprobuvaly-taktychnyj-bezpilotnyk-reybird-3/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2021/06/golovna-1.jpg",
+      "sha256": "6c9aa7a25dca09e5ff4a7f88a91eb0c5fb1aa6e59ff061b1b90f7ad63dc0dd13",
+      "dimensions": [
+        960,
+        540
+      ],
+      "author": "Сергій Місюра / АрміяInform",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "The original on-site report explicitly names Raybird-3; actual photographed airframe, nose propeller, wing and tail were checked. Manufacturer promotional graphics in the same article are excluded.",
+      "visual_review_notes": "Raybird-3 from behind and above on its launcher, wings and tail visible. The publisher photograph is unchanged.",
+      "angle_id": "rear-upper-ground",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "lostarmour-pdf-2024-071",
+      "model_name": "RAYBIRD-3",
+      "file": "photos/original_raybird_05.jpg",
+      "source_page": "https://armyinform.com.ua/2021/06/04/yak-pid-kyyevom-vyprobuvaly-taktychnyj-bezpilotnyk-reybird-3/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2021/06/foto-5.jpg",
+      "sha256": "872ad989bfba9ccc7e53140a6751f42277a9e5cfd8b2140be554bfbcb8875380",
+      "dimensions": [
+        960,
+        540
+      ],
+      "author": "Сергій Місюра / АрміяInform",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "The original on-site report explicitly names Raybird-3; actual photographed airframe, nose propeller, wing and tail were checked. Manufacturer promotional graphics in the same article are excluded.",
+      "visual_review_notes": "Raybird-3 from the opposite side at an elevated angle on its launcher. The publisher photograph is unchanged.",
+      "angle_id": "side-upper-ground",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "lostarmour-pdf-2024-071",
+      "model_name": "RAYBIRD-3",
+      "file": "photos/original_raybird_show_07.jpg",
+      "source_page": "https://armyinform.com.ua/2021/05/12/bezpilotnyk-acs-3-robot-skorpion-legkyj-bagatoczilovyj-vertolit-uchasnyky-ligy-oboronnyh-pidpryyemstv-prezentuvaly-perspektyvni-rozrobky/",
+      "downloaded_image": "https://armyinform.com.ua/wp-content/uploads/2021/05/foto_8.jpg",
+      "sha256": "d1a456c3fe4fb5a87a72e67dad8a3d49efb1efb32b30086874b30eebe5b7bc81",
+      "dimensions": [
+        1200,
+        800
+      ],
+      "author": "Дмитро Юрченко / АрміяInform",
+      "license": "CC BY 4.0",
+      "license_page": "https://creativecommons.org/licenses/by/4.0/",
+      "model_review_notes": "The original on-site report explicitly names Raybird-3; actual photographed airframe, nose propeller, wing and tail were checked. Manufacturer promotional graphics in the same article are excluded.",
+      "visual_review_notes": "Raybird-3 fuselage, propeller and wing viewed from the front side at an exhibition; original control station and surroundings retained. The publisher photograph is unchanged.",
+      "angle_id": "front-side-exhibition",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be a camera raw original.",
+      "publication_status": "approved_imported"
+    }
+  ]
+}

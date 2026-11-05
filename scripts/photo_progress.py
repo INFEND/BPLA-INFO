@@ -36,6 +36,43 @@ def _bulletin_union_models(assets, catalog):
                 raise ValueError("Duplicate cross-catalog ID: "+row["id"])
             models[row["id"]]=row["name"]
             model_types[row["id"]]=new_type
+    # The later PDF and album imports also introduce independent aircraft.
+    # Apply their explicit target IDs and the app's reviewed album aliases.
+    vsu_file=assets/"catalog_bpla_vsu_pdf.json"
+    if vsu_file.is_file():
+        for row in json.loads(vsu_file.read_text("utf-8"))["entries"]:
+            if row.get("targetId") in models:
+                continue
+            if row["id"] not in models:
+                models[row["id"]]=row["name"]
+                model_types[row["id"]]=row.get("type","")
+    repo=assets.parents[3]
+    album_file=repo/"research/source_catalogs/catalog_album_2026_original.dat"
+    if album_file.is_file():
+        import gzip
+        source=repo/"app/src/main/java/dev/infend/bplainfo/DroneStore.java"
+        aliases={}
+        if source.is_file():
+            code=source.read_text("utf-8")
+            start=code.find("private static String albumAliasTarget(")
+            end=code.find("private static void mergeAlbum(",start)
+            if start>=0 and end>start:
+                aliases={int(page):target for page,target in re.findall(
+                    r'case (\d+):return "([^"]+)";',code[start:end])}
+        document=json.loads(gzip.decompress(album_file.read_bytes()))
+        for row in document["entries"]:
+            if row["type"] not in {"Самолётный","Коптерный","Барражирующий"}:
+                continue
+            target=aliases.get(row["page"])
+            if target in models:
+                continue
+            if not target and any(norm(name)==norm(row["name"]) and
+                    model_types.get(mid,"").casefold()==row["type"].casefold()
+                    for mid,name in models.items()):
+                continue
+            if row["id"] not in models:
+                models[row["id"]]=row["name"]
+                model_types[row["id"]]=row["type"]
     return models
 
 def audit(root):
@@ -95,15 +132,34 @@ def audit(root):
     unknown = set(manifest.get("items", {})) - set(models)
     if unknown:
         raise ValueError("Unknown model IDs in photo manifest: " + ", ".join(sorted(unknown)))
+    by_id={row['id']:row for row in rows}
+    aliases=manifest.get('aliases',{})
+    for alias,review in aliases.items():
+        target=review.get('target_id')
+        if (alias not in by_id or target not in manifest.get('items',{}) or
+                alias in manifest.get('items',{}) or alias==target or
+                review.get('model_review_approved') is not True or
+                len(review.get('model_review_notes','').strip())<15):
+            raise ValueError('Invalid or unreviewed gallery alias: '+alias)
+        original=by_id[target]
+        row=by_id[alias]
+        row.update(embedded=original['embedded'],
+                   verified_distinct_processed=original['verified_distinct_processed'],
+                   remaining=original['remaining'],complete=original['complete'],
+                   shared_gallery=target)
+        if row['complete']:
+            complete.append(alias)
     total_required = len(models) * REQUIRED
     return {
         "models_total": len(models), "minimum_verified_photos_required": total_required,
         "models_complete": len(complete), "models_incomplete": len(models) - len(complete),
         "photos_embedded": total_embedded, "photos_verified_processed_distinct": approved_count,
+        "physical_model_galleries": len(manifest.get('items',{})),
+        "reviewed_shared_galleries": len(aliases),
         "minimum_additional_verified_photos": sum(r["remaining"] for r in rows),
         "completion_percent": round(100 * len(complete) / len(models), 2) if models else 0,
         "models": rows,
-        "definition": "Complete means >=3 embedded genuine photos with reviewed model identity and distinct useful views. Verified unmodified originals keep the publisher file byte for byte; background removal is not required. A hash alone never proves model identity."
+        "definition": "Counts cover catalog cards from base, bulletin, VSU PDF and the aircraft-only album, including explicit source aliases. Complete means >=3 genuine photos with reviewed model identity and distinct useful views. Explicitly reviewed equivalent cards may share one physical gallery; physical photo totals count each binary once. Required/remaining photo counts are card-level slots. Unmodified originals preserve publisher bytes; background removal is not required."
     }
 
 def main():

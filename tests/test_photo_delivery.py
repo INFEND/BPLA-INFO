@@ -35,6 +35,7 @@ class LocalPhotoRegressionTests(unittest.TestCase):
         self.assertEqual(MANIFEST["storage"],"apk-assets-only")
         ids = {entry["id"]:entry["name"] for entry in CATALOG["entries"]}
         ids.update({entry["id"]:entry["name"] for entry in json.loads((ASSETS/"bulletin30_2025.json").read_text("utf-8"))["entries"]})
+        ids.update({entry["id"]:entry["name"] for entry in json.loads((ASSETS/"catalog_bpla_vsu_pdf.json").read_text("utf-8"))["entries"]})
         referenced=set()
         for model_id, entry in MANIFEST["items"].items():
             self.assertIn(model_id, ids)
