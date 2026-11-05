@@ -62,7 +62,6 @@ public final class CardPresentation {
         }
         // ICU regex on some Android builds rejects (?U); use portable code points.
         if(s.length()>1&&s.equals(s.toUpperCase(Locale.ROOT))&&hasLetter) {
-            String lower=s.toLowerCase(Locale.forLanguageTag("ru"));
             return lower.substring(0,1).toUpperCase(Locale.forLanguageTag("ru"))+lower.substring(1);
         }
         return s;
