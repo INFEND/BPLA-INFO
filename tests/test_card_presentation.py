@@ -23,7 +23,10 @@ public class PresentationSmoke {
     eq(CardPresentation.engine("ДВС"),"ДВС");
     eq(CardPresentation.engine("ЭЛЕКТРИЧЕСКИЙ"),"Электрический");
     eq(CardPresentation.engine("ГТД"),"ГТД");
-    eq(CardPresentation.engine("ЭЛЕКТРОДВИГАТЕЛЬ"),"Электродвигатель");
+    eq(CardPresentation.engine("ЭЛЕКТРОДВИГАТЕЛЬ"),"Электрический");
+    eq(CardPresentation.engine("электро"),"Электрический");
+    eq(CardPresentation.engine("electric"),"Электрический");
+    eq(CardPresentation.engine("эл."),"Электрический");
     eq(CardPresentation.engine("Электрический"),"Электрический");
     eq(CardPresentation.engine(""),"");
     eq(CardPresentation.engine(null),"");
@@ -57,7 +60,7 @@ class CardPresentationTests(unittest.TestCase):
             file=pathlib.Path(folder)/"PresentationSmoke.java"
             file.write_text(HARNESS,encoding="utf-8")
             subprocess.run(["javac","-encoding","UTF-8","-d",folder,
-                str(JAVA/"SpecFormatter.java"),str(JAVA/"CardPresentation.java"),str(file)],
+                str(JAVA/"SpecFormatter.java"),str(JAVA/"PreviewFormatter.java"),str(JAVA/"CardPresentation.java"),str(file)],
                 check=True,capture_output=True,text=True)
             subprocess.run(["java","-cp",folder,"dev.infend.bplainfo.PresentationSmoke"],
                 check=True,capture_output=True,text=True)

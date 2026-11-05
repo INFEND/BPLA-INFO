@@ -84,6 +84,17 @@ public final class CardPresentation {
     private static void append(Map<String,String> lines,String name,String raw) {
         String normalized=label(name);
         String data=value(normalized,raw);
+        String lower=name.toLowerCase(Locale.forLanguageTag("ru"));
+        if(lower.contains("скорост")&&(lower.contains("км/ч")||lower.contains("м/с")))
+            data=PreviewFormatter.speed(raw,java.util.Collections.singletonList(new String[]{name,raw}));
+        else if((lower.contains("полет")||lower.contains("полёт")||
+                 lower.contains("автоном")||lower.contains("продолжительност"))&&
+                 (lower.contains("мин")||lower.contains(" ч")||lower.contains("час")))
+            data=PreviewFormatter.endurance(raw,java.util.Collections.singletonList(new String[]{name,raw}));
+        else if((lower.contains("радиус")||lower.contains("дальност"))&&
+                 (lower.contains("км")||lower.contains(" м")))
+            data=PreviewFormatter.range(raw,java.util.Collections.singletonList(new String[]{name,raw}));
+        if("—".equals(data))data="";
         if(!normalized.isEmpty()&&!data.isEmpty()&&!lines.containsKey(normalized))
             lines.put(normalized,data);
     }

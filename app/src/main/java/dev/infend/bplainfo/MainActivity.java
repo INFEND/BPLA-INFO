@@ -339,9 +339,9 @@ public final class MainActivity extends Activity {
             String subtitle=engine.isEmpty()?modelType:modelType+" | "+engine;
             labels.addView(text(subtitle,13,t.fg,true));
             LinearLayout stats=horizontal();card.addView(stats);
-            stat(stats,"АВТОНОМНОСТЬ",d.previewEndurance(),Gravity.START);
-            stat(stats,"СКОРОСТЬ",d.previewSpeed(),Gravity.CENTER_HORIZONTAL);
-            stat(stats,"ДАЛЬНОСТЬ",d.previewRange(),Gravity.END);
+            stat(stats,"АВТОНОМНОСТЬ",PreviewFormatter.endurance(d.previewEndurance(),d.specRows),Gravity.START);
+            stat(stats,"СКОРОСТЬ",PreviewFormatter.speed(d.previewSpeed(),d.specRows),Gravity.CENTER_HORIZONTAL);
+            stat(stats,"ДАЛЬНОСТЬ",PreviewFormatter.range(d.previewRange(),d.specRows),Gravity.END);
             card.setOnClickListener(v->detail(d));
             if(t.animations){card.setAlpha(0f);card.setTranslationY(dp(13));card.animate().alpha(1).translationY(0).setDuration(180).setStartDelay(Math.min(index,8)*25L).start();}
         }
@@ -411,7 +411,7 @@ public final class MainActivity extends Activity {
                 photo.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 photo.setImageResource(R.drawable.ic_airplane);photo.setColorFilter(t.muted);
                 frame.addView(photo,new LinearLayout.LayoutParams(-1,0,1));
-                TextView photoStatus=text("ФОТО В ПРИЛОЖЕНИИ",10,t.muted,false);
+                TextView photoStatus=text(p.needsReview()?"ПРЕДВАРИТЕЛЬНОЕ ФОТО":"ФОТО В ПРИЛОЖЕНИИ",10,p.needsReview()?t.accent:t.muted,true);
                 frame.addView(photoStatus,margins(-1,-2,0,2));
                 final boolean[] requested={false};
                 lazyFrames.add(frame);
@@ -420,7 +420,7 @@ public final class MainActivity extends Activity {
                     requested[0]=true;
                     photoStatus.setText("ОТКРЫТИЕ ФОТО…");
                     PhotoLibrary.into(this,p,photo,1350,ok->
-                        photoStatus.setText(ok?"СНИМОК "+number:PhotoLibrary.unavailableMessage(this)));
+                        photoStatus.setText(ok?(p.needsReview()?"ИСХОДНИК · ФОН НЕ УДАЛЁН":"СНИМОК "+number):PhotoLibrary.unavailableMessage(this)));
                 });
 
                 frame.setOnClickListener(v->showDocumentaryPhoto(p));
@@ -746,7 +746,7 @@ public final class MainActivity extends Activity {
         int screenHeight=getResources().getDisplayMetrics().heightPixels;
         int photoHeight=Math.max(dp(240),Math.min((int)(screenHeight*0.68f),dp(760)));
         content.addView(photo,new LinearLayout.LayoutParams(-1,photoHeight));
-        String credit="ФОТО ВСТРОЕНО В ПРИЛОЖЕНИЕ";
+        String credit=item.needsReview()?"ПРЕДВАРИТЕЛЬНОЕ ФОТО · ФОН НЕ УДАЛЁН":"ФОТО ВСТРОЕНО В ПРИЛОЖЕНИЕ";
         if(!item.author.isEmpty())credit+=" | "+item.author;
         if(!item.license.isEmpty())credit+=" | "+item.license;
         if(!item.source.isEmpty())credit+=" | "+item.source;

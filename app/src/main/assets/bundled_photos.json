@@ -1,7 +1,7 @@
 {
   "schema": 2,
   "storage": "apk-assets-only",
-  "description": "Only files physically embedded in the APK. No Wikimedia or remote photo URLs.",
+  "description": "Physical offline photos only. Some galleries contain visibly labelled original unprocessed source candidates, NOT approved background removals.",
   "items": {
     "lostarmour-pdf-2024-041": {
       "name": "PUMA AE RQ-20",
@@ -23,6 +23,297 @@
           "source": "DVIDS photo 6381574; 14.09.2020; RQ-20 Puma in flight",
           "processing_status": "needs_background_review",
           "original_sha256": "6c97b913429c5cbf76718a0935bea67a76a7aa5b9afcc9bb2383b2919fd33742"
+        }
+      ]
+    },
+    "lostarmour-pdf-2024-042": {
+      "name": "PUMA LE",
+      "files": [
+        {
+          "file": "photos/draft_dce6b7b299000e32f6.jpg",
+          "sha256": "dce6b7b299000e32f6560903505852a3550db5378cd60655d357de8352e9baa5",
+          "author": "PO3 Roberto Nieves, U.S. Coast Guard",
+          "license": "Public domain (U.S. Government)",
+          "source": "DVIDS 9457880 · неизменённый исходный кадр",
+          "processing_status": "needs_background_review",
+          "original_sha256": "dce6b7b299000e32f6560903505852a3550db5378cd60655d357de8352e9baa5",
+          "publication_status": "preview_unreviewed",
+          "visual_review_approved": false,
+          "background_removed": false,
+          "source_archive": "research/photos/originals/dce6b7b299000e32f6560903505852a3550db5378cd60655d357de8352e9baa5.jpg",
+          "angle_hint": "не проверено"
+        },
+        {
+          "file": "photos/draft_5f50b0f210398a207c.jpg",
+          "sha256": "5f50b0f210398a207c911f2e41e5df55d889dbb388655f55d70657bfb43de303",
+          "author": "PO3 Roberto Nieves, U.S. Coast Guard",
+          "license": "Public domain (U.S. Government)",
+          "source": "DVIDS 9457884 · неизменённый исходный кадр",
+          "processing_status": "needs_background_review",
+          "original_sha256": "5f50b0f210398a207c911f2e41e5df55d889dbb388655f55d70657bfb43de303",
+          "publication_status": "preview_unreviewed",
+          "visual_review_approved": false,
+          "background_removed": false,
+          "source_archive": "research/photos/originals/5f50b0f210398a207c911f2e41e5df55d889dbb388655f55d70657bfb43de303.jpg",
+          "angle_hint": "не проверено"
+        }
+      ]
+    },
+    "lostarmour-pdf-2024-081": {
+      "name": "VECTOR",
+      "files": [
+        {
+          "file": "photos/draft_521db4089373bf7565.jpg",
+          "sha256": "521db4089373bf7565c487c97944c6a81dc83b0ca5442b67570d7ddc561d2c08",
+          "author": "Cpl Emily Hazelbaker, U.S. Marine Corps",
+          "license": "Public domain (U.S. Government)",
+          "source": "DVIDS 9499015 · неизменённый исходный кадр",
+          "processing_status": "needs_background_review",
+          "original_sha256": "521db4089373bf7565c487c97944c6a81dc83b0ca5442b67570d7ddc561d2c08",
+          "publication_status": "preview_unreviewed",
+          "visual_review_approved": false,
+          "background_removed": false,
+          "source_archive": "research/photos/originals/521db4089373bf7565c487c97944c6a81dc83b0ca5442b67570d7ddc561d2c08.jpg",
+          "angle_hint": "не проверено"
+        },
+        {
+          "file": "photos/draft_3ed1840b359f87fa2a.jpg",
+          "sha256": "3ed1840b359f87fa2af1544ed9f187589f98f20f83526f1854dcf61fcdfc8aea",
+          "author": "Cpl Emily Hazelbaker, U.S. Marine Corps",
+          "license": "Public domain (U.S. Government)",
+          "source": "DVIDS 9499028 · неизменённый исходный кадр",
+          "processing_status": "needs_background_review",
+          "original_sha256": "3ed1840b359f87fa2af1544ed9f187589f98f20f83526f1854dcf61fcdfc8aea",
+          "publication_status": "preview_unreviewed",
+          "visual_review_approved": false,
+          "background_removed": false,
+          "source_archive": "research/photos/originals/3ed1840b359f87fa2af1544ed9f187589f98f20f83526f1854dcf61fcdfc8aea.jpg",
+          "angle_hint": "не проверено"
+        }
+      ]
+    },
+    "lostarmour-pdf-2024-003": {
+      "name": "ДОМАХА",
+      "files": [
+        {
+          "file": "photos/draft_e67f1538fb33029d00.webp",
+          "sha256": "e67f1538fb33029d004764377d92fbb867bee2359e0ef098bb8fbf47b6beba9c",
+          "author": "Антон Шевельов / Міністерство оборони України",
+          "license": "CC BY 4.0",
+          "source": "ArmyInform 2025-11-10 02-1-scaled.webp · неизменённый исходный кадр",
+          "processing_status": "needs_background_review",
+          "original_sha256": "e67f1538fb33029d004764377d92fbb867bee2359e0ef098bb8fbf47b6beba9c",
+          "publication_status": "preview_unreviewed",
+          "visual_review_approved": false,
+          "background_removed": false,
+          "source_archive": "research/photos/originals/e67f1538fb33029d004764377d92fbb867bee2359e0ef098bb8fbf47b6beba9c.webp",
+          "angle_hint": "top_front"
+        },
+        {
+          "file": "photos/draft_aaa1a5589539194222.webp",
+          "sha256": "aaa1a558953919422221b668c24383fdb6f202216ee028d1f01695472ee22ff5",
+          "author": "Антон Шевельов / Міністерство оборони України",
+          "license": "CC BY 4.0",
+          "source": "ArmyInform 2025-11-10 03-1-scaled.webp · неизменённый исходный кадр",
+          "processing_status": "needs_background_review",
+          "original_sha256": "aaa1a558953919422221b668c24383fdb6f202216ee028d1f01695472ee22ff5",
+          "publication_status": "preview_unreviewed",
+          "visual_review_approved": false,
+          "background_removed": false,
+          "source_archive": "research/photos/originals/aaa1a558953919422221b668c24383fdb6f202216ee028d1f01695472ee22ff5.webp",
+          "angle_hint": "front_oblique"
+        },
+        {
+          "file": "photos/draft_bae03ff4b49ae42d4f.webp",
+          "sha256": "bae03ff4b49ae42d4f18db1ebd5a8c9361eb304ba13aa64f73a97a531f3573cd",
+          "author": "Антон Шевельов / Міністерство оборони України",
+          "license": "CC BY 4.0",
+          "source": "ArmyInform 2025-11-10 04-2-scaled.webp · неизменённый исходный кадр",
+          "processing_status": "needs_background_review",
+          "original_sha256": "bae03ff4b49ae42d4f18db1ebd5a8c9361eb304ba13aa64f73a97a531f3573cd",
+          "publication_status": "preview_unreviewed",
+          "visual_review_approved": false,
+          "background_removed": false,
+          "source_archive": "research/photos/originals/bae03ff4b49ae42d4f18db1ebd5a8c9361eb304ba13aa64f73a97a531f3573cd.webp",
+          "angle_hint": "front_lower"
+        },
+        {
+          "file": "photos/draft_31169c1a004d155ba0.webp",
+          "sha256": "31169c1a004d155ba0aed66e2f85d40c42876fbb30325f89d8cd8da5bbc9493f",
+          "author": "Антон Шевельов / Міністерство оборони України",
+          "license": "CC BY 4.0",
+          "source": "ArmyInform 2025-11-10 05-2-scaled.webp · неизменённый исходный кадр",
+          "processing_status": "needs_background_review",
+          "original_sha256": "31169c1a004d155ba0aed66e2f85d40c42876fbb30325f89d8cd8da5bbc9493f",
+          "publication_status": "preview_unreviewed",
+          "visual_review_approved": false,
+          "background_removed": false,
+          "source_archive": "research/photos/originals/31169c1a004d155ba0aed66e2f85d40c42876fbb30325f89d8cd8da5bbc9493f.webp",
+          "angle_hint": "front_lower_oblique"
+        },
+        {
+          "file": "photos/draft_04ac8e6d6c3c1a2b8f.webp",
+          "sha256": "04ac8e6d6c3c1a2b8f82d3e8ef3f533446cc139d87a994c31a07f091891ebd79",
+          "author": "Антон Шевельов / Міністерство оборони України",
+          "license": "CC BY 4.0",
+          "source": "ArmyInform 2025-11-10 06-2-scaled.webp · неизменённый исходный кадр",
+          "processing_status": "needs_background_review",
+          "original_sha256": "04ac8e6d6c3c1a2b8f82d3e8ef3f533446cc139d87a994c31a07f091891ebd79",
+          "publication_status": "preview_unreviewed",
+          "visual_review_approved": false,
+          "background_removed": false,
+          "source_archive": "research/photos/originals/04ac8e6d6c3c1a2b8f82d3e8ef3f533446cc139d87a994c31a07f091891ebd79.webp",
+          "angle_hint": "top_front"
+        }
+      ]
+    },
+    "lostarmour-pdf-2024-005": {
+      "name": "A1-СМ ФУРИЯ",
+      "files": [
+        {
+          "file": "photos/draft_bd3cfa351ecede3193.webp",
+          "sha256": "bd3cfa351ecede319385cf54321fc4fb505de5ca296f3bebee4424f91e45bca0",
+          "author": "Антон Шевельов / Міністерство оборони України",
+          "license": "CC BY 4.0",
+          "source": "ArmyInform 2025-11-10 09-scaled.webp · неизменённый исходный кадр",
+          "processing_status": "needs_background_review",
+          "original_sha256": "bd3cfa351ecede319385cf54321fc4fb505de5ca296f3bebee4424f91e45bca0",
+          "publication_status": "preview_unreviewed",
+          "visual_review_approved": false,
+          "background_removed": false,
+          "source_archive": "research/photos/originals/bd3cfa351ecede319385cf54321fc4fb505de5ca296f3bebee4424f91e45bca0.webp",
+          "angle_hint": "top_front"
+        },
+        {
+          "file": "photos/draft_f32c7a61d03529bbdd.webp",
+          "sha256": "f32c7a61d03529bbdd6c2abd99025878ac480f5062fbdbeb4365e4a8739fda45",
+          "author": "Антон Шевельов / Міністерство оборони України",
+          "license": "CC BY 4.0",
+          "source": "ArmyInform 2025-11-10 10-1-scaled.webp · неизменённый исходный кадр",
+          "processing_status": "needs_background_review",
+          "original_sha256": "f32c7a61d03529bbdd6c2abd99025878ac480f5062fbdbeb4365e4a8739fda45",
+          "publication_status": "preview_unreviewed",
+          "visual_review_approved": false,
+          "background_removed": false,
+          "source_archive": "research/photos/originals/f32c7a61d03529bbdd6c2abd99025878ac480f5062fbdbeb4365e4a8739fda45.webp",
+          "angle_hint": "front_detail"
+        },
+        {
+          "file": "photos/draft_0f77d246ddf3041220.webp",
+          "sha256": "0f77d246ddf3041220f763bd2fb106532480faed56369fb5e2e47161535dc693",
+          "author": "Антон Шевельов / Міністерство оборони України",
+          "license": "CC BY 4.0",
+          "source": "ArmyInform 2025-11-10 11-1-scaled.webp · неизменённый исходный кадр",
+          "processing_status": "needs_background_review",
+          "original_sha256": "0f77d246ddf3041220f763bd2fb106532480faed56369fb5e2e47161535dc693",
+          "publication_status": "preview_unreviewed",
+          "visual_review_approved": false,
+          "background_removed": false,
+          "source_archive": "research/photos/originals/0f77d246ddf3041220f763bd2fb106532480faed56369fb5e2e47161535dc693.webp",
+          "angle_hint": "front_oblique"
+        },
+        {
+          "file": "photos/draft_63f1845ab57e84d6c6.webp",
+          "sha256": "63f1845ab57e84d6c6ca438f05ba5aa61cbed497cbf1c12c24b797caedc2e9ab",
+          "author": "Антон Шевельов / Міністерство оборони України",
+          "license": "CC BY 4.0",
+          "source": "ArmyInform 2025-11-10 12-1-scaled.webp · неизменённый исходный кадр",
+          "processing_status": "needs_background_review",
+          "original_sha256": "63f1845ab57e84d6c6ca438f05ba5aa61cbed497cbf1c12c24b797caedc2e9ab",
+          "publication_status": "preview_unreviewed",
+          "visual_review_approved": false,
+          "background_removed": false,
+          "source_archive": "research/photos/originals/63f1845ab57e84d6c6ca438f05ba5aa61cbed497cbf1c12c24b797caedc2e9ab.webp",
+          "angle_hint": "top"
+        },
+        {
+          "file": "photos/draft_5a18a1f279a697f31b.webp",
+          "sha256": "5a18a1f279a697f31bf4437e0307dd9415d3605504686a0660e093693ee65340",
+          "author": "Антон Шевельов / Міністерство оборони України",
+          "license": "CC BY 4.0",
+          "source": "ArmyInform 2025-11-10 15-scaled.webp · неизменённый исходный кадр",
+          "processing_status": "needs_background_review",
+          "original_sha256": "5a18a1f279a697f31bf4437e0307dd9415d3605504686a0660e093693ee65340",
+          "publication_status": "preview_unreviewed",
+          "visual_review_approved": false,
+          "background_removed": false,
+          "source_archive": "research/photos/originals/5a18a1f279a697f31bf4437e0307dd9415d3605504686a0660e093693ee65340.webp",
+          "angle_hint": "rear_oblique"
+        }
+      ]
+    },
+    "lostarmour-pdf-2024-056": {
+      "name": "CETUS",
+      "files": [
+        {
+          "file": "photos/draft_b8c058b5749f3d6b47.webp",
+          "sha256": "b8c058b5749f3d6b477cbe4563cff6a6702827d5b16c642985d767f1202405b6",
+          "author": "Антон Шевельов / Міністерство оборони України",
+          "license": "CC BY 4.0",
+          "source": "ArmyInform 2025-11-10 25-scaled.webp · неизменённый исходный кадр",
+          "processing_status": "needs_background_review",
+          "original_sha256": "b8c058b5749f3d6b477cbe4563cff6a6702827d5b16c642985d767f1202405b6",
+          "publication_status": "preview_unreviewed",
+          "visual_review_approved": false,
+          "background_removed": false,
+          "source_archive": "research/photos/originals/b8c058b5749f3d6b477cbe4563cff6a6702827d5b16c642985d767f1202405b6.webp",
+          "angle_hint": "top_oblique"
+        },
+        {
+          "file": "photos/draft_eec76dc952ace15905.webp",
+          "sha256": "eec76dc952ace15905635d8b103730a684c4e7d0d1a74220361ee8494193d3ca",
+          "author": "Антон Шевельов / Міністерство оборони України",
+          "license": "CC BY 4.0",
+          "source": "ArmyInform 2025-11-10 24-scaled.webp · неизменённый исходный кадр",
+          "processing_status": "needs_background_review",
+          "original_sha256": "eec76dc952ace15905635d8b103730a684c4e7d0d1a74220361ee8494193d3ca",
+          "publication_status": "preview_unreviewed",
+          "visual_review_approved": false,
+          "background_removed": false,
+          "source_archive": "research/photos/originals/eec76dc952ace15905635d8b103730a684c4e7d0d1a74220361ee8494193d3ca.webp",
+          "angle_hint": "front_lower"
+        },
+        {
+          "file": "photos/draft_d1bfefc5ed823aa63e.webp",
+          "sha256": "d1bfefc5ed823aa63e436e1837d93316db65446c3cf6e6aaa7e0ebb38dbb5a1b",
+          "author": "Антон Шевельов / Міністерство оборони України",
+          "license": "CC BY 4.0",
+          "source": "ArmyInform 2025-11-10 23-scaled.webp · неизменённый исходный кадр",
+          "processing_status": "needs_background_review",
+          "original_sha256": "d1bfefc5ed823aa63e436e1837d93316db65446c3cf6e6aaa7e0ebb38dbb5a1b",
+          "publication_status": "preview_unreviewed",
+          "visual_review_approved": false,
+          "background_removed": false,
+          "source_archive": "research/photos/originals/d1bfefc5ed823aa63e436e1837d93316db65446c3cf6e6aaa7e0ebb38dbb5a1b.webp",
+          "angle_hint": "front_lower_oblique"
+        },
+        {
+          "file": "photos/draft_eea2c8143956f19789.webp",
+          "sha256": "eea2c8143956f19789ff4a6588de5cdb4fdde1c59ed5aafbfa89dbe9598a634f",
+          "author": "Антон Шевельов / Міністерство оборони України",
+          "license": "CC BY 4.0",
+          "source": "ArmyInform 2025-11-10 27-scaled.webp · неизменённый исходный кадр",
+          "processing_status": "needs_background_review",
+          "original_sha256": "eea2c8143956f19789ff4a6588de5cdb4fdde1c59ed5aafbfa89dbe9598a634f",
+          "publication_status": "preview_unreviewed",
+          "visual_review_approved": false,
+          "background_removed": false,
+          "source_archive": "research/photos/originals/eea2c8143956f19789ff4a6588de5cdb4fdde1c59ed5aafbfa89dbe9598a634f.webp",
+          "angle_hint": "top"
+        },
+        {
+          "file": "photos/draft_c421fd0b1f6c3b187e.webp",
+          "sha256": "c421fd0b1f6c3b187ebc3d097f587de5da9fd3439cf1994dc758282a36b64738",
+          "author": "Антон Шевельов / Міністерство оборони України",
+          "license": "CC BY 4.0",
+          "source": "ArmyInform 2025-11-10 29-scaled.webp · неизменённый исходный кадр",
+          "processing_status": "needs_background_review",
+          "original_sha256": "c421fd0b1f6c3b187ebc3d097f587de5da9fd3439cf1994dc758282a36b64738",
+          "publication_status": "preview_unreviewed",
+          "visual_review_approved": false,
+          "background_removed": false,
+          "source_archive": "research/photos/originals/c421fd0b1f6c3b187ebc3d097f587de5da9fd3439cf1994dc758282a36b64738.webp",
+          "angle_hint": "top"
         }
       ]
     }

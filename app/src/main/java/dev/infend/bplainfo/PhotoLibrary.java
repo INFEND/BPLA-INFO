@@ -26,13 +26,21 @@ import java.util.concurrent.Executors;
  */
 public final class PhotoLibrary {
     public static final class Photo {
-        public final String file, sha256, author, license, source;
+        public final String file, sha256, author, license, source, processingStatus;
         public Photo(String file,String sha256,String author,String license,String source) {
+            this(file,sha256,author,license,source,"needs_background_review");
+        }
+        public Photo(String file,String sha256,String author,String license,String source,String processingStatus) {
             this.file=file;
             this.sha256=sha256;
             this.author=author;
             this.license=license;
             this.source=source;
+            this.processingStatus=processingStatus;
+        }
+        public boolean needsReview(){
+            return !("background_removed_verified".equals(processingStatus) ||
+                     "verified_clean_original".equals(processingStatus));
         }
     }
     public interface Callback { void ready(Bitmap bitmap); }
@@ -103,7 +111,7 @@ public final class PhotoLibrary {
                         try(InputStream check=context.getAssets().open(file)){
                             if(check.read()==-1)continue;
                         }catch(Exception missing){continue;}
-                        list.add(new Photo(file,sha,author,license,source));
+                        list.add(new Photo(file,sha,author,license,source,record.optString("processing_status","needs_background_review")));
                     }
                     if(!list.isEmpty())built.put(id,Collections.unmodifiableList(list));
                 }
