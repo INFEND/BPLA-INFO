@@ -180,7 +180,7 @@ def main():
     else:
         for key in ("models_total", "minimum_verified_photos_required", "models_complete",
                     "models_incomplete", "photos_embedded", "photos_verified_processed_distinct",
-                    "minimum_additional_verified_photos", "completion_percent"):
+                    "photos_verified_distinct_originals", "minimum_additional_verified_photos", "completion_percent"):
             print(f"{key}: {report[key]}")
         for row in report["models"]:
             if row["embedded"]:
