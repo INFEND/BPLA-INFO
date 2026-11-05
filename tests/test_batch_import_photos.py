@@ -182,6 +182,30 @@ class BatchPhotoImporterTests(unittest.TestCase):
         _,manifest,_=importer.prepare(self.stage,self.repo)
         self.assertEqual(len(manifest['items']['bulletin-model']['files']),1)
 
+    def test_album_alias_does_not_create_duplicate_model_id(self):
+        import gzip
+        archive=self.repo/'research/source_catalogs/catalog_album_2026_original.dat'
+        archive.parent.mkdir(parents=True)
+        archive.write_bytes(gzip.compress(json.dumps({'entries':[
+            {'id':'album-duplicate','name':'Alias model','type':'Самолётный','page':31},
+            {'id':'album-new','name':'New model','type':'Самолётный','page':32}
+        ]}).encode()))
+        java=self.repo/'app/src/main/java/dev/infend/bplainfo/DroneStore.java'
+        java.parent.mkdir(parents=True)
+        java.write_text('private static String albumAliasTarget(int page){'
+                        'case 31:return "test-model";'
+                        'case 32:return "missing-model";'
+                        '}\nprivate static void mergeAlbum(',encoding='utf-8')
+        item=self.original_candidate()
+        item.update(model_id='album-duplicate',model_name='Alias model')
+        self.batch([item])
+        with self.assertRaisesRegex(ValueError,'Unknown model'):
+            importer.prepare(self.stage,self.repo)
+        item.update(model_id='album-new',model_name='New model')
+        self.batch([item])
+        _,manifest,_=importer.prepare(self.stage,self.repo)
+        self.assertEqual(len(manifest['items']['album-new']['files']),1)
+
     def test_original_import_into_aircraft_album_only_model(self):
         import gzip
         archive=self.repo/'research/source_catalogs/catalog_album_2026_original.dat'
