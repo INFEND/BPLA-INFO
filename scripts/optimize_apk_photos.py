@@ -138,7 +138,7 @@ def pack(root=ROOT, assets=ASSETS):
             before += len(original)
             payload, details = optimize(original)
             if payload is not None:
-                next_name = str(Path(name).with_suffix(".webp"))
+                next_name = "photos/packed_" + expected[:24] + ".webp"
                 if not SAFE.fullmatch(next_name) or next_name in final_paths:
                     raise ValueError("Duplicate optimized path: " + next_name)
                 details.update({"algorithm": "adaptive-webp-ssim-v1",
