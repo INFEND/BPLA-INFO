@@ -88,12 +88,14 @@ def audit(root):
     total_embedded = 0
     approved_count = 0
     original_count = 0
+    processed_count = 0
     for model_id, model_name in models.items():
         records = manifest.get("items", {}).get(model_id, {}).get("files", [])
         if not isinstance(records, list):
             raise ValueError("Invalid gallery: " + model_id)
         accepted = 0
         accepted_originals = 0
+        accepted_processed = 0
         reviewed_angles = set()
         for record in records:
             rel = record["file"]
@@ -128,10 +130,14 @@ def audit(root):
                 if record.get("processing_status") == "verified_unmodified_original":
                     original_count += 1
                     accepted_originals += 1
+                else:
+                    processed_count += 1
+                    accepted_processed += 1
         if accepted >= REQUIRED:
             complete.append(model_id)
         rows.append({"id": model_id, "name": model_name, "embedded": len(records),
                      "verified_distinct_processed": accepted, "verified_distinct_originals": accepted_originals,
+                     "verified_distinct_total": accepted, "verified_distinct_background_removed": accepted_processed,
                      "remaining": max(0, REQUIRED - accepted),
                      "complete": accepted >= REQUIRED})
     unknown = set(manifest.get("items", {})) - set(models)
@@ -151,6 +157,8 @@ def audit(root):
         row.update(embedded=original['embedded'],
                    verified_distinct_processed=original['verified_distinct_processed'],
                    verified_distinct_originals=original['verified_distinct_originals'],
+                   verified_distinct_total=original['verified_distinct_total'],
+                   verified_distinct_background_removed=original['verified_distinct_background_removed'],
                    remaining=original['remaining'],complete=original['complete'],
                    shared_gallery=target)
         if row['complete']:
@@ -161,6 +169,8 @@ def audit(root):
         "models_complete": len(complete), "models_incomplete": len(models) - len(complete),
         "photos_embedded": total_embedded, "photos_verified_processed_distinct": approved_count,
         "photos_verified_distinct_originals": original_count,
+        "photos_verified_distinct_total": approved_count,
+        "photos_verified_distinct_background_removed": processed_count,
         "physical_model_galleries": len(manifest.get('items',{})),
         "reviewed_shared_galleries": len(aliases),
         "minimum_additional_verified_photos": sum(r["remaining"] for r in rows),
@@ -180,7 +190,7 @@ def main():
     else:
         for key in ("models_total", "minimum_verified_photos_required", "models_complete",
                     "models_incomplete", "photos_embedded", "photos_verified_processed_distinct",
-                    "photos_verified_distinct_originals", "minimum_additional_verified_photos", "completion_percent"):
+                    "photos_verified_distinct_originals", "photos_verified_distinct_background_removed", "minimum_additional_verified_photos", "completion_percent"):
             print(f"{key}: {report[key]}")
         for row in report["models"]:
             if row["embedded"]:
