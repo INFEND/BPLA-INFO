@@ -6,7 +6,7 @@ from pathlib import Path
 import tempfile
 import unittest
 import zipfile
-from PIL import Image
+from PIL import Image, ImageDraw
 
 ROOT=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location("audit_apk_photos",ROOT/"scripts/audit_apk_photos.py")
@@ -83,6 +83,37 @@ class ApkPhotoAuditTests(unittest.TestCase):
             manifest['aliases']['alternate-name']['target_id']='missing-model'
             write()
             with self.assertRaisesRegex(ValueError,'unreviewed photo gallery alias'):
+                audit.audit(path)
+
+    def test_reencoded_derivative_cannot_replace_publisher_original_in_release(self):
+        # A decodable and correctly hashed derivative still violates the
+        # unchanged-file requirement; retaining an archive outside APK is not enough.
+        image=io.BytesIO()
+        fixture=Image.new('RGB',(600,400))
+        draw=ImageDraw.Draw(fixture)
+        for y in range(0,400,16):
+            for x in range(0,600,16):
+                draw.rectangle((x,y,x+15,y+15),fill=((x*7)%256,(y*11)%256,((x+y)*5)%256))
+        fixture.save(image,format='WEBP',quality=84)
+        binary=image.getvalue()
+        self.assertGreater(len(binary),512)
+        original_sha='1'*64
+        photo={
+            'file':'photos/packed_test.webp','sha256':hashlib.sha256(binary).hexdigest(),
+            'original_sha256':original_sha,'original_archive':'photo_originals/test.jpg',
+            'author':'Test author','license':'CC0 1.0','source':'Synthetic audit fixture',
+            'processing_status':'optimized_from_verified_original',
+            'model_review_approved':True,'visual_review_approved':True,'background_removed':False,
+            'optimization':{'algorithm':'adaptive-webp-ssim-v1','source_sha256':original_sha,
+                'quality':84,'source_bytes':len(binary)*3,'packed_bytes':len(binary),
+                'ssim_luma':0.99,'psnr_luma_db':40}
+        }
+        with tempfile.TemporaryDirectory() as folder:
+            path=Path(folder)/'test.apk'
+            self.make_apk(path,{'schema':2,'storage':'apk-assets-only',
+                'items':{'fixture':{'files':[photo]}}},
+                {'assets/photos/packed_test.webp':binary})
+            with self.assertRaisesRegex(ValueError,'invalid photo processing status'):
                 audit.audit(path)
 
 if __name__=="__main__":

@@ -10,7 +10,8 @@ from PIL import Image, UnidentifiedImageError
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "app/src/main/assets"
 MANIFEST = ASSETS / "bundled_photos.json"
-ALLOWED = {"CC0 1.0", "CC BY 4.0", "CC BY-SA 4.0", "Public domain (U.S. Government)"}
+ALLOWED = {"CC0 1.0", "CC BY 4.0", "CC BY-SA 4.0", "Public domain (U.S. Government)",
+           "Unsplash License", "Pexels License"}
 SHA = re.compile(r"^[0-9a-f]{64}$")
 
 

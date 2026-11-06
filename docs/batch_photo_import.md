@@ -1,14 +1,18 @@
 # Batch import, photo originals and licensing
 
-## Current policy — 5 November 2026
+## Current policy — confirmed 6 November 2026
 
 This section supersedes older background-removal requirements below. Add **3–5 real photographs of the exact model without changing publisher image bytes**. Do not crop, upscale, enhance, remove backgrounds, re-encode, generate substitutes or synthesize views. Preserve publisher watermarks. The same image under two filenames is not two photographs.
 
 Use `processing_status: verified_unmodified_original`. Set `original` and `prepared` to the same downloaded file. The importer enforces equality of the packaged SHA-256 and `original_sha256`, requires `model_review_approved: true` with meaningful `model_review_notes`, and keeps `background_removed: false`. Existing visual and distinct-angle review flags remain mandatory. Redistribution permission is required; editing permission is unnecessary when no edits are made.
 
+This also applies during APK assembly. The build-time WebP packing introduced in v1.0.30 is disabled under the latest unchanged-byte requirement. `audit_apk_photos.py` rejects `optimized_from_verified_original` derivatives even when their archive and fidelity metrics are present. `optimize_apk_photos.py` is a historical utility, not part of release delivery.
+
+Individually reviewed free photographer images under the **Unsplash License** and **Pexels License** are accepted alongside the licenses below. Verify the exact photo page and current official terms; do not include paid Unsplash+ or third-party sponsored images. The use is illustration in an informational aircraft catalog, not standalone image resale, a competing stock service, a wallpaper service, or an endorsement. Retain author, source, license evidence and exact published-rendition hashes in provenance. Images photographed *by* a drone do not depict that drone.
+
 Inspect the actual image and the original publisher caption together. A caption mentioning an aircraft does not establish that the aircraft is visible: operators, control stations, launch tubes and unrelated aircraft in the same gallery do not replace model photos. Do not attach a generic-model photograph to an unconfirmed specific variant.
 
-Put publisher and license links in `app/src/main/assets/photo_credits.json`, keyed by the packaged photo path. These links open only when tapped; image decoding still reads the embedded APK file. Keep download provenance outside Android assets in `research/photos/`.
+Put publisher and license links in `app/src/main/assets/photo_credits.json`, keyed by the packaged photo path. This is offline attribution data, not an image downloader or a request to add technical labels to the photo-only viewer. Keep download provenance outside Android assets in `research/photos/`.
 
 The first batch is recorded in `research/photos/original_batch_2026_11_05.json`. The review of all 52 photos released in v1.0.27 is in `research/photos/original_policy_review_2026_11_05.json`; subsequent batches have numbered provenance files listed in `research/photos/README.md`. Previous rejection of an attempted cutout does not reject its untouched publisher photograph. Completed galleries do not complete the whole catalog.
 

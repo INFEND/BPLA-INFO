@@ -12,7 +12,10 @@ PHOTO_PATTERN = re.compile(r"photos/[a-z0-9][a-z0-9_-]{2,100}\.(?:webp|png|jpg|j
 LEGACY = ("assets/photo_sources.json",)
 MAX_SIZE = 12_000_000
 Image.MAX_IMAGE_PIXELS = 30_000_000
-VALID_PROCESSING = {"needs_background_review", "background_removed_verified", "verified_clean_original", "verified_unmodified_original", "optimized_from_verified_original"}
+# The current delivery policy requires unchanged publisher bytes inside APKs.
+# An optimizer may remain available as a historical research utility, but its
+# derived images cannot pass this release gate.
+VALID_PROCESSING = {"needs_background_review", "background_removed_verified", "verified_clean_original", "verified_unmodified_original"}
 
 def valid_image_header(file, binary):
     if file.endswith(".webp"):
@@ -69,29 +72,6 @@ def audit(path):
                         raise ValueError("Unmodified original bytes changed: " + file)
                     if record.get("model_review_approved") is not True or record.get("visual_review_approved") is not True:
                         raise ValueError("Original model/photo identity not reviewed: " + file)
-                if status == "optimized_from_verified_original":
-                    # Source is retained byte-for-byte in research/photo_originals.
-                    # APK contains a separately identified quality-gated derivative.
-                    opt = record.get("optimization")
-                    if not isinstance(opt, dict) or opt.get("algorithm") != "adaptive-webp-ssim-v1":
-                        raise ValueError("Missing image optimization provenance: " + file)
-                    if (opt.get("source_sha256") != record.get("original_sha256") or
-                            not record.get("original_archive") or
-                            record.get("model_review_approved") is not True or
-                            record.get("visual_review_approved") is not True):
-                        raise ValueError("Optimized image has unverified publisher identity: " + file)
-                    if (not file.endswith(".webp") or
-                            not isinstance(opt.get("quality"), int) or
-                            not 78 <= opt["quality"] <= 93 or
-                            not isinstance(opt.get("source_bytes"), int) or
-                            not isinstance(opt.get("packed_bytes"), int) or
-                            opt["source_bytes"] <= opt["packed_bytes"] or
-                            opt["packed_bytes"] < 512 or
-                            opt.get("ssim_luma", 0) < 0.974 or
-                            opt.get("psnr_luma_db", 0) < 33.5):
-                        raise ValueError("Image optimization quality or size invalid: " + file)
-                    if record.get("background_removed") is not False:
-                        raise ValueError("Optimized photo falsely tagged as cutout: " + file)
                 if not PHOTO_PATTERN.fullmatch(file):
                     raise ValueError("Invalid embedded photo path: " + file)
                 if file in referenced:
@@ -110,9 +90,6 @@ def audit(path):
                 verify_decodable_image(file, binary, status)
                 if hashlib.sha256(binary).hexdigest() != record["sha256"]:
                     raise ValueError("Photo checksum mismatch: " + asset)
-                if status == "optimized_from_verified_original":
-                    if len(binary) != record["optimization"]["packed_bytes"]:
-                        raise ValueError("Packed photo byte size mismatch: " + asset)
         actual = {name.removeprefix("assets/") for name in names
                   if name.startswith("assets/photos/") and not name.endswith("/")}
         if actual != referenced:

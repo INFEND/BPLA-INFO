@@ -57,10 +57,6 @@ jobs:
           mkdir -p /tmp/bpla-photo-dimensions
           javac -encoding UTF-8 -d /tmp/bpla-photo-dimensions app/src/main/java/dev/infend/bplainfo/PhotoDimensions.java tests/PhotoDimensionsSmoke.java
           java -cp /tmp/bpla-photo-dimensions dev.infend.bplainfo.PhotoDimensionsSmoke
-      - name: Optimize verified photographs for smaller APK
-        run: |
-          python3 scripts/optimize_apk_photos.py --report dist/photo_optimization_report.json
-          python3 -m json.tool dist/photo_optimization_report.json
       - name: Compile Android debug and release
         id: compilation
         run: gradle --no-daemon :app:assembleDebug :app:assembleRelease

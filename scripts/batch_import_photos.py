@@ -19,7 +19,8 @@ MODEL_RE = re.compile(r"[a-z0-9][a-z0-9_-]{2,100}\Z")
 ANGLE_RE = re.compile(r"[a-z0-9][a-z0-9_-]{2,60}\Z")
 PHOTO_RE = re.compile(r"[a-z0-9][a-z0-9_-]{2,100}\.(?:webp|png|jpg|jpeg)\Z")
 SHA_RE = re.compile(r"[a-f0-9]{64}\Z")
-LICENSES = {"CC0 1.0", "CC BY 4.0", "CC BY-SA 4.0", "Public domain (U.S. Government)"}
+LICENSES = {"CC0 1.0", "CC BY 4.0", "CC BY-SA 4.0", "Public domain (U.S. Government)",
+            "Unsplash License", "Pexels License"}
 STATES = {"verified_clean_original", "background_removed_verified", "verified_unmodified_original"}
 
 def sha256(data):

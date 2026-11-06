@@ -1,0 +1,271 @@
+{
+  "schema": 1,
+  "reviewed_date": "2026-11-06",
+  "policy": "Actual photographer images inspected alongside their original captions. Exact downloaded publisher bytes retained inside APK; no local image edits. Product-family cards are not misrepresented as specific different variants.",
+  "license_references": [
+    {
+      "license": "Unsplash License",
+      "source_page": "https://unsplash.com/license",
+      "checked": "2026-11-06"
+    },
+    {
+      "license": "Pexels License",
+      "source_page": "https://www.pexels.com/license/",
+      "checked": "2026-11-06"
+    }
+  ],
+  "entries": [
+    {
+      "model_id": "bulletin30-2025-p068r",
+      "model_name": "DJI Mavic 2",
+      "file": "photos/original_unsplash_zcdrczluz2a.jpg",
+      "source_page": "https://unsplash.com/photos/black-and-white-drone-in-mid-air-zcdrCzLuz2A",
+      "downloaded_image": "https://images.unsplash.com/photo-1607258148607-e06703082100?auto=format&fit=crop&fm=jpg&ixid=NHwxMjA3fDA%3D&ixlib=rb-4.1.0&q=60&w=3000",
+      "sha256": "50213792cc2ab4608445ab6ec51706e25a3b6729abffd8391426ffc128e492bd",
+      "dimensions": [
+        3000,
+        2000
+      ],
+      "author": "Sebastian Rück",
+      "license": "Unsplash License",
+      "license_page": "https://unsplash.com/license",
+      "model_review_notes": "The photographer identifies DJI Mavic 2; the actual Mavic 2 arm mark, airframe and camera were checked visually. This photograph shows Mavic 2 Pro under the generic DJI Mavic 2 family card. It is not assigned to a specific different variant, Mavic 3 or an Enterprise card.",
+      "visual_review_notes": "Near-frontal whole-airframe flight view; Mavic 2 mark and Hasselblad camera are visible.",
+      "angle_id": "front-lower-flight",
+      "rights_evidence": "The photographer photo page explicitly marks this as a free photograph under the Unsplash License. The current official license permits copying and use in an informational app. This use does not sell the standalone photograph, imply endorsement, or create a competing stock-photo or wallpaper service. Author and license evidence are retained.",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be camera RAW.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p068r",
+      "model_name": "DJI Mavic 2",
+      "file": "photos/original_unsplash_gk7xae4zkxw.jpg",
+      "source_page": "https://unsplash.com/photos/black-helicopter-flying-over-snow-covered-ground-during-daytime-gK7xAE4ZKxw",
+      "downloaded_image": "https://images.unsplash.com/photo-1609337668234-3197591976e2?auto=format&fit=crop&fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=60&w=3000",
+      "sha256": "c61b5737846f708a06a93860dc95922f730572f54986886baef266604fc60af2",
+      "dimensions": [
+        3000,
+        2000
+      ],
+      "author": "Bas van der Horst",
+      "license": "Unsplash License",
+      "license_page": "https://unsplash.com/license",
+      "model_review_notes": "The photographer identifies DJI Mavic 2; the actual Mavic 2 arm mark, airframe and camera were checked visually. This photograph shows Mavic 2 Zoom under the generic DJI Mavic 2 family card. It is not assigned to a specific different variant, Mavic 3 or an Enterprise card.",
+      "visual_review_notes": "Whole airframe in flight from a side quarter; Mavic 2 arm marking and cylindrical Zoom camera are visible.",
+      "angle_id": "side-quarter-flight",
+      "rights_evidence": "The photographer photo page explicitly marks this as a free photograph under the Unsplash License. The current official license permits copying and use in an informational app. This use does not sell the standalone photograph, imply endorsement, or create a competing stock-photo or wallpaper service. Author and license evidence are retained.",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be camera RAW.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p068r",
+      "model_name": "DJI Mavic 2",
+      "file": "photos/original_unsplash_0qcbkpqr12c.jpg",
+      "source_page": "https://unsplash.com/photos/a-large-gray-and-black-remote-controlled-flying-device-0QcbKPQR12c",
+      "downloaded_image": "https://images.unsplash.com/photo-1637009828486-ebc19508fbc9?auto=format&fit=crop&fm=jpg&ixid=NHwxMjA3fDA%3D&ixlib=rb-4.1.0&q=60&w=3000",
+      "sha256": "70b313a1f0f3739c9c058e460cd5e65694d16a5df15794314ceaf9ad5c606d69",
+      "dimensions": [
+        3000,
+        2000
+      ],
+      "author": "Ömer Haktan Bulut",
+      "license": "Unsplash License",
+      "license_page": "https://unsplash.com/license",
+      "model_review_notes": "The photographer identifies DJI Mavic 2; the actual Mavic 2 arm mark, airframe and camera were checked visually. This photograph shows Mavic 2 Pro under the generic DJI Mavic 2 family card. It is not assigned to a specific different variant, Mavic 3 or an Enterprise card.",
+      "visual_review_notes": "Higher front-quarter view, showing the top body, Mavic 2 arm marking and Hasselblad camera; original propeller-edge framing retained.",
+      "angle_id": "upper-front-quarter-flight",
+      "rights_evidence": "The photographer photo page explicitly marks this as a free photograph under the Unsplash License. The current official license permits copying and use in an informational app. This use does not sell the standalone photograph, imply endorsement, or create a competing stock-photo or wallpaper service. Author and license evidence are retained.",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be camera RAW.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p070l",
+      "model_name": "DJI Mini 2",
+      "file": "photos/original_unsplash_bvfwcj8e71q.jpg",
+      "source_page": "https://unsplash.com/photos/a-drone-flying-through-the-air-bvFwcj8e71Q",
+      "downloaded_image": "https://images.unsplash.com/photo-1668836733970-9ed7e53cd2ca?auto=format&fit=crop&fm=jpg&ixid=NHwxMjA3fDA%3D&ixlib=rb-4.1.0&q=60&w=3000",
+      "sha256": "2aa58c00ca52c43ca41419738ce4ad2e3746fee2d756323e273845fb274ced04",
+      "dimensions": [
+        3000,
+        3000
+      ],
+      "author": "Daniel Shapiro",
+      "license": "Unsplash License",
+      "license_page": "https://unsplash.com/license",
+      "model_review_notes": "The photographer explicitly identifies DJI Mini 2. The visible MINI 2 arm marking and the nose, camera and airframe match that model. This is not the first Mavic Mini, Mini 3/4 or Mini SE.",
+      "visual_review_notes": "Whole Mini 2 at front-side level in flight; MINI 2 marking, body and all four arms visible.",
+      "angle_id": "front-side-flight",
+      "rights_evidence": "The photographer photo page explicitly marks this as a free photograph under the Unsplash License. The current official license permits copying and use in an informational app. This use does not sell the standalone photograph, imply endorsement, or create a competing stock-photo or wallpaper service. Author and license evidence are retained.",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be camera RAW.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p070l",
+      "model_name": "DJI Mini 2",
+      "file": "photos/original_unsplash_fbncp_zabe4.jpg",
+      "source_page": "https://unsplash.com/photos/white-drone-flying-in-the-sky-during-daytime-fbnCp_zaBE4",
+      "downloaded_image": "https://images.unsplash.com/photo-1613743146963-3b0d2ecf8eb3?auto=format&fit=crop&fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=60&w=3000",
+      "sha256": "1caa2a033978439d25448147f9658c1e64f75e848fd7f1574bfed22b6850b8f2",
+      "dimensions": [
+        3000,
+        3750
+      ],
+      "author": "Vadim Art",
+      "license": "Unsplash License",
+      "license_page": "https://unsplash.com/license",
+      "model_review_notes": "The photographer explicitly identifies DJI Mini 2. The visible MINI 2 arm marking and the nose, camera and airframe match that model. This is not the first Mavic Mini, Mini 3/4 or Mini SE.",
+      "visual_review_notes": "Whole Mini 2 viewed upward from a front quarter, exposing the underside and deployed arms.",
+      "angle_id": "underside-front-flight",
+      "rights_evidence": "The photographer photo page explicitly marks this as a free photograph under the Unsplash License. The current official license permits copying and use in an informational app. This use does not sell the standalone photograph, imply endorsement, or create a competing stock-photo or wallpaper service. Author and license evidence are retained.",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be camera RAW.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p070l",
+      "model_name": "DJI Mini 2",
+      "file": "photos/original_unsplash_ltdxrsnnbe0.jpg",
+      "source_page": "https://unsplash.com/photos/white-and-black-drone-in-close-up-photography-LtDXRSnNBe0",
+      "downloaded_image": "https://images.unsplash.com/photo-1619892447950-72edfbc8427e?auto=format&fit=crop&fm=jpg&ixid=NHwxMjA3fDA%3D&ixlib=rb-4.1.0&q=60&w=3000",
+      "sha256": "ba9d85a141bd963697944813b287d30d4bf43a7d931f46107ee9f6f427aa347f",
+      "dimensions": [
+        3000,
+        2000
+      ],
+      "author": "Bruno Yamazaky",
+      "license": "Unsplash License",
+      "license_page": "https://unsplash.com/license",
+      "model_review_notes": "The photographer explicitly identifies DJI Mini 2. The visible MINI 2 arm marking and the nose, camera and airframe match that model. This is not the first Mavic Mini, Mini 3/4 or Mini SE.",
+      "visual_review_notes": "Close front-side photograph of the Mini 2 nose, camera and body; outer arms extend beyond the original frame.",
+      "angle_id": "nose-side-close-flight",
+      "rights_evidence": "The photographer photo page explicitly marks this as a free photograph under the Unsplash License. The current official license permits copying and use in an informational app. This use does not sell the standalone photograph, imply endorsement, or create a competing stock-photo or wallpaper service. Author and license evidence are retained.",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be camera RAW.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p069r",
+      "model_name": "DJI Mavic 3",
+      "file": "photos/original_unsplash_hb4wmggewfc.jpg",
+      "source_page": "https://unsplash.com/photos/a-black-and-green-quad-quad-quad-quad-quad-quad-quad-quad-quad-quad-quad-quad-HB4wmGGewFc",
+      "downloaded_image": "https://images.unsplash.com/photo-1699084583349-d543ea7fb645?auto=format&fit=crop&fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=60&w=3000",
+      "sha256": "b0a9240081be0aae7764ea105252134d495b5293b734b7caffc84646728c50d9",
+      "dimensions": [
+        3000,
+        2000
+      ],
+      "author": "Jonas",
+      "license": "Unsplash License",
+      "license_page": "https://unsplash.com/license",
+      "model_review_notes": "The original photographer page identifies DJI Mavic 3, and the photographed MAVIC 3 arm mark and original two-camera assembly were inspected. The photographs show the original Mavic 3 generation, not the single-camera Classic or three-camera Pro.",
+      "visual_review_notes": "Whole Mavic 3 in flight from the front and below, showing its original two-camera assembly and marked arm.",
+      "angle_id": "front-lower-flight",
+      "rights_evidence": "The photographer photo page explicitly marks this as a free photograph under the Unsplash License. The current official license permits copying and use in an informational app. This use does not sell the standalone photograph, imply endorsement, or create a competing stock-photo or wallpaper service. Author and license evidence are retained.",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be camera RAW.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p069r",
+      "model_name": "DJI Mavic 3",
+      "file": "photos/original_pexels_36420098.jpg",
+      "source_page": "https://www.pexels.com/ru-ru/photo/36420098/",
+      "downloaded_image": "https://images.pexels.com/photos/36420098/pexels-photo-36420098.jpeg?cs=srgb&dl=pexels-mike-art-visual-creator-photography-and-video-2159421235-36420098.jpg&fm=jpg",
+      "sha256": "dcb79bafb8f517054faa2834cf3a03274652fbfcec4d30e17d9beb4369173dc3",
+      "dimensions": [
+        2656,
+        1992
+      ],
+      "author": "Mike Art",
+      "license": "Pexels License",
+      "license_page": "https://www.pexels.com/license/",
+      "model_review_notes": "The original photographer page identifies DJI Mavic 3, and the photographed MAVIC 3 arm mark and original two-camera assembly were inspected. The photographs show the original Mavic 3 generation, not the single-camera Classic or three-camera Pro.",
+      "visual_review_notes": "Whole Mavic 3 in flight seen from above at a front quarter; MAVIC 3 arm mark and original dual-camera body visible.",
+      "angle_id": "upper-front-quarter-flight",
+      "rights_evidence": "The photographer photo page explicitly marks this as a free photograph under the Pexels License. The current official license permits copying and use in an informational app. This use does not sell the standalone photograph, imply endorsement, or create a competing stock-photo or wallpaper service. Author and license evidence are retained.",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be camera RAW.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p069r",
+      "model_name": "DJI Mavic 3",
+      "file": "photos/original_unsplash_5blhrz1qw0k.jpg",
+      "source_page": "https://unsplash.com/photos/a-small-black-remote-controlled-flying-device-on-a-table-5BlHrZ1QW0k",
+      "downloaded_image": "https://images.unsplash.com/photo-1671043120956-f35166f77f87?auto=format&fit=crop&fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=60&w=3000",
+      "sha256": "cf6fa49dacf667c69d7b5c550476cff32129ce5a9103b1dcb62a699420b1b66a",
+      "dimensions": [
+        3000,
+        2004
+      ],
+      "author": "Hannes Köttner",
+      "license": "Unsplash License",
+      "license_page": "https://unsplash.com/license",
+      "model_review_notes": "The original photographer page identifies DJI Mavic 3, and the photographed MAVIC 3 arm mark and original two-camera assembly were inspected. The photographs show the original Mavic 3 generation, not the single-camera Classic or three-camera Pro.",
+      "visual_review_notes": "Close front-side view on a table, clearly showing the MAVIC 3 arm and two-camera gimbal; original outer-propeller framing retained.",
+      "angle_id": "side-front-quarter-ground",
+      "rights_evidence": "The photographer photo page explicitly marks this as a free photograph under the Unsplash License. The current official license permits copying and use in an informational app. This use does not sell the standalone photograph, imply endorsement, or create a competing stock-photo or wallpaper service. Author and license evidence are retained.",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be camera RAW.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p070r",
+      "model_name": "DJI Air 2S",
+      "file": "photos/original_dvids_8725466.jpg",
+      "source_page": "https://www.dvidshub.net/image/8725466/marine-corps-warfighting-laboratory-supports-us-japan-readiness-keen-sword-25",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2410/8725466/2000w_q95.jpg",
+      "sha256": "5c4e2e91d59b7dc0ed08fd05542d99413b94b3487202c45f2b8c11b0b939a23c",
+      "dimensions": [
+        1999,
+        1333
+      ],
+      "author": "Kevin Ray J. Salvador / U.S. Marine Corps",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption identifies DJI Air 2S. The AIR 2S mark in the clear front view, nose, upward sensors, arm shape and underside layout were visually checked across the same report. It is not Mavic Air 2 or DJI Air 3/3S.",
+      "visual_review_notes": "Upper front-quarter view of the Air 2S held above a table; AIR 2S arm marking, front and upper sensors and camera are visible.",
+      "angle_id": "front-upper-held",
+      "rights_evidence": "The original DVIDS photo release is explicitly marked PUBLIC DOMAIN and credits a U.S. Marine Corps photographer. The photograph is used for model identification without implying government endorsement.",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be camera RAW.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p070r",
+      "model_name": "DJI Air 2S",
+      "file": "photos/original_dvids_9673612.jpg",
+      "source_page": "https://www.dvidshub.net/image/9673612/kaiju-rain-26-3d-intelligence-battalion-marines-conduct-drone-exploitation",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2605/9673612/2000w_q95.jpg",
+      "sha256": "074a66b23c719aed9a75e6fa8f6ccf256a32a1fda6b73872b41064b90f13dad0",
+      "dimensions": [
+        2000,
+        1334
+      ],
+      "author": "Lance Cpl. John-Paul Haubeil / U.S. Marine Corps",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption identifies DJI Air 2S. The AIR 2S mark in the clear front view, nose, upward sensors, arm shape and underside layout were visually checked across the same report. It is not Mavic Air 2 or DJI Air 3/3S.",
+      "visual_review_notes": "Close side view of the Air 2S on a table, showing body, arms and nose; original hands overlap part of the front motor.",
+      "angle_id": "side-level-ground",
+      "rights_evidence": "The original DVIDS photo release is explicitly marked PUBLIC DOMAIN and credits a U.S. Marine Corps photographer. The photograph is used for model identification without implying government endorsement.",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be camera RAW.",
+      "publication_status": "approved_imported"
+    },
+    {
+      "model_id": "bulletin30-2025-p070r",
+      "model_name": "DJI Air 2S",
+      "file": "photos/original_dvids_9673611.jpg",
+      "source_page": "https://www.dvidshub.net/image/9673611/kaiju-rain-26-3d-intelligence-battalion-marines-conduct-drone-exploitation",
+      "downloaded_image": "https://d1ldvf68ux039x.cloudfront.net/thumbs/photos/2605/9673611/2000w_q95.jpg",
+      "sha256": "477cb019a1f4295316e5c7d293a5c5fc972b7460a95c0d33b0a9d028faaa7279",
+      "dimensions": [
+        2000,
+        1334
+      ],
+      "author": "Lance Cpl. John-Paul Haubeil / U.S. Marine Corps",
+      "license": "Public domain (U.S. Government)",
+      "license_page": "https://www.dvidshub.net/about/copyright",
+      "model_review_notes": "The official photographer caption identifies DJI Air 2S. The AIR 2S mark in the clear front view, nose, upward sensors, arm shape and underside layout were visually checked across the same report. It is not Mavic Air 2 or DJI Air 3/3S.",
+      "visual_review_notes": "Complete underside of the Air 2S during a simulated recovery exercise; original training tape and surroundings retained.",
+      "angle_id": "underside-ground",
+      "rights_evidence": "The original DVIDS photo release is explicitly marked PUBLIC DOMAIN and credits a U.S. Marine Corps photographer. The photograph is used for model identification without implying government endorsement.",
+      "changes": "None. Unmodified publisher-hosted rendition; not claimed to be camera RAW.",
+      "publication_status": "approved_imported"
+    }
+  ]
+}
