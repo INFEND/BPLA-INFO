@@ -128,6 +128,21 @@ class ProgressTests(unittest.TestCase):
         self.assertEqual(report['photos_verified_processed_distinct'], 2)
         self.assertEqual(report['photos_verified_distinct_originals'], 1)
 
+    def test_distinct_original_and_background_removed_counters(self):
+        self.add('processed.jpg', state='background_removed_verified')
+        self.add('original.jpg', state='verified_unmodified_original')
+        original = self.manifest['items']['model-one']['files'][1]
+        original.update(original_sha256=original['sha256'], model_review_approved=True)
+        self.save()
+        report = module.audit(self.root)
+        self.assertEqual(report['photos_verified_distinct_total'], 2)
+        self.assertEqual(report['photos_verified_distinct_originals'], 1)
+        self.assertEqual(report['photos_verified_distinct_background_removed'], 1)
+        row = next(r for r in report['models'] if r['id'] == 'model-one')
+        self.assertEqual(row['verified_distinct_total'], 2)
+        self.assertEqual(row['verified_distinct_originals'], 1)
+        self.assertEqual(row['verified_distinct_background_removed'], 1)
+
     def test_per_model_original_counter_excludes_processed_images(self):
         self.add('processed.jpg', state='background_removed_verified')
         self.add('original.jpg', state='verified_unmodified_original')
