@@ -160,6 +160,15 @@ public final class SortSheet {
         popup.showAsDropDown(anchor,0,dp(2));
     }
     private void apply(){
-        changed.run();draw();
+        int position=0;
+        if(body.getParent() instanceof ScrollView)
+            position=((ScrollView)body.getParent()).getScrollY();
+        changed.run();
+        draw();
+        final int restoreY=position;
+        if(body.getParent() instanceof ScrollView){
+            ScrollView parent=(ScrollView)body.getParent();
+            parent.post(()->parent.scrollTo(0,restoreY));
+        }
     }
 }
