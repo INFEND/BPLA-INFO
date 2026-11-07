@@ -76,39 +76,16 @@ def prepare(staging, repo):
     repo=Path(repo).resolve()
     assets=repo/"app/src/main/assets"
     catalog=json.loads((assets/"catalog_lostarmour_2024_verified.json").read_text("utf-8"))
-    models={x["id"]:x["name"] for x in catalog["entries"]}
-    bulletin=assets/"bulletin30_2025.json"
-    if bulletin.is_file():
-        for row in json.loads(bulletin.read_text("utf-8"))["entries"]:
-            if row["id"] in models and models[row["id"]]!=row["name"]:
-                raise ValueError("Conflicting catalog model: "+row["id"])
-            models[row["id"]]=row["name"]
-    vsu=assets/"catalog_bpla_vsu_pdf.json"
-    if vsu.is_file():
-        for row in json.loads(vsu.read_text("utf-8"))["entries"]:
-            if not row.get("targetId"):
-                models[row["id"]]=row["name"]
-    # Album-only aircraft are valid offline catalog cards too. Keep the same
-    # reviewed alias and aircraft-only rules as photo_progress.py.
-    import gzip
-    album=repo/"research/source_catalogs/catalog_album_2026_original.dat"
-    if album.is_file():
-        source=repo/"app/src/main/java/dev/infend/bplainfo/DroneStore.java"
-        aliases={}
-        if source.is_file():
-            code=source.read_text("utf-8")
-            start=code.find("private static String albumAliasTarget(")
-            end=code.find("private static void mergeAlbum(",start)
-            if start>=0 and end>start:
-                aliases={int(page):target for page,target in re.findall(
-                    r'case (\d+):return "([^"]+)";',code[start:end])}
-        for row in json.loads(gzip.decompress(album.read_bytes()))["entries"]:
-            if row["type"] not in {"Самолётный","Коптерный","Барражирующий"}:
-                continue
-            if aliases.get(row["page"]) in models:
-                continue
-            if row["id"] not in models:
-                models[row["id"]]=row["name"]
+    # Use exactly the same aircraft card union and reviewed alias policy as
+    # the completion report. Never silently merge uncertain variants.
+    import importlib.util
+    progress_path = Path(__file__).resolve().with_name("photo_progress.py")
+    spec = importlib.util.spec_from_file_location("bpla_photo_progress", progress_path)
+    if spec is None or spec.loader is None:
+        raise ValueError("Cannot load shared catalog resolver")
+    progress = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(progress)
+    models = progress._bulletin_union_models(assets, catalog)
     manifest_file=assets/"bundled_photos.json"
     manifest=json.loads(manifest_file.read_text("utf-8"))
     if manifest.get("schema")!=2 or manifest.get("storage")!="apk-assets-only":
