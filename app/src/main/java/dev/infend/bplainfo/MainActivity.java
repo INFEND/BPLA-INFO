@@ -267,6 +267,8 @@ public final class MainActivity extends Activity {
             root=homeRoot;listHost=homeListHost;
             setContentView(homeRoot);
             if(Build.VERSION.SDK_INT>=30)root.requestApplyInsets();
+            if(listHost!=null&&listHost.getChildCount()==0)cards();
+            else if(homeScroll!=null)homeScroll.post(this::loadNextCardBatchIfNearBottom);
             if(fromSettings&&t.animations){
                 homeRoot.setAlpha(0f);homeRoot.setTranslationX(-dp(16));
                 homeRoot.animate().alpha(1f).translationX(0f).setDuration(225)
@@ -365,10 +367,16 @@ public final class MainActivity extends Activity {
                 }
                 if(!match)continue;
             }
-            String canonical=CatalogFacets.canonicalName(CardPresentation.name(d.name()));
+            String canonical=CatalogFacets.canonicalName(d.name());
             if(canonical.isEmpty())canonical=d.id;
             Drone previous=unique.get(canonical);
-            if(previous==null||quality(d)>quality(previous))unique.put(canonical,d);
+            if(previous==null)unique.put(canonical,d);
+            else if(CatalogDuplicates.sameVerifiedModel(previous,d)){
+                if(quality(d)>quality(previous))unique.put(canonical,d);
+            }else{
+                // A different verified variant or a personal card must not silently disappear.
+                unique.put(canonical+"|"+d.id,d);
+            }
         }
         a.addAll(unique.values());
         a.sort((x,y)->{
