@@ -85,13 +85,17 @@ public final class SortSheet {
             row.setBackground(background(selected?t.soft:t.buttonBg,selected?t.accent:t.stroke,13));
             TextView name=label(entries[i],14,selected?t.accent:t.fg,selected);
             row.addView(name,new LinearLayout.LayoutParams(0,-1,1));
-            name.setOnClickListener(v->{
+            Runnable toggleOrder=()->{
                 if(state.sortBy==item)state.descending=!state.descending;
                 else {state.sortBy=item;state.descending=false;}
                 apply();
-            });
-            row.addView(action("↑",selected&&!state.descending,()->{state.sortBy=item;state.descending=false;apply();}));
-            row.addView(action("↓",selected&&state.descending,()->{state.sortBy=item;state.descending=true;apply();}));
+            };
+            name.setOnClickListener(v->toggleOrder.run());
+            TextView direction=action(selected?(state.descending?"↓":"↑"):"↕",selected,toggleOrder);
+            direction.setContentDescription(selected?
+                (state.descending?"Убывание. Нажми для возрастания":"Возрастание. Нажми для убывания"):
+                "Сортировать: "+entries[i]);
+            row.addView(direction);
             padBottom(row,50);
         }
         title("ФИЛЬТРЫ");
