@@ -42,8 +42,10 @@ public final class CatalogDuplicates {
                     canonical.put(key,drone);
                     continue;
                 }
-                // Do not combine independent user-defined model variants.
-                if(!CatalogFacets.identicalModel(seen.name(),drone.name())){
+                // Never automatically merge user-created IDs with imported models.
+                // Their edits may intentionally differ even when names match.
+                if(!generated(seen)||!generated(drone)||
+                   !CatalogFacets.identicalModel(seen.name(),drone.name())){
                     canonical.put(key+"|"+drone.id,drone);
                     continue;
                 }
@@ -90,6 +92,12 @@ public final class CatalogDuplicates {
         }
     }
 
+    private static boolean generated(Drone d){
+        return d.id.startsWith("lostarmour-pdf-")||
+               d.id.startsWith("bulletin30-")||
+               d.id.startsWith("album-2026-")||
+               d.id.startsWith("vsu-pdf-");
+    }
     private static int score(Drone d){
         int count=0;
         if(d.id.startsWith("lostarmour-pdf"))count+=150;
