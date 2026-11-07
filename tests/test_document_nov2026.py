@@ -59,7 +59,7 @@ class DocumentTasks(unittest.TestCase):
         self.assertNotIn('↥ JSON',MAIN)
     def test_non_destructive_exact_dedup(self):
         self.assertIn('CatalogDuplicates.cleanup(c,pruneNonAir(c,out))',STORE)
-        self.assertIn('catalog_exact_duplicates_before_v1.json',DEDUP)
+        self.assertIn('catalog_exact_duplicates_before_v2.json',DEDUP)
         self.assertIn('keeper.favorite|=other.favorite;',DEDUP)
         self.assertIn('keeper.galleryUris.add(uri);',DEDUP)
 if __name__=="__main__":unittest.main()
