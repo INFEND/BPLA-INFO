@@ -31,11 +31,13 @@ public final class MainActivity extends Activity {
     private LinearLayout root,listHost;
     private int cardRenderEpoch=0;
     private static final int CARD_BATCH_SIZE=18;
-    private String searchTerm="",category="Все";
+    private String searchTerm="",category="Все",countryFilter="",roleFilter="";
+    private LinearLayout homeRoot,homeListHost;
+    private ScrollView homeScroll;
     private boolean onlyFavorites=false,onlyWithPhotos=false,descending=false,showingDetail=false;
     private int sortBy=0;
     private Drone pendingImage;
-    private final String[] sortNames={"По названию","По производителю","По скорости","По дальности","По массе","По размаху крыла"};
+    private final String[] sortNames={"По названию","По производителю","По скорости","По дальности","По массе","По размаху крыла","По автономности"};
 
     @Override public void onCreate(Bundle state){
         super.onCreate(state);
@@ -204,25 +206,67 @@ public final class MainActivity extends Activity {
         ScrollView sc=new ScrollView(this);sc.setFillViewport(false);sc.setClipToPadding(false);
         sc.setVerticalScrollBarEnabled(false);into.addView(sc,new LinearLayout.LayoutParams(-1,0,1));return sc;
     }
+    private View navIcon(String kind,Runnable click){
+        FrameLayout frame=new FrameLayout(this);
+        frame.setBackground(panel(t.panel,14));
+        SettingsIconView symbol=new SettingsIconView(this,kind,t.accent);
+        symbol.setPadding(dp(9),dp(9),dp(9),dp(9));
+        FrameLayout.LayoutParams lp=new FrameLayout.LayoutParams(dp(42),dp(42),Gravity.CENTER);
+        frame.addView(symbol,lp);
+        frame.setContentDescription(kind.equals("settings")?"Настройки":"Назад");
+        frame.setOnClickListener(v->{
+            if(t.haptics)v.performHapticFeedback(android.view.HapticFeedbackConstants.KEYBOARD_TAP);
+            if(t.animations){
+                symbol.animate().scaleX(.86f).scaleY(.86f).rotationBy(kind.equals("settings")?45f:0f)
+                    .setDuration(110).withEndAction(()->{
+                        symbol.animate().scaleX(1f).scaleY(1f).setDuration(110).start();
+                        click.run();
+                    }).start();
+            }else click.run();
+        });
+        return frame;
+    }
     private void titleBar(String title,String hint,Runnable back){
         LinearLayout bar=horizontal();bar.setPadding(dp(18),dp(18),dp(18),dp(12));root.addView(bar);
-        if(back!=null){TextView b=button("‹",false,back);b.setTextSize(24);bar.addView(b,margins(46,46,0,0));}
-        LinearLayout titles=vertical();LinearLayout.LayoutParams titleLp=new LinearLayout.LayoutParams(0,-2,1);
-        titleLp.leftMargin=dp(back==null?0:10);bar.addView(titles,titleLp);
+        if(back!=null)bar.addView(navIcon("back",back),margins(44,44,0,0));
+        LinearLayout titles=vertical();
+        LinearLayout.LayoutParams titleLp=new LinearLayout.LayoutParams(0,-2,1);
+        titleLp.leftMargin=dp(back==null?0:11);bar.addView(titles,titleLp);
         titles.addView(text(title,23,t.fg,true));
         titles.addView(text(hint,11,t.muted,false));
-        if(back==null)bar.addView(button("⚙",false,this::settings),margins(46,46,4,0));
+        if(back==null)bar.addView(navIcon("settings",this::settings),margins(44,44,4,0));
+    }
+    private void returnToHome(){
+        if(homeRoot==null){home();return;}
+        hideKeyboard();
+        showingDetail=false;showingSettings=false;
+        root=homeRoot;listHost=homeListHost;
+        setContentView(homeRoot);
+        if(Build.VERSION.SDK_INT>=30)root.requestApplyInsets();
+    }
+    private void chooseCategory(String selected,LinearLayout chips){
+        category=selected;
+        for(int i=0;i<chips.getChildCount();i++){
+            View child=chips.getChildAt(i);
+            if(!(child instanceof TextView))continue;
+            TextView chip=(TextView)child;
+            boolean active=selected.contentEquals(chip.getText());
+            chip.setTextColor(active?(t.mode==2?Color.WHITE:0xFF06140C):t.fg);
+            chip.setBackground(panel(active?t.accent:t.panel,14));
+        }
+        cards();
     }
     private void home(){
         showingDetail=false;showingSettings=false;activeSettingsSection="";
         setup();
+        homeRoot=root;
         titleBar("БПЛА  ИНФО","Каталог БПЛА",null);
         LinearLayout inner=vertical();inner.setPadding(dp(14),0,dp(14),dp(30));
         ScrollView sc=scroll(root);sc.addView(inner);
+        homeScroll=sc;
         LinearLayout controls=horizontal();inner.addView(controls,margins(-1,-2,0,9));
         controls.addView(button("+ ДОБАВИТЬ",true,()->edit(null)),new LinearLayout.LayoutParams(0,dp(43),1));
         controls.addView(button("⇅ СОРТИРОВКА",false,this::sortDialog),margins(-2,43,5,0));
-        controls.addView(button(onlyFavorites?"★":"☆",false,()->{onlyFavorites=!onlyFavorites;home();}),margins(44,43,5,0));
         EditText search=new EditText(this);
         search.setTextSize(15);search.setSingleLine(true);search.setTextColor(t.fg);search.setHintTextColor(t.muted);
         search.setPadding(dp(16),0,dp(14),0);search.setHint("⌕  Поиск по названию и параметрам");
@@ -235,15 +279,14 @@ public final class MainActivity extends Activity {
         });
         HorizontalScrollView strip=new HorizontalScrollView(this);strip.setHorizontalScrollBarEnabled(false);
         LinearLayout chips=horizontal();strip.addView(chips);inner.addView(strip,margins(-1,47,0,6));
-        for(String group:new String[]{"Все","Самолётный","Мультикоптер","Многомоторный","Барражирующие боеприпасы"}){
-            TextView chip=button(group,category.equals(group),()->{category=group;home();});
+        for(String group:new String[]{"Все","Самолётный","Коптерный"}){
+            TextView chip=button(group,category.equals(group),()->chooseCategory(group,chips));
             chips.addView(chip,margins(-2,39,0,0));
         }
         LinearLayout heading=horizontal();inner.addView(heading,margins(-1,-2,3,3));
         TextView count=text("",13,t.muted,true);count.setId(1234001);heading.addView(count,new LinearLayout.LayoutParams(0,dp(31),1));
-        heading.addView(button("↧ JSON",false,this::importFile),margins(-2,34,3,0));
-        heading.addView(button("↥ JSON",false,this::exportFile),margins(-2,34,3,0));
         listHost=vertical();inner.addView(listHost);
+        homeListHost=listHost;
         cards();
     }
     /** Include only real bundled APK photos and locally attached photos, never remote URLs. */
@@ -262,16 +305,16 @@ public final class MainActivity extends Activity {
     private List<Drone> filtered(){
         ArrayList<Drone> a=new ArrayList<>();
         String q=searchTerm.toLowerCase(Locale.ROOT).trim();
+        java.util.LinkedHashMap<String,Drone> unique=new java.util.LinkedHashMap<>();
         for(Drone d:records){
+            if(!CardPresentation.isAir(d.type(),d.sourceGroup))continue;
+            String kind=CatalogFacets.airframe(d.type(),d.sourceGroup,d.name());
+            if(category.equals("Самолётный")&&!kind.equals("Самолётный"))continue;
+            if(category.equals("Коптерный")&&!kind.equals("Коптерный"))continue;
             if(onlyFavorites&&!d.favorite)continue;
             if(onlyWithPhotos&&!hasAttachedPhoto(d))continue;
-            String kind=d.displayType().toLowerCase(Locale.ROOT);
-            if(category.equals("Самолётный")&&!kind.equals("самолётный"))continue;
-            if(category.equals("Мультикоптер")&&!kind.equals("мультикоптер"))continue;
-            if(category.equals("Многомоторный")&&!kind.equals("многомоторный"))continue;
-            if(category.equals("Барражирующие боеприпасы")&&!kind.contains("барраж"))continue;
-            // Hide legacy non-aircraft records without deleting user photos or favorites.
-            if(!CardPresentation.isAir(d.type(),d.sourceGroup))continue;
+            if(!countryFilter.isEmpty()&&!countryFilter.equals(CatalogFacets.country(d.specRows)))continue;
+            if(!roleFilter.isEmpty()&&!roleFilter.equals(CatalogFacets.role(d.type(),d.sourceGroup,d.specRows)))continue;
             if(!q.isEmpty()){
                 boolean match=false;
                 for(String field:d.values){if(field!=null&&field.toLowerCase(Locale.ROOT).contains(q)){match=true;break;}}
@@ -280,14 +323,20 @@ public final class MainActivity extends Activity {
                 }
                 if(!match)continue;
             }
-            a.add(d);
+            String canonical=CatalogFacets.canonicalName(CardPresentation.name(d.name()));
+            if(canonical.isEmpty())canonical=d.id;
+            Drone previous=unique.get(canonical);
+            if(previous==null||quality(d)>quality(previous))unique.put(canonical,d);
         }
+        a.addAll(unique.values());
         a.sort((x,y)->{
             int result;
             if(sortBy>=2){
                 int field=sortBy==2?5:sortBy==3?6:sortBy==4?10:3;
-                double vx=Drone.numeric(sortBy==2?x.previewSpeed():sortBy==3?x.previewRange():x.get(field));
-                double vy=Drone.numeric(sortBy==2?y.previewSpeed():sortBy==3?y.previewRange():y.get(field));
+                double vx=Drone.numeric(sortBy==2?x.previewSpeed():sortBy==3?x.previewRange():
+                    sortBy==6?x.previewEndurance():x.get(field));
+                double vy=Drone.numeric(sortBy==2?y.previewSpeed():sortBy==3?y.previewRange():
+                    sortBy==6?y.previewEndurance():y.get(field));
                 if(vx<0&&vy>=0)return 1;
                 if(vy<0&&vx>=0)return -1;
                 result=Double.compare(vx,vy);
@@ -295,6 +344,14 @@ public final class MainActivity extends Activity {
             return descending?-result:result;
         });
         return a;
+    }
+    private int quality(Drone d){
+        int score=Math.min(120,d.specRows.size())*2;
+        if(d.id.startsWith("lostarmour-pdf-2024-"))score+=30;
+        if(d.id.startsWith("bulletin30-"))score+=18;
+        if(d.favorite)score+=5;
+        score+=Math.min(10,d.galleryUris.size())*3;
+        return score;
     }
     private void cards(){
         if(listHost==null)return;
@@ -327,15 +384,17 @@ public final class MainActivity extends Activity {
             listHost.addView(card,margins(-1,-2,0,5));
             LinearLayout head=horizontal();card.addView(head);
             ImageView typeIcon=new ImageView(this);
-            String type=d.type().toLowerCase(Locale.ROOT);
-            typeIcon.setImageResource(type.contains("коптер")||type.contains("мульт")||type.contains("квадр")?R.drawable.ic_multicopter:R.drawable.ic_airplane);
+            String type=CatalogFacets.airframe(d.type(),d.sourceGroup,d.name());
+            typeIcon.setImageResource(type.equals("Коптерный")?R.drawable.ic_multicopter:R.drawable.ic_airplane);
             typeIcon.setColorFilter(t.accent);
-            typeIcon.setPadding(dp(3),dp(3),dp(3),dp(3));
-            head.addView(typeIcon,margins(37,37,0,0));
+            typeIcon.setPadding(dp(4),dp(4),dp(4),dp(4));
+            LinearLayout.LayoutParams iconLayout=margins(32,32,0,0);
+            iconLayout.rightMargin=dp(11);
+            head.addView(typeIcon,iconLayout);
             LinearLayout labels=vertical();head.addView(labels,new LinearLayout.LayoutParams(0,-2,1));
             labels.addView(text(CardPresentation.name(d.name()),20,t.fg,true));
             String engine=CardPresentation.engine(d.engineType());
-            String modelType=d.displayType();
+            String modelType=CatalogFacets.airframe(d.type(),d.sourceGroup,d.name());
             String subtitle=engine.isEmpty()?modelType:modelType+" | "+engine;
             labels.addView(text(subtitle,13,t.fg,true));
             LinearLayout stats=horizontal();card.addView(stats);
@@ -396,7 +455,7 @@ public final class MainActivity extends Activity {
     }
     private void detail(Drone d){
         hideKeyboard();showingDetail=true;setup();
-        titleBar(CardPresentation.name(d.name()),"ТЕХНИЧЕСКАЯ КАРТОЧКА",this::home);
+        titleBar(CardPresentation.name(d.name()),"ТЕХНИЧЕСКАЯ КАРТОЧКА",this::returnToHome);
         LinearLayout content=vertical();content.setPadding(dp(15),0,dp(15),dp(26));scroll(root).addView(content);
         LinearLayout photos=vertical();photos.setPadding(dp(12),dp(13),dp(12),dp(13));
         photos.setBackground(outlined(t.panel,t.stroke,20));
@@ -535,15 +594,26 @@ public final class MainActivity extends Activity {
         });
     }
     private void sortDialog(){
-        String[] names=new String[sortNames.length+2];
-        System.arraycopy(sortNames,0,names,0,sortNames.length);
-        names[sortNames.length]=descending?"Направление: ↓ убывание":"Направление: ↑ возрастание";
-        names[sortNames.length+1]=onlyWithPhotos?"[С ФОТО]  ✓ ВКЛ":"[С ФОТО]  ВЫКЛ";
-        UiDialogs.options(this,t,"Сортировка",names,onlyWithPhotos?sortNames.length+1:sortBy,choice->{
-            if(choice==sortNames.length+1)onlyWithPhotos=!onlyWithPhotos;
-            else if(choice==sortNames.length)descending=!descending;
-            else sortBy=choice;
-            home();
+        SortSheet.State state=new SortSheet.State();
+        state.sortBy=sortBy;
+        state.descending=descending;
+        state.favorites=onlyFavorites;
+        state.photos=onlyWithPhotos;
+        state.country=countryFilter;
+        state.role=roleFilter;
+        java.util.TreeSet<String> countries=new java.util.TreeSet<>();
+        for(Drone d:records){
+            String country=CatalogFacets.country(d.specRows);
+            if(!country.isEmpty())countries.add(country);
+        }
+        java.util.ArrayList<String> options=new java.util.ArrayList<>();
+        options.add("");
+        options.addAll(countries);
+        SortSheet.open(this,t,state,options,()->{
+            sortBy=state.sortBy;descending=state.descending;
+            onlyFavorites=state.favorites;onlyWithPhotos=state.photos;
+            countryFilter=state.country;roleFilter=state.role;
+            cards();
         });
     }
     private String activeSettingsSection="";
@@ -811,5 +881,8 @@ public final class MainActivity extends Activity {
     private void toast(String s){Toast.makeText(this,s,Toast.LENGTH_LONG).show();}
     private void hideKeyboard(){try{((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(root.getWindowToken(),0);}catch(Exception ignored){}}
     @Override protected void onResume(){super.onResume();OtaUpdater.resumePending(this);}
-    @Override public void onBackPressed(){if(showingDetail||showingSettings){home();return;}super.onBackPressed();}
+    @Override public void onBackPressed(){
+        if(showingDetail||showingSettings){returnToHome();return;}
+        super.onBackPressed();
+    }
 }
