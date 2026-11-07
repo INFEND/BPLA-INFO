@@ -136,7 +136,7 @@ def audit(root):
         if accepted >= REQUIRED:
             complete.append(model_id)
         rows.append({"id": model_id, "name": model_name, "embedded": len(records),
-                     "verified_distinct_processed": accepted, "verified_distinct_originals": accepted_originals,
+                     "verified_distinct_processed": accepted_processed, "verified_distinct_originals": accepted_originals,
                      "verified_distinct_total": accepted, "verified_distinct_background_removed": accepted_processed,
                      "remaining": max(0, REQUIRED - accepted),
                      "complete": accepted >= REQUIRED})
@@ -195,7 +195,7 @@ def main():
         for row in report["models"]:
             if row["embedded"]:
                 print(f'{row["id"]} {row["name"]}: {row["embedded"]} embedded, '
-                      f'{row["verified_distinct_processed"]} verified, {row["remaining"]} needed')
+                      f'{row["verified_distinct_total"]} verified ({row["verified_distinct_originals"]} originals, {row["verified_distinct_processed"]} processed), {row["remaining"]} needed')
 
 if __name__ == "__main__":
     main()
