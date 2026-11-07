@@ -20,7 +20,7 @@ public final class FacetsSmoke {
     eq(CatalogFacets.airframe("Коптерный","","FPV-7"),"Коптерный");
     eq(CatalogFacets.airframe("Барражирующий","Барражирующие боеприпасы","RAM-2S"),"Самолётный");
     eq(CatalogFacets.role("Барражирующий","",null),"Барражирующий");
-    eq(CatalogFacets.country(Arrays.asList(new String[]{"СТРАНА (ПО АЛЬБОМУ)","Турция"})),"Турция");
+    eq(CatalogFacets.country(Collections.singletonList(new String[]{"СТРАНА (ПО АЛЬБОМУ)","Турция"})),"Турция");
     eq(CatalogFacets.flag("Россия"),"🇷🇺");
     if(CatalogFacets.identicalModel("Leleka 100 BASIC","Leleka 100 EFT"))
       throw new AssertionError("Variants were incorrectly collapsed");
