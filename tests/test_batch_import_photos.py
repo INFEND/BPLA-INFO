@@ -174,8 +174,8 @@ class BatchPhotoImporterTests(unittest.TestCase):
             importer.prepare(self.stage,self.repo)
 
     def test_original_import_into_new_bulletin_model(self):
-        (self.assets/'bulletin30_2025.json').write_text(json.dumps({'entries':[
-            {'id':'bulletin-model','name':'Bulletin model'}]}))
+        (self.assets/'bulletin30_2025.json').write_text(json.dumps({'schema':1,'entries':[
+            {'id':'bulletin-model','name':'Bulletin model','type':'Самолётный'}]}))
         item=self.original_candidate()
         item.update(model_id='bulletin-model',model_name='Bulletin model')
         self.batch([item])
