@@ -31,6 +31,7 @@ public final class MainActivity extends Activity {
     private LinearLayout root,listHost;
     private int cardRenderEpoch=0;
     private static final int CARD_BATCH_SIZE=18;
+    private int catalogVisibleCount=CARD_BATCH_SIZE;
     private String searchTerm="",category="Все",countryFilter="",roleFilter="";
     private LinearLayout homeRoot,homeListHost;
     private ScrollView homeScroll;
@@ -357,6 +358,7 @@ public final class MainActivity extends Activity {
         if(listHost==null)return;
         final LinearLayout target=listHost;
         final int epoch=++cardRenderEpoch;
+        final int scrollPosition=homeScroll==null?0:homeScroll.getScrollY();
         target.removeAllViews();
         List<Drone> found=filtered();
         View parent=(View)listHost.getParent();
@@ -371,13 +373,20 @@ public final class MainActivity extends Activity {
         // Render after the first UI frame; never construct hundreds of cards in one run.
         target.post(()->{
             if(epoch!=cardRenderEpoch||target!=listHost)return;
-            try{renderCardBatch(target,found,0,epoch);}
-            catch(RuntimeException error){showStartupFailure("Список моделей",error);}
+            try{
+                renderCardBatch(target,found,0,epoch);
+                if(homeScroll!=null&&scrollPosition>0)
+                    homeScroll.post(()->{
+                        if(epoch==cardRenderEpoch)homeScroll.scrollTo(0,scrollPosition);
+                    });
+            }catch(RuntimeException error){showStartupFailure("Список моделей",error);}
         });
     }
     private void renderCardBatch(LinearLayout target,List<Drone> found,int offset,int epoch){
         if(epoch!=cardRenderEpoch||target!=listHost||isFinishing()||isDestroyed())return;
-        int end=CatalogPaging.end(offset,found.size(),CARD_BATCH_SIZE);
+        int chunk=offset==0?Math.max(CARD_BATCH_SIZE,catalogVisibleCount):CARD_BATCH_SIZE;
+        int end=CatalogPaging.end(offset,found.size(),chunk);
+        catalogVisibleCount=Math.max(catalogVisibleCount,end);
         for(int index=offset;index<end;index++){
             Drone d=found.get(index);
             LinearLayout card=vertical();card.setPadding(dp(13),dp(12),dp(13),dp(12));card.setBackground(panel(t.panel,20));
