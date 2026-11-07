@@ -1,0 +1,64 @@
+{
+  "schema": 1,
+  "date": "2026-11-07",
+  "status": "source_pages_identified_not_downloaded_or_embedded",
+  "policy": "Original source bytes only. No photo is approved until visual review, model/version match, rights, unique angle, and SHA-256 of downloaded bytes are checked.",
+  "candidates": [
+    {
+      "model": "RQ-11 Raven",
+      "photo_id": "7610302",
+      "url": "https://www.dvidshub.net/image/7610302/101st-airborne-division-conducts-call-fire-using-rq-11-raven",
+      "author": "Spc. Alexander Chatoff, U.S. Army",
+      "date": "2023-01-30",
+      "resolution": "6720x4480",
+      "rights": "DVIDS page labels PUBLIC DOMAIN; verify image-specific rights notice before redistribution",
+      "caption": "Soldier holds RQ-11 Raven",
+      "review": "pending_original_bytes_and_visual_review"
+    },
+    {
+      "model": "RQ-11 Raven",
+      "photo_id": "7610303",
+      "url": "https://www.dvidshub.net/image/7610303/101st-airborne-division-conducts-call-fire-using-rq-11-raven",
+      "author": "Spc. Alexander Chatoff, U.S. Army",
+      "date": "2023-01-30",
+      "resolution": "6720x4480",
+      "rights": "DVIDS page labels PUBLIC DOMAIN; verify image-specific rights notice before redistribution",
+      "caption": "Soldier prepares to launch RQ-11 Raven",
+      "review": "pending_original_bytes_and_visual_review"
+    },
+    {
+      "model": "RQ-11 Raven B",
+      "photo_id": "9217706",
+      "url": "https://www.dvidshub.net/image/9217706/lt-ben-ortiz-launches-rq-11-raven-b-unmanned-aerial-vehicle",
+      "author": "Lance Cpl. James Purschwitz, U.S. Marine Corps",
+      "date": "2009-03-18",
+      "resolution": "2420x1928",
+      "rights": "DVIDS page labels PUBLIC DOMAIN; verify image-specific rights notice before redistribution",
+      "caption": "Launch of explicitly identified Raven B variant; do not merge with unspecified RQ-11 without review",
+      "review": "pending_original_bytes_and_visual_review"
+    },
+    {
+      "model": "Bayraktar TB2",
+      "photo_id": "9621163",
+      "url": "https://www.dvidshub.net/image/9621163/39th-abw-leadership-visits-polish-military-contingent",
+      "author": "Staff Sgt. Koby I. Saunders, U.S. Air Force",
+      "date": "2026-04-13",
+      "resolution": "6048x4024",
+      "rights": "DVIDS page labels PUBLIC DOMAIN; verify image-specific rights notice before redistribution",
+      "caption": "Polish contingent presents TB2 aircraft",
+      "review": "pending_original_bytes_and_visual_review"
+    },
+    {
+      "model": "Bayraktar TB2",
+      "photo_id": "9621165",
+      "url": "https://www.dvidshub.net/image/9621165/39th-abw-leadership-visits-polish-military-contingent",
+      "author": "Staff Sgt. Koby I. Saunders, U.S. Air Force",
+      "date": "2026-04-13",
+      "resolution": "6048x4024",
+      "rights": "DVIDS page labels PUBLIC DOMAIN; verify image-specific rights notice before redistribution",
+      "caption": "Different shot of TB2 familiarization visit; independently assess angle and duplicate content",
+      "review": "pending_original_bytes_and_visual_review"
+    }
+  ],
+  "notes": "Source metadata checked from DVIDS pages on 2026-11-07. Direct original-image download was unavailable in this run. No hashes, photo approvals, APK changes, or OTA claims."
+}
