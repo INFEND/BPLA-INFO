@@ -15,7 +15,8 @@ class PhotoSortAndAlignmentTests(unittest.TestCase):
         self.assertIn('onlyWithPhotos=state.photos;',ACT)
         self.assertIn('Только с фотографиями',sheet)
         self.assertIn('state.photos=!state.photos;apply();',sheet)
-        self.assertIn('state.descending=true;apply();',sheet)
+        self.assertIn('if(state.sortBy==item)state.descending=!state.descending;',sheet)
+        self.assertIn('row.addView(direction);',sheet)
         self.assertIn('if(onlyWithPhotos&&!hasAttachedPhoto(d))continue;',ACT)
         self.assertIn('onlyWithPhotos?"Для выбранных моделей пока нет фотографий"',ACT)
 
