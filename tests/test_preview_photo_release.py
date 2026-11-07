@@ -28,7 +28,7 @@ public final class PdfPreviewSmoke {
     eq(PreviewFormatter.speed("120",null),"—");
     eq(PreviewFormatter.endurance("15",null),"—");
     eq(PreviewFormatter.range("",copter),"—");
-    eq(PreviewFormatter.endurance("до 2 часов (120 минут)",null),"до 2 ч");
+    eq(PreviewFormatter.endurance("до 2 часов (120 минут)",null),"≤2 ч");
     eq(CardPresentation.engine("электро"),"Электрический");
     eq(CardPresentation.engine("ЭЛЕКТРО"),"Электрический");
     eq(CardPresentation.engine("ЭЛЕКТРОДВИГАТЕЛЬ"),"Электрический");

@@ -21,7 +21,7 @@ class CatalogueRegressionTests(unittest.TestCase):
     def test_ui_uses_custom_dialogs_and_compact_stats(self):
         self.assertNotIn("AlertDialog",UI)
         self.assertIn('stat(stats,"АВТОНОМНОСТЬ"',UI)
-        self.assertIn('UiDialogs.options(this,t,"Сортировка"',UI)
+        self.assertIn('SortSheet.open(this,t,state,options',UI)
         self.assertNotIn("QR LINK",UI)
         self.assertNotIn('"Н/Д"',UI)
     def test_resolved_speed_contains_all_source_alternatives(self):

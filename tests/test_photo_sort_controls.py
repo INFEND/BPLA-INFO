@@ -9,11 +9,13 @@ PHOTOS=(ROOT/"app/src/main/java/dev/infend/bplainfo/PhotoLibrary.java").read_tex
 
 class PhotoSortAndAlignmentTests(unittest.TestCase):
     def test_photo_only_option_is_separate_and_toggleable(self):
-        self.assertIn('String[] names=new String[sortNames.length+2]',ACT)
-        self.assertIn('names[sortNames.length+1]=onlyWithPhotos?',ACT)
-        self.assertIn('[С ФОТО]',ACT)
-        self.assertIn('if(choice==sortNames.length+1)onlyWithPhotos=!onlyWithPhotos;',ACT)
-        self.assertIn('else if(choice==sortNames.length)descending=!descending;',ACT)
+        sheet=(ROOT/"app/src/main/java/dev/infend/bplainfo/SortSheet.java").read_text("utf-8")
+        self.assertIn('SortSheet.open(this,t,state,options',ACT)
+        self.assertIn('state.photos=onlyWithPhotos;',ACT)
+        self.assertIn('onlyWithPhotos=state.photos;',ACT)
+        self.assertIn('Только с фотографиями',sheet)
+        self.assertIn('state.photos=!state.photos;apply();',sheet)
+        self.assertIn('state.descending=true;apply();',sheet)
         self.assertIn('if(onlyWithPhotos&&!hasAttachedPhoto(d))continue;',ACT)
         self.assertIn('onlyWithPhotos?"Для выбранных моделей пока нет фотографий"',ACT)
 
@@ -30,8 +32,9 @@ class PhotoSortAndAlignmentTests(unittest.TestCase):
         card=ACT.split('private void renderCardBatch(',1)[1].split('private void stat(',1)[0]
         self.assertNotIn('TextView star=button(',card)
         self.assertNotIn('d.favorite=!d.favorite;',card)
-        self.assertIn('d.favorite=!d.favorite;save();detail(d);',ACT)
-        self.assertIn('onlyFavorites=!onlyFavorites;home();',ACT)
+        self.assertIn('d.favorite=!d.favorite;save();',ACT)
+        self.assertIn('state.favorites=onlyFavorites;',ACT)
+        self.assertIn('onlyFavorites=state.favorites;',ACT)
 
     def test_three_metrics_share_exact_column_gravity(self):
         self.assertIn('stat(stats,"АВТОНОМНОСТЬ",PreviewFormatter.endurance(d.previewEndurance(),d.specRows),Gravity.START);',ACT)
