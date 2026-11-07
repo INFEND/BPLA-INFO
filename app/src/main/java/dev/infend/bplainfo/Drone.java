@@ -47,13 +47,8 @@ public final class Drone {
    return "";
  }
  public String displayType(){
-   String raw=type();
-   String upper=(raw+" "+sourceGroup).toUpperCase(java.util.Locale.ROOT);
-   if(upper.contains("КОПТЕР")||upper.contains("КВАДР"))return "Мультикоптер";
-   if(upper.contains("БАРРАЖ"))return "Барражирующий";
-   if(upper.contains("МНОГОМОТОР"))return "Многомоторный";
-   if(upper.contains("КРЫЛО")||upper.contains("САМОЛ")||upper.contains("ОДНОМОТОР")||upper.contains("ХВОСТОВ"))return "Самолётный";
-   return raw.isEmpty()?"БПЛА":raw;
+   String resolved=CatalogFacets.airframe(type(),sourceGroup,name());
+   return resolved.isEmpty()?"БПЛА":resolved;
  }
  public String engineType(){
    String a=specification("ТИП ДВИГАТЕЛЯ");

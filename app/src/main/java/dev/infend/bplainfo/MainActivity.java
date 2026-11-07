@@ -509,7 +509,15 @@ public final class MainActivity extends Activity {
             strip.post(()->loadVisibleDocumentaryPhotos(strip,lazyFrames,lazyLoads));
         }
         LinearLayout actions=horizontal();content.addView(actions,margins(-1,49,0,6));
-        actions.addView(button(d.favorite?"★ В ИЗБРАННОМ":"☆ ИЗБРАННОЕ",false,()->{d.favorite=!d.favorite;save();detail(d);}),new LinearLayout.LayoutParams(0,-1,1));
+        TextView favoriteAction=button(d.favorite?"★ В ИЗБРАННОМ":"☆ ИЗБРАННОЕ",false,()->{});
+        favoriteAction.setOnClickListener(v->{
+            d.favorite=!d.favorite;save();
+            favoriteAction.setText(d.favorite?"★ В ИЗБРАННОМ":"☆ ИЗБРАННОЕ");
+            if(t.haptics)v.performHapticFeedback(android.view.HapticFeedbackConstants.KEYBOARD_TAP);
+            if(t.animations)v.animate().scaleX(.96f).scaleY(.96f).setDuration(90)
+                .withEndAction(()->v.animate().scaleX(1f).scaleY(1f).setDuration(110).start()).start();
+        });
+        actions.addView(favoriteAction,new LinearLayout.LayoutParams(0,-1,1));
         actions.addView(button("✎ ИЗМЕНИТЬ",true,()->edit(d)),margins(-2,-1,4,0));
         actions.addView(button("⋮",false,()->more(d)),margins(45,-1,4,0));
         LinearLayout table=vertical();table.setPadding(dp(15),dp(14),dp(15),dp(14));table.setBackground(panel(t.panel,19));
@@ -630,7 +638,7 @@ public final class MainActivity extends Activity {
         settingsArrows.clear();
         showingDetail=false;showingSettings=true;
         setup();
-        titleBar("НАСТРОЙКИ","ПЕРСОНАЛИЗАЦИЯ  /  БПЛА ИНФО",this::home);
+        titleBar("НАСТРОЙКИ","ПЕРСОНАЛИЗАЦИЯ  /  БПЛА ИНФО",this::returnToHome);
         LinearLayout content=vertical();content.setPadding(dp(16),0,dp(16),dp(28));
         scroll(root).addView(content);
         LinearLayout intro=vertical();intro.setPadding(dp(17),dp(16),dp(17),dp(17));

@@ -70,6 +70,11 @@ public final class CardPresentation {
     public static String label(String source) {
         if(source==null)return "";
         String s=source.trim().toUpperCase(Locale.ROOT).replace('Ё','Е');
+        // Strip source-page prefixes, not the actual parameter name.
+        s=s.replaceFirst("^(?:АЛЬБОМ\\s*\\([^)]*\\)|БПЛА\\s+ВСУ\\s*\\([^)]*\\)|БЮЛЛЕТЕНЬ\\s*\\([^)]*\\))\\s*[·|:]\\s*","");
+        if(s.startsWith("ИСТОЧНИК ДОПОЛНЕННЫХ")||s.startsWith("ССЫЛКА НА ИСТОЧНИК")||
+           s.equals("ПРИМЕЧАНИЯ")||s.equals("ИСТОЧНИК"))return "";
+        if(s.startsWith("СТРАНА (ПО АЛЬБОМУ)"))return "СТРАНА";
         if(s.equals("ДЛИНА"))return "ДЛИНА ФЮЗЕЛЯЖА";
         if(s.equals("РАЗМАХ КРЫЛА"))return "РАЗМАХ КРЫЛЬЕВ";
         if(s.equals("ДВИГАТЕЛЬ"))return "ТИП ДВИГАТЕЛЯ";
@@ -89,6 +94,7 @@ public final class CardPresentation {
     }
     private static void append(Map<String,String> lines,String name,String raw) {
         String normalized=label(name);
+        if(normalized.isEmpty())return;
         String data=value(normalized,raw);
         String lower=name.toLowerCase(Locale.forLanguageTag("ru"));
         if(lower.contains("скорост")&&(lower.contains("км/ч")||lower.contains("м/с")))

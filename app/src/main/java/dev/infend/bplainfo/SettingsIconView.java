@@ -76,6 +76,21 @@ public final class SettingsIconView extends View {
                 line(canvas,31,11,37,12);line(canvas,37,12,37,18);
                 break;
             case "about":
+            case "back":
+                line(canvas,29,13,18,24);line(canvas,18,24,29,35);
+                break;
+            case "settings":
+                circle(canvas,24,24,8);
+                circle(canvas,24,24,3);
+                for(int x=0;x<8;x++){
+                    double angle=x*Math.PI/4;
+                    float ax=24+(float)Math.cos(angle)*11.5f;
+                    float ay=24+(float)Math.sin(angle)*11.5f;
+                    float bx=24+(float)Math.cos(angle)*15.8f;
+                    float by=24+(float)Math.sin(angle)*15.8f;
+                    line(canvas,ax,ay,bx,by);
+                }
+                break;
             case "info":
                 circle(canvas,24,24,14);
                 line(canvas,24,22,24,32);
