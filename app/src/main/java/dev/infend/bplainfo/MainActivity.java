@@ -619,6 +619,8 @@ public final class MainActivity extends Activity {
         state.country=countryFilter;
         state.role=roleFilter;
         java.util.TreeSet<String> countries=new java.util.TreeSet<>();
+        countries.add("Россия");
+        countries.add("Украина");
         for(Drone d:records){
             String country=CatalogFacets.country(d.specRows);
             if(!country.isEmpty())countries.add(country);
