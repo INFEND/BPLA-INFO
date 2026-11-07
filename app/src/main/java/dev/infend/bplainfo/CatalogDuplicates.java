@@ -16,7 +16,7 @@ import java.util.Map;
 /** One-time conservative merge of exact duplicate models, with a complete private backup. */
 public final class CatalogDuplicates {
     private static final String PREFS="bpla_store";
-    private static final int REVISION=1;
+    private static final int REVISION=2;
     private CatalogDuplicates(){}
 
     public static ArrayList<Drone> cleanup(Context context,ArrayList<Drone> records){
@@ -27,7 +27,6 @@ public final class CatalogDuplicates {
             ArrayList<Drone> copied=new ArrayList<>();
             for(Drone d:records)copied.add(Drone.fromJson(d.json()));
             Map<String,Drone> canonical=new LinkedHashMap<>();
-            Map<String,Integer> positions=new LinkedHashMap<>();
             ArrayList<Drone> removed=new ArrayList<>();
             for(Drone drone:copied){
                 String airframe=CatalogFacets.airframe(drone.type(),drone.sourceGroup,drone.name());
@@ -44,8 +43,7 @@ public final class CatalogDuplicates {
                 }
                 // Never automatically merge user-created IDs with imported models.
                 // Their edits may intentionally differ even when names match.
-                if(!generated(seen)||!generated(drone)||
-                   !CatalogFacets.identicalModel(seen.name(),drone.name())){
+                if(!sameVerifiedModel(seen,drone)){
                     canonical.put(key+"|"+drone.id,drone);
                     continue;
                 }
@@ -61,7 +59,7 @@ public final class CatalogDuplicates {
                 return records;
             }
             // Persist all originals, not merely the discarded records: reversible archive.
-            File backup=new File(context.getNoBackupFilesDir(),"catalog_exact_duplicates_before_v1.json");
+            File backup=new File(context.getNoBackupFilesDir(),"catalog_exact_duplicates_before_v2.json");
             if(!backup.isFile()){
                 JSONArray all=new JSONArray();
                 for(Drone d:records)all.put(d.json());
@@ -92,6 +90,24 @@ public final class CatalogDuplicates {
         }
     }
 
+    /** Never treat a user-created record or a different manufacturer's product as a duplicate. */
+    public static boolean sameVerifiedModel(Drone first,Drone second){
+        if(first==null||second==null||!generated(first)||!generated(second))return false;
+        if(!CatalogFacets.identicalModel(first.name(),second.name()))return false;
+        String leftAirframe=CatalogFacets.airframe(first.type(),first.sourceGroup,first.name());
+        String rightAirframe=CatalogFacets.airframe(second.type(),second.sourceGroup,second.name());
+        if(leftAirframe.isEmpty()||!leftAirframe.equals(rightAirframe))return false;
+        String leftMaker=manufacturerIdentity(first.manufacturer());
+        String rightMaker=manufacturerIdentity(second.manufacturer());
+        return leftMaker.isEmpty()||rightMaker.isEmpty()||leftMaker.equals(rightMaker);
+    }
+    private static String manufacturerIdentity(String raw){
+        if(raw==null||raw.trim().isEmpty())return "";
+        // Generic source-country labels are not manufacturer names.
+        if(!CatalogFacets.normalizeCountry(raw).isEmpty())return "";
+        return CatalogFacets.canonicalName(raw).replace("«","").replace("»","")
+            .replace("\"","").replace("'","");
+    }
     private static boolean generated(Drone d){
         return d.id.startsWith("lostarmour-pdf-")||
                d.id.startsWith("bulletin30-")||
