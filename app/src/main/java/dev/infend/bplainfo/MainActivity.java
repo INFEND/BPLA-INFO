@@ -32,6 +32,9 @@ public final class MainActivity extends Activity {
     private int cardRenderEpoch=0;
     private static final int CARD_BATCH_SIZE=18;
     private int catalogVisibleCount=CARD_BATCH_SIZE;
+    private java.util.List<Drone> activeCardResults=java.util.Collections.emptyList();
+    private boolean autoPagePending=false;
+    private boolean screenTransitioning=false;
     private String searchTerm="",category="Все",countryFilter="",roleFilter="";
     private LinearLayout homeRoot,homeListHost;
     private ScrollView homeScroll;
@@ -235,15 +238,50 @@ public final class MainActivity extends Activity {
         titleLp.leftMargin=dp(back==null?0:11);bar.addView(titles,titleLp);
         titles.addView(text(title,23,t.fg,true));
         titles.addView(text(hint,11,t.muted,false));
-        if(back==null)bar.addView(navIcon("settings",this::settings),margins(44,44,4,0));
+        if(back==null)bar.addView(navIcon("settings",this::openSettingsAnimated),margins(44,44,4,0));
+    }
+    private void openSettingsAnimated(){
+        if(screenTransitioning)return;
+        if(!t.animations){settings();return;}
+        screenTransitioning=true;
+        final View outgoing=root;
+        outgoing.animate().cancel();
+        outgoing.animate().alpha(0f).translationX(-dp(14)).setDuration(125)
+            .withEndAction(()->{
+                outgoing.setAlpha(1f);outgoing.setTranslationX(0f);
+                settings();
+                final View incoming=root;
+                incoming.setAlpha(0f);incoming.setTranslationX(dp(16));
+                incoming.animate().alpha(1f).translationX(0f).setDuration(215)
+                    .withEndAction(()->screenTransitioning=false).start();
+            }).start();
     }
     private void returnToHome(){
+        if(screenTransitioning)return;
         if(homeRoot==null){home();return;}
         hideKeyboard();
-        showingDetail=false;showingSettings=false;
-        root=homeRoot;listHost=homeListHost;
-        setContentView(homeRoot);
-        if(Build.VERSION.SDK_INT>=30)root.requestApplyInsets();
+        final boolean fromSettings=showingSettings;
+        final View outgoing=root;
+        Runnable restore=()->{
+            showingDetail=false;showingSettings=false;
+            root=homeRoot;listHost=homeListHost;
+            setContentView(homeRoot);
+            if(Build.VERSION.SDK_INT>=30)root.requestApplyInsets();
+            if(fromSettings&&t.animations){
+                homeRoot.setAlpha(0f);homeRoot.setTranslationX(-dp(16));
+                homeRoot.animate().alpha(1f).translationX(0f).setDuration(225)
+                    .withEndAction(()->screenTransitioning=false).start();
+            }else screenTransitioning=false;
+        };
+        if(fromSettings&&t.animations){
+            screenTransitioning=true;
+            outgoing.animate().cancel();
+            outgoing.animate().alpha(0f).translationX(dp(14)).setDuration(125)
+                .withEndAction(()->{
+                    outgoing.setAlpha(1f);outgoing.setTranslationX(0f);
+                    restore.run();
+                }).start();
+        }else restore.run();
     }
     private void chooseCategory(String selected,LinearLayout chips){
         category=selected;
@@ -265,6 +303,9 @@ public final class MainActivity extends Activity {
         LinearLayout inner=vertical();inner.setPadding(dp(14),0,dp(14),dp(30));
         ScrollView sc=scroll(root);sc.addView(inner);
         homeScroll=sc;
+        sc.setOnScrollChangeListener((View v,int x,int y,int oldX,int oldY)->{
+            if(y>=oldY)loadNextCardBatchIfNearBottom();
+        });
         LinearLayout controls=horizontal();inner.addView(controls,margins(-1,-2,0,9));
         controls.addView(button("+ ДОБАВИТЬ",true,()->edit(null)),new LinearLayout.LayoutParams(0,dp(43),1));
         controls.addView(button("⇅ СОРТИРОВКА",false,this::sortDialog),margins(-2,43,5,0));
@@ -358,9 +399,11 @@ public final class MainActivity extends Activity {
         if(listHost==null)return;
         final LinearLayout target=listHost;
         final int epoch=++cardRenderEpoch;
+        autoPagePending=false;
         final int scrollPosition=homeScroll==null?0:homeScroll.getScrollY();
         target.removeAllViews();
         List<Drone> found=filtered();
+        activeCardResults=found;
         View parent=(View)listHost.getParent();
         if(parent!=null){View count=((View)parent).getRootView().findViewById(1234001);if(count instanceof TextView)((TextView)count).setText("НАЙДЕНО: "+found.size()+"   |   ВСЕГО: "+records.stream().filter(d->CardPresentation.isAir(d.type(),d.sourceGroup)).count());}
         if(found.isEmpty()){
@@ -375,10 +418,13 @@ public final class MainActivity extends Activity {
             if(epoch!=cardRenderEpoch||target!=listHost)return;
             try{
                 renderCardBatch(target,found,0,epoch);
-                if(homeScroll!=null&&scrollPosition>0)
+                if(homeScroll!=null){
                     homeScroll.post(()->{
-                        if(epoch==cardRenderEpoch)homeScroll.scrollTo(0,scrollPosition);
+                        if(epoch!=cardRenderEpoch)return;
+                        if(scrollPosition>0)homeScroll.scrollTo(0,scrollPosition);
+                        loadNextCardBatchIfNearBottom();
                     });
+                }
             }catch(RuntimeException error){showStartupFailure("Список моделей",error);}
         });
     }
@@ -401,7 +447,7 @@ public final class MainActivity extends Activity {
             iconLayout.rightMargin=dp(11);
             head.addView(typeIcon,iconLayout);
             LinearLayout labels=vertical();head.addView(labels,new LinearLayout.LayoutParams(0,-2,1));
-            labels.addView(text(CardPresentation.name(d.name()),20,t.fg,true));
+            labels.addView(text(d.name().trim(),20,t.fg,true));
             String engine=CardPresentation.engine(d.engineType());
             String modelType=CatalogFacets.airframe(d.type(),d.sourceGroup,d.name());
             String subtitle=engine.isEmpty()?modelType:modelType+" | "+engine;
@@ -414,16 +460,30 @@ public final class MainActivity extends Activity {
             if(t.animations){card.setAlpha(0f);card.setTranslationY(dp(13));card.animate().alpha(1).translationY(0).setDuration(180).setStartDelay(Math.min(index,8)*25L).start();}
         }
         if(offset==0)target.post(()->StartupGuard.completed(getApplicationContext()));
-        if(end<found.size()){
-            final LinearLayout footer=vertical();
-            target.addView(footer,margins(-1,-2,0,8));
-            footer.addView(button("ПОКАЗАТЬ ЕЩЁ ("+end+" / "+found.size()+")",false,()->{
-                if(epoch!=cardRenderEpoch||target!=listHost)return;
-                target.removeView(footer);
-                try{renderCardBatch(target,found,end,epoch);}
-                catch(RuntimeException error){showStartupFailure("Продолжение списка",error);}
-            }),margins(-1,44,0,4));
-        }
+        if(end<found.size()&&homeScroll!=null)
+            homeScroll.post(this::loadNextCardBatchIfNearBottom);
+    }
+    /** Keep 18-item batches, but automatically continue near the scroll boundary. */
+    private void loadNextCardBatchIfNearBottom(){
+        if(autoPagePending||showingDetail||showingSettings||homeScroll==null||listHost==null)return;
+        if(catalogVisibleCount>=activeCardResults.size()||activeCardResults.isEmpty())return;
+        View child=homeScroll.getChildAt(0);
+        if(child==null||homeScroll.getHeight()<=0)return;
+        int remaining=child.getHeight()-homeScroll.getScrollY()-homeScroll.getHeight();
+        if(remaining>dp(470))return;
+        autoPagePending=true;
+        final int epoch=cardRenderEpoch;
+        final LinearLayout current=listHost;
+        final java.util.List<Drone> currentResults=activeCardResults;
+        homeScroll.post(()->{
+            autoPagePending=false;
+            if(epoch!=cardRenderEpoch||current!=listHost||
+               currentResults!=activeCardResults||showingDetail||showingSettings)return;
+            int offset=catalogVisibleCount;
+            if(offset>=currentResults.size())return;
+            try{renderCardBatch(current,currentResults,offset,epoch);}
+            catch(RuntimeException error){showStartupFailure("Продолжение списка",error);}
+        });
     }
     private void stat(LinearLayout row,String label,String value,int alignment){
         String formatted=SpecFormatter.display(value);
