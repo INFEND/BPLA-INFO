@@ -47,7 +47,9 @@ class DocumentTasks(unittest.TestCase):
         self.assertIn('if(showingDetail||showingSettings){returnToHome();return;}',MAIN)
     def test_persistent_sort(self):
         self.assertIn('SortSheet.open(this,t,state,options',MAIN)
-        self.assertIn('changed.run();draw();',SORT)
+        self.assertIn('changed.run();',SORT)
+        self.assertIn('final int restoreY=position;',SORT)
+        self.assertIn('draw();',SORT)
         self.assertIn('↑',SORT)
         self.assertIn('↓',SORT)
         self.assertIn('Только избранное',SORT)
