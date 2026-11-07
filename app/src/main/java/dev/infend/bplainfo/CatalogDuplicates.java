@@ -112,6 +112,7 @@ public final class CatalogDuplicates {
         return d.id.startsWith("lostarmour-pdf-")||
                d.id.startsWith("bulletin30-")||
                d.id.startsWith("album-2026-")||
+               d.id.startsWith("bpla-vsu-pdf-")||
                d.id.startsWith("vsu-pdf-");
     }
     private static int score(Drone d){
