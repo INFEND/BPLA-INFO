@@ -119,6 +119,7 @@ def pack(root=ROOT, assets=ASSETS):
     originals = set()
     final_paths = set()
     count = saved = before = after = 0
+    skipped_webp = skipped_already_packed = skipped_no_benefit = 0
     # First validate ALL original bytes. Any error aborts with no file changes.
     for model in manifest["items"].values():
         for photo in model["files"]:
@@ -132,10 +133,33 @@ def pack(root=ROOT, assets=ASSETS):
             archived = original_path.read_bytes()
             original = (assets / name).read_bytes()
             expected = photo["original_sha256"]
-            if (digest(original) != photo["sha256"] or digest(archived) != expected or
-                    original != archived or photo.get("processing_status") != "verified_unmodified_original"):
+            if digest(original) != photo["sha256"] or digest(archived) != expected:
+                raise ValueError("Unverified or changed publisher bytes: " + name)
+            status = photo.get("processing_status")
+            if status == "optimized_from_verified_original":
+                details = photo.get("optimization", {})
+                if (not isinstance(details, dict) or
+                        details.get("algorithm") != "adaptive-webp-ssim-v1" or
+                        details.get("source_sha256") != expected or
+                        details.get("packed_bytes") != len(original) or
+                        details.get("source_bytes") != len(archived) or
+                        not name.endswith(".webp")):
+                    raise ValueError("Previously compressed photo failed verification: " + name)
+                skipped_already_packed += 1
+                before += len(archived)
+                after += len(original)
+                final_paths.add(name)
+                continue
+            if status != "verified_unmodified_original" or original != archived:
                 raise ValueError("Unverified or changed publisher bytes: " + name)
             before += len(original)
+            # Existing WebP files are already compressed; NEVER re-encode them.
+            # New JPEG/PNG sources are packed only if size AND fidelity improve.
+            if name.endswith(".webp"):
+                skipped_webp += 1
+                after += len(original)
+                final_paths.add(name)
+                continue
             payload, details = optimize(original)
             if payload is not None:
                 next_name = "photos/packed_" + expected[:24] + ".webp"
@@ -156,6 +180,7 @@ def pack(root=ROOT, assets=ASSETS):
                 saved += len(original) - len(payload)
                 after += len(payload)
             else:
+                skipped_no_benefit += 1
                 if name in final_paths:
                     raise ValueError("Duplicate original path: " + name)
                 final_paths.add(name)
@@ -171,8 +196,11 @@ def pack(root=ROOT, assets=ASSETS):
         (assets / name).unlink()
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
                              encoding="utf-8")
-    return {"photos": len(originals), "optimized": count, "source_bytes": before,
-            "packed_bytes": after, "saved_bytes": saved,
+    return {"photos": len(originals), "optimized": count,
+            "skipped_precompressed_webp": skipped_webp,
+            "skipped_already_optimized": skipped_already_packed,
+            "skipped_no_benefit_or_quality": skipped_no_benefit,
+            "source_bytes": before, "packed_bytes": after, "saved_bytes": saved,
             "saved_percent": round(100 * saved / before, 2) if before else 0}
 
 

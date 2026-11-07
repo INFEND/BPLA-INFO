@@ -85,9 +85,9 @@ class ApkPhotoAuditTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'unreviewed photo gallery alias'):
                 audit.audit(path)
 
-    def test_reencoded_derivative_cannot_replace_publisher_original_in_release(self):
-        # A decodable and correctly hashed derivative still violates the
-        # unchanged-file requirement; retaining an archive outside APK is not enough.
+    def test_quality_gated_derivative_is_allowed_but_unverified_claims_are_rejected(self):
+        # Compact APK bytes are allowed only with preserved publisher provenance
+        # and quality metrics. Invalid origin hashes or metadata are rejected.
         image=io.BytesIO()
         fixture=Image.new('RGB',(600,400))
         draw=ImageDraw.Draw(fixture)
@@ -113,7 +113,18 @@ class ApkPhotoAuditTests(unittest.TestCase):
             self.make_apk(path,{'schema':2,'storage':'apk-assets-only',
                 'items':{'fixture':{'files':[photo]}}},
                 {'assets/photos/packed_test.webp':binary})
-            with self.assertRaisesRegex(ValueError,'invalid photo processing status'):
+            # First the model review and source hash are acceptable; packed
+            # data has the expected checksum and metadata.
+            photo['file'] = 'photos/packed_' + original_sha[:24] + '.webp'
+            self.make_apk(path,{'schema':2,'storage':'apk-assets-only',
+                'items':{'fixture':{'files':[photo]}}},
+                {'assets/' + photo['file']:binary})
+            audit.audit(path)
+            photo['optimization']['source_sha256']='0'*64
+            with zipfile.ZipFile(path,'w') as z:
+                z.writestr('assets/bundled_photos.json',json.dumps({'schema':2,'storage':'apk-assets-only','items':{'fixture':{'files':[photo]}}}))
+                z.writestr('assets/' + photo['file'],binary)
+            with self.assertRaisesRegex(ValueError,'optimization provenance'):
                 audit.audit(path)
 
 if __name__=="__main__":

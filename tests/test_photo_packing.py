@@ -73,6 +73,11 @@ class PhotoPackingTests(unittest.TestCase):
         self.assertEqual(hashlib.sha256(packed).hexdigest(), photo["sha256"])
         self.assertGreaterEqual(photo["optimization"]["ssim_luma"], 0.974)
         self.assertGreaterEqual(photo["optimization"]["psnr_luma_db"], 33.5)
+        # Re-running packing never re-encodes files already optimized.
+        again = pack(root=self.root, assets=self.assets)
+        self.assertEqual(again["optimized"], 0)
+        self.assertEqual(again["skipped_already_optimized"], 1)
+        self.assertEqual((self.assets / photo["file"]).read_bytes(), packed)
         with Image.open(BytesIO(packed)) as image:
             self.assertEqual(image.format, "WEBP")
             image.load()

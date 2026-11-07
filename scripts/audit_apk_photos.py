@@ -12,10 +12,11 @@ PHOTO_PATTERN = re.compile(r"photos/[a-z0-9][a-z0-9_-]{2,100}\.(?:webp|png|jpg|j
 LEGACY = ("assets/photo_sources.json",)
 MAX_SIZE = 12_000_000
 Image.MAX_IMAGE_PIXELS = 30_000_000
-# The current delivery policy requires unchanged publisher bytes inside APKs.
-# An optimizer may remain available as a historical research utility, but its
-# derived images cannot pass this release gate.
-VALID_PROCESSING = {"needs_background_review", "background_removed_verified", "verified_clean_original", "verified_unmodified_original"}
+# Publisher originals are preserved in the repository. The APK may contain
+# a quality-gated WebP derivative with signed source/hash metadata.
+VALID_PROCESSING = {"needs_background_review", "background_removed_verified",
+                    "verified_clean_original", "verified_unmodified_original",
+                    "optimized_from_verified_original"}
 
 def valid_image_header(file, binary):
     if file.endswith(".webp"):
@@ -72,6 +73,26 @@ def audit(path):
                         raise ValueError("Unmodified original bytes changed: " + file)
                     if record.get("model_review_approved") is not True or record.get("visual_review_approved") is not True:
                         raise ValueError("Original model/photo identity not reviewed: " + file)
+                if status == "optimized_from_verified_original":
+                    optimization = record.get("optimization")
+                    source_hash = record.get("original_sha256", "")
+                    if (not isinstance(optimization, dict) or
+                            record.get("model_review_approved") is not True or
+                            record.get("visual_review_approved") is not True or
+                            record.get("background_removed") is True or
+                            not record.get("original_archive") or
+                            file != "photos/packed_" + source_hash[:24] + ".webp" or
+                            optimization.get("source_sha256") != source_hash or
+                            optimization.get("algorithm") != "adaptive-webp-ssim-v1" or
+                            not isinstance(optimization.get("quality"), int) or
+                            optimization["quality"] not in (78, 84, 89, 93) or
+                            not isinstance(optimization.get("source_bytes"), int) or
+                            not isinstance(optimization.get("packed_bytes"), int) or
+                            not isinstance(optimization.get("ssim_luma"), (int, float)) or
+                            not isinstance(optimization.get("psnr_luma_db"), (int, float)) or
+                            not 0.974 <= optimization["ssim_luma"] <= 1.00001 or
+                            not 33.5 <= optimization["psnr_luma_db"] <= 99.01):
+                        raise ValueError("Invalid verified WebP optimization provenance: " + file)
                 if not PHOTO_PATTERN.fullmatch(file):
                     raise ValueError("Invalid embedded photo path: " + file)
                 if file in referenced:
@@ -83,6 +104,10 @@ def audit(path):
                 if asset not in names:
                     raise ValueError("Missing photo binary in APK: " + asset)
                 binary = apk.read(asset)
+                if status == "optimized_from_verified_original":
+                    if (len(binary) != optimization["packed_bytes"] or
+                            optimization["source_bytes"] <= len(binary) / 0.92):
+                        raise ValueError("Unverified compression size/ratio: " + file)
                 if not 512 <= len(binary) <= MAX_SIZE:
                     raise ValueError("Invalid photo size: " + asset)
                 if not valid_image_header(file, binary):
