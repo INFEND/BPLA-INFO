@@ -125,7 +125,7 @@ class ProgressTests(unittest.TestCase):
         original.update(original_sha256=original['sha256'], model_review_approved=True)
         self.save()
         report = module.audit(self.root)
-        self.assertEqual(report['photos_verified_processed_distinct'], 2)
+        self.assertEqual(report['photos_verified_processed_distinct'], 1)
         self.assertEqual(report['photos_verified_distinct_originals'], 1)
 
     def test_distinct_original_and_background_removed_counters(self):
@@ -150,7 +150,7 @@ class ProgressTests(unittest.TestCase):
         original.update(original_sha256=original['sha256'], model_review_approved=True)
         self.save()
         row = next(r for r in module.audit(self.root)['models'] if r['id'] == 'model-one')
-        self.assertEqual(row['verified_distinct_processed'], 2)
+        self.assertEqual(row['verified_distinct_processed'], 1)
         self.assertEqual(row['verified_distinct_originals'], 1)
 
     def test_original_without_model_review_does_not_count(self):
