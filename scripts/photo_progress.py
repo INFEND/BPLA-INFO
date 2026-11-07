@@ -167,7 +167,7 @@ def audit(root):
     return {
         "models_total": len(models), "minimum_verified_photos_required": total_required,
         "models_complete": len(complete), "models_incomplete": len(models) - len(complete),
-        "photos_embedded": total_embedded, "photos_verified_processed_distinct": approved_count,
+        "photos_embedded": total_embedded, "photos_verified_processed_distinct": processed_count,
         "photos_verified_distinct_originals": original_count,
         "photos_verified_distinct_total": approved_count,
         "photos_verified_distinct_background_removed": processed_count,
