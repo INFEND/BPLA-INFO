@@ -44,7 +44,10 @@ public final class PreviewFormatter {
 
         String number=stripped.trim();
         if(number.isEmpty())return "—";
-        // Avoid displaying malformed or unparseable text as measurements.
+        if(number.startsWith("до "))number="≤"+number.substring(3).trim();
+        if(number.startsWith("от "))number="≥"+number.substring(3).trim();
+        if(input.trim().startsWith("~")||input.trim().startsWith("≈"))number="~"+number;
+        // Upper/lower bounds are kept as bounds, not falsely advertised as estimates.
         if(!isSafeNumeric(number))return "—";
         return number.replace("– ","–").replace(" –","–")+" "+unit;
     }
@@ -115,7 +118,7 @@ public final class PreviewFormatter {
         for(int i=0;i<rest.length();i++){
             char c=rest.charAt(i);
             if(Character.isDigit(c))anyDigit=true;
-            else if(c!=','&&c!='.'&&c!='–'&&c!='-'&&c!=' '&&c!='+'&&c!='/')
+            else if(c!=','&&c!='.'&&c!='–'&&c!='-'&&c!=' '&&c!='+'&&c!='/'&&c!='≤'&&c!='≥'&&c!='~')
                 return false;
         }
         return anyDigit;

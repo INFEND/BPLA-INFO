@@ -656,7 +656,7 @@ public final class MainActivity extends Activity {
                 LinearLayout tile=vertical();tile.setGravity(Gravity.CENTER);tile.setPadding(dp(3),dp(6),dp(3),dp(6));
                 tile.setBackground(outlined(selected?t.soft:t.buttonBg,selected?t.accent:t.stroke,14));
                 SettingsIconView glyph=new SettingsIconView(this,iconKinds[i],selected?t.accent:t.muted);
-                tile.addView(glyph,margins(34,34,0,4));
+                tile.addView(glyph,margins(30,30,0,7));
                 TextView title=text(names[i],12,selected?t.accent:t.fg,selected);
                 title.setGravity(Gravity.CENTER);tile.addView(title);
                 LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(0,-1,1);
@@ -727,8 +727,8 @@ public final class MainActivity extends Activity {
         SettingsIconView icon=new SettingsIconView(this,id,opened?t.accent:t.muted);
         icon.setBackground(outlined(t.soft,t.stroke,13));
         icon.setPadding(dp(9),dp(9),dp(9),dp(9));
-        header.addView(icon,margins(45,45,0,0));
-        LinearLayout labels=vertical();labels.setPadding(dp(12),0,0,0);
+        header.addView(icon,margins(41,41,0,0));
+        LinearLayout labels=vertical();labels.setPadding(dp(15),0,0,0);
         header.addView(labels,new LinearLayout.LayoutParams(0,-2,1));
         labels.addView(text(heading,16,t.fg,true));
         labels.addView(text(subtitle,11,t.muted,false));
