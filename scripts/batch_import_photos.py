@@ -147,7 +147,7 @@ def prepare(staging, repo):
         if prepared_path.suffix.lower()!=Path(name).suffix.lower():
             raise ValueError("Prepared file extension mismatch")
         original=image_data(original_path,MAX_ORIGINAL_BYTES)
-        prepared=image_data(prepared_path,MAX_PREPARED_BYTES,status=="background_removed_verified")
+        prepared=image_data(prepared_path,MAX_ORIGINAL_BYTES if status=="verified_unmodified_original" else MAX_PREPARED_BYTES,status=="background_removed_verified")
         original_sha=sha256(original)
         if not SHA_RE.fullmatch(entry.get("original_sha256","")) or entry["original_sha256"]!=original_sha:
             raise ValueError("Original SHA-256 mismatch: "+target)
