@@ -58,7 +58,18 @@
       "rights": "DVIDS page labels PUBLIC DOMAIN; verify image-specific rights notice before redistribution",
       "caption": "Different shot of TB2 familiarization visit; independently assess angle and duplicate content",
       "review": "pending_original_bytes_and_visual_review"
+    },
+    {
+      "model": "Bayraktar TB2",
+      "photo_id": "9621161",
+      "url": "https://www.dvidshub.net/image/9621161/39th-abw-leadership-visits-polish-military-contingent",
+      "author": "Staff Sgt. Koby I. Saunders, U.S. Air Force",
+      "date": "2026-04-13",
+      "resolution": "4706x3131",
+      "rights": "DVIDS page labels PUBLIC DOMAIN; verify image-specific restrictions before redistribution",
+      "caption": "Group photo with Bayraktar TB2 visible behind personnel; assess aircraft visibility and whether this provides a useful distinct view",
+      "review": "pending_original_bytes_and_visual_review"
     }
   ],
-  "notes": "Source metadata checked from DVIDS pages on 2026-11-07. Direct original-image download was unavailable in this run. No hashes, photo approvals, APK changes, or OTA claims."
+  "notes": "Source metadata checked from DVIDS pages on 2026-11-07 and 2026-11-09. Original-image bytes not downloaded. All candidates remain unapproved until image-specific rights, visual model identity, distinct angle, original SHA-256 and embedded SHA-256 are verified."
 }
