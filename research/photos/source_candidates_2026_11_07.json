@@ -69,7 +69,40 @@
       "rights": "DVIDS page labels PUBLIC DOMAIN; verify image-specific restrictions before redistribution",
       "caption": "Group photo with Bayraktar TB2 visible behind personnel; assess aircraft visibility and whether this provides a useful distinct view",
       "review": "pending_original_bytes_and_visual_review"
+    },
+    {
+      "model": "RQ-11 Raven",
+      "photo_id": "3598582",
+      "url": "https://www.dvidshub.net/image/3598582/birds-eye-view",
+      "author": "Tech. Sgt. Amy M. Lovgren, U.S. Air Force",
+      "date": "2017-07-03",
+      "resolution": "3300x2550",
+      "rights": "DVIDS labels PUBLIC DOMAIN; image-specific restrictions must still be checked",
+      "caption": "RQ-11 Raven waiting for takeoff at Al Udeid Air Base; ground view",
+      "review": "pending_original_bytes_and_visual_review"
+    },
+    {
+      "model": "RQ-11 Raven",
+      "photo_id": "3598586",
+      "url": "https://www.dvidshub.net/image/3598586/birds-eye-view",
+      "author": "Tech. Sgt. Amy M. Lovgren, U.S. Air Force",
+      "date": "2017-07-03",
+      "resolution": "3300x2550",
+      "rights": "DVIDS labels PUBLIC DOMAIN; image-specific restrictions must still be checked",
+      "caption": "RQ-11 Raven in flight at Al Udeid Air Base; possible airborne view",
+      "review": "pending_original_bytes_and_visual_review"
+    },
+    {
+      "model": "RQ-11 Raven",
+      "photo_id": "1301414",
+      "url": "https://www.dvidshub.net/image/1301414/national-training-center-rq-11-raven-exercise",
+      "author": "Sgt. Richard W. Jones Jr., U.S. Army",
+      "date": "2014-04-19",
+      "resolution": "5760x3840",
+      "rights": "DVIDS labels PUBLIC DOMAIN; image-specific restrictions must still be checked",
+      "caption": "RQ-11 Raven hand launch during training; potential launch angle",
+      "review": "pending_original_bytes_and_visual_review"
     }
   ],
-  "notes": "Source metadata checked from DVIDS pages on 2026-11-07 and 2026-11-09. Original-image bytes not downloaded. All candidates remain unapproved until image-specific rights, visual model identity, distinct angle, original SHA-256 and embedded SHA-256 are verified."
+  "notes": "Source metadata checked from DVIDS pages on 2026-11-07 and 2026-11-09. Original-image bytes not downloaded. All candidates remain unapproved until image-specific rights, visual model identity, distinct angle, original SHA-256 and embedded SHA-256 are verified. Additional RQ-11 candidate pages checked 2026-11-10; source pages only, not approved originals."
 }
